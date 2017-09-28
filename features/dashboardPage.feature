@@ -1,6 +1,10 @@
 Feature: Dashboard page
 
-Scenario: Dashboard has navbar
+    Background:
+        Given that I am logged in
 
-  Given I am logged in as "admin" "district"
-  Then I should be able to logout
+    Scenario: I see the navigation bar
+        Then I expect that element "#header" is visible
+
+    Scenario: I can logout
+        Then I should be able to logout
