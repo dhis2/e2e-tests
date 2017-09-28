@@ -36,17 +36,34 @@ import { dashboardPage } from '../../../page_objects/Dashboard';
 
 defineSupportCode(({ Then }) => {
     Then(
+        /^I should( not)? be authenticated$/,
+        (falseCase) => {
+            if (falseCase) {
+                isVisible(loginPage.loginForm, false);
+                isVisible(loginPage.loginMessage, false);
+
+                assert(loginPage.loginMessage.getText() === 'Wrong user name or password');
+            }
+            else {
+                isVisible(dashboardPage.headerDiv, false);
+            }
+        }
+    );
+
+    Then(
         /^I expect that the login form is( not)* visible$/,
         (falseCase) => {
+            isVisible(loginPage.loginForm, falseCase);
             isVisible(loginPage.usernameInput, falseCase);
             isVisible(loginPage.passwordInput, falseCase);
+            isVisible(loginPage.submitButton, falseCase);
         }
     );
 
     Then(
         /^I expect the logout link to be present$/,
         () => {
-            isVisible(dashboardPage.logoutLink.selector, false);
+            isVisible(dashboardPage.logoutLink, false);
         }
     );
 
