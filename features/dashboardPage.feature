@@ -1,7 +1,7 @@
 Feature: Dashboard page
 
     Background:
-        Given that I am logged in
+        Given I am logged in
 
     Scenario: I see the navigation bar
         Then I expect that element "#header" is visible

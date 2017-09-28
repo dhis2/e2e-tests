@@ -14,7 +14,7 @@ defineSupportCode(({ Given }) => {
     );
 
     Given(
-        /^that I am logged in$/,
+        /^I am logged in$/,
         () => {
             // login as standard user
             login('admin', 'district');
