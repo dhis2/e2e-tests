@@ -132,7 +132,7 @@ exports.config = {
             './features/step_definitions/when.js',
             './features/step_definitions/then.js',
             './features/step_definitions/dhis2/given.js',
-//            './features/step_definitions/dhis2/when.js',
+            './features/step_definitions/dhis2/when.js',
             './features/step_definitions/dhis2/then.js'
         ],
         backtrace: false,   // <boolean> show full backtrace for errors
