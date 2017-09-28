@@ -7,4 +7,11 @@ defineSupportCode(({ When }) => {
         /^I login as "(.+)" with password as "(.+)"$/,
         login
     );
+
+    When(
+        /^I open up the application$/,
+        () => {
+            browser.url('/');
+        }
+    );
 });

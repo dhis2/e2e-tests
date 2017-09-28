@@ -7,13 +7,6 @@ import { dashboardPage } from '../../../page_objects/Dashboard';
 
 defineSupportCode(({ Given }) => {
     Given(
-        /^I open up the application$/,
-        () => {
-            browser.url('/');
-        }
-    );
-
-    Given(
         /^I am logged in$/,
         () => {
             // login as standard user
