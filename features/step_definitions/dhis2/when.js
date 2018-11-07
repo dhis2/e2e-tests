@@ -11,7 +11,7 @@ defineSupportCode(({ When }) => {
     When(
         /^I open up the application$/,
         () => {
-            browser.url('/');
+            browser.url('');
         }
     );
 });
