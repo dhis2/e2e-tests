@@ -1,13 +1,13 @@
 import Page from './Page';
 
 class Dashboard extends Page {
-    get headerDiv() { return browser.element('#header') }
-    get mainPageDiv() { return browser.element('#mainPage') }
-    get userIcon() { return browser.element('//*[@id="header"]/div/div[3]/div/div[1]') }
+    get headerDiv() { return browser.element('//*[@id="root"]/div/div[1]') }
+    get mainPageDiv() { return browser.element('.dashboard-wrapper') }
+    get userIcon() { return browser.element('//*[@id="root"]/div/div[1]/div[3]/div/div[1]') }
     get logoutLink() { return browser.element('a[href$="/dhis-web-commons-security/logout.action"]') }
 
     open() {
-        super.open('dhis-web-dashboard-integration/index.html');
+        super.open('dhis-web-dashboard/index.html');
     }
 
     doLogout() {

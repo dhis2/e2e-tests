@@ -11,8 +11,8 @@ defineSupportCode(({ Given }) => {
         () => {
             // login as standard user
             login('admin', 'district');
-
-            isVisible(dashboardPage.mainPageDiv, false);
+            browser.waitForExist(dashboardPage.mainPageDiv.selector);
+            isVisible(dashboardPage.mainPageDiv);
         }
     );
 });

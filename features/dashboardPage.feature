@@ -4,7 +4,7 @@ Feature: Dashboard page
         Given I am logged in
 
     Scenario: I see the navigation bar
-        Then I expect that element "#header" is visible
+        Then I expect that header is visible
 
     Scenario: I can logout
         Then I should be able to logout

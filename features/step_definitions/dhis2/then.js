@@ -12,13 +12,15 @@ defineSupportCode(({ Then }) => {
         /^I should( not)? be authenticated$/,
         (falseCase) => {
             if (falseCase) {
-                isVisible(loginPage.loginForm, false);
-                isVisible(loginPage.loginMessage, false);
+                browser.waitForExist(loginPage.loginForm.selector);
+                isVisible(loginPage.loginForm);
+                isVisible(loginPage.loginMessage);
 
-                assert(loginPage.loginMessage.getText() === 'Wrong user name or password');
+                assert(loginPage.loginMessage.getText() === 'Invalid login information');
             }
             else {
-                isVisible(dashboardPage.headerDiv, false);
+                browser.waitForExist(dashboardPage.headerDiv.selector);
+                isVisible(dashboardPage.headerDiv);
             }
         }
     );
@@ -26,6 +28,7 @@ defineSupportCode(({ Then }) => {
     Then(
         /^I expect that the login form is( not)* visible$/,
         (falseCase) => {
+            console.log(falseCase);
             isVisible(loginPage.loginForm, falseCase);
             isVisible(loginPage.usernameInput, falseCase);
             isVisible(loginPage.passwordInput, falseCase);
@@ -33,6 +36,13 @@ defineSupportCode(({ Then }) => {
         }
     );
 
+    Then(
+        /^I expect that header is visible$/,
+        () => {
+            browser.waitForExist(dashboardPage.headerDiv.selector);
+            isVisible(dashboardPage.headerDiv);
+        }
+    )
     Then(
         /^I expect the logout link to be present$/,
         () => {

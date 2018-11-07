@@ -19,6 +19,7 @@ class Login extends Page {
         this.usernameInput.setValue(username);
         this.passwordInput.setValue(password);
         this.submitButton.click();
+        
     }
 }
 
