@@ -1,6 +1,7 @@
 exports.config = {
-
-    //
+    // debug:true,
+    // execArgv: ['--inspect=127.0.0.1:5859'],
+    //execArgv: ['--inspect'],
     // ==================
     // Specify Test Files
     // ==================
@@ -42,7 +43,7 @@ exports.config = {
         // maxInstances can get overwritten per capability. So if you have an in-house Selenium
         // grid with only 5 firefox instances available you can make sure that not more than
         // 5 instances get started at a time.
-        maxInstances: 5,
+        maxInstances: 1,
         //
         browserName: 'chrome'
     }],
@@ -58,7 +59,7 @@ exports.config = {
     sync: true,
     //
     // Level of logging verbosity: silent | verbose | command | data | result | error
-    logLevel: 'silent',
+    logLevel: 'error',
     //
     // Enables colors for log output.
     coloredLogs: true,
@@ -72,7 +73,7 @@ exports.config = {
     //
     // Set a base URL in order to shorten url command calls. If your url parameter starts
     // with "/", then the base url gets prepended.
-    baseUrl: "https://play.dhis2.org/dev/",
+    baseUrl: "https://play.dhis2.org/2.31-rc1/",
     //
     // Default timeout for all waitFor* commands.
     waitforTimeout: 10000,
@@ -119,13 +120,22 @@ exports.config = {
     // The only one supported by default is 'dot'
     // see also: http://webdriver.io/guide/testrunner/reporters.html
     reporters: [
-        'spec',
+        'spec', 'allure',
     ],
+
+    reporterOptions: {
+        allure: {
+            outputDir: './reports/',
+            disableWebdriverStepsReporting: true,
+            useCucumberStepReporter: true
+        }
+    },
     //
     // If you are using Cucumber you need to specify the location of your step definitions.
     cucumberOpts: {
         // <string[]> (file/dir) require files before executing features
         require: [
+            './features/step_definitions/**/*.js',
             './features/step_definitions/given.js',
             './features/step_definitions/when.js',
             './features/step_definitions/then.js',
@@ -133,7 +143,7 @@ exports.config = {
             './features/step_definitions/dhis2/when.js',
             './features/step_definitions/dhis2/then.js'
         ],
-        backtrace: false,   // <boolean> show full backtrace for errors
+        backtrace: true,   // <boolean> show full backtrace for errors
         // <string[]> ("extension:module") require files with the given EXTENSION after requiring MODULE (repeatable)
         compiler: [
             'js:babel-register'
