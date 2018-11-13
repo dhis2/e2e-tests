@@ -8,13 +8,15 @@
     "babel-register": "^6.26.0",
     "chai": "^4.1.2",
     "wdio-allure-reporter": "^0.8.3",
+    "wdio-browserstack-service": "^0.1.16",
     "wdio-cucumber-framework": "^2.2.8",
     "wdio-selenium-standalone-service": "0.0.10",
     "wdio-spec-reporter": "^0.1.2",
     "webdriverio": "^4.14.0"
   },
   "scripts": {
-    "test": "./node_modules/.bin/wdio wdio.conf.js"
+    "test": "./node_modules/.bin/wdio wdio.conf.js",
+    "browserstack": "./node_modules/.bin/wdio wdio.remote.conf.js"
   },
   "author": "Edoardo Sabadelli",
   "contributors": [

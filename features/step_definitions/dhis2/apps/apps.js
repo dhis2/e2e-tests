@@ -27,7 +27,7 @@ Then(/^every app should open without errors$/, {timeout: 120* 1000}, () => {
       
       var log = 'App: ' + app + ' has ' + logs.length + ' severe errors: \n' + JSON.stringify(logs, null, 1);
       testLogs.push(log);
-      var status = logs.length > 0 ? 'failed': 'passed';ß
+      var status = logs.length > 0 ? 'failed': 'passed';
       allure.createStep(app, log, 'attachment', status);
   })
 
