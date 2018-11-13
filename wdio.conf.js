@@ -49,22 +49,8 @@ exports.config = {
     }],
 
     seleniumLogs: './logs',
-    seleniumArgs: {
-        drivers: {
-            chrome: {
-                version: 2.36,
-                baseURL: 'https://chromedriver.storage.googleapis.com'
-            }
-        }
-    },
-    seleniumInstallArgs: {
-        drivers: {
-            chrome: {
-                version: 2.36,
-                baseURL: 'https://chromedriver.storage.googleapis.com'
-            }
-        }
-    },
+    seleniumInstallArgs: { version: '3.4.0' },
+    seleniumArgs: { version: '3.4.0' },
     //
     // ===================
     // Test Configurations
