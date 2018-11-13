@@ -64,7 +64,7 @@ exports.config = {
 
   reporterOptions: {
       allure: {
-          outputDir: './reports/',
+          outputDir: './allure-report/',
           disableWebdriverStepsReporting: true,
           useCucumberStepReporter: true
       }
