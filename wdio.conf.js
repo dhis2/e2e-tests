@@ -47,6 +47,8 @@ exports.config = {
         //
         browserName: 'chrome'
     }],
+
+    seleniumLogs: './logs',
     //
     // ===================
     // Test Configurations
