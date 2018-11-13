@@ -1,6 +1,6 @@
 exports.config = {
-  user: 'gintarevilkelyte2',
-  key: 'qdstYJpJEEvFyuUaLhHZ',
+  user: process.env.USERNAME,
+  key: process.env.KEY,
   
   specs: [
       './features/**/*.feature'
