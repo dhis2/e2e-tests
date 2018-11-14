@@ -17,18 +17,20 @@ Given(/^I have a list of installed core apps$/, () => {
 });
 
 Then(/^every app should open without errors$/, { timeout: 120 * 1000 }, () => {
-  const testLogs = [];
+  let totalConsoleLogs = 0;
   listOfApps.forEach(app => {
     console.log('opening app: ' + app);
+
     browser.url(app);
     browser.pause(1500);
-    const logs = getConsoleLog();
 
-    const log = 'App: ' + app + ' has ' + logs.length + ' severe errors: \n' + JSON.stringify(logs, null, 1);
-    testLogs.push(log);
-    const status = logs.length > 0 ? 'failed' : 'passed';
-    allure.createStep(app, log, 'attachment', status);
+    const consoleLogs = getConsoleLog();
+    const reportLog = 'App: ' + app + ' has ' + consoleLogs.length + ' severe errors: \n' + JSON.stringify(consoleLogs, null, 1);
+    totalConsoleLogs += consoleLogs.length;
+
+    const status = consoleLogs.length > 0 ? 'failed' : 'passed';
+    allure.createStep(app, reportLog, 'attachment', status);
   });
 
-  expect(testLogs.length).to.equal(0, 'Total errors: ' + testLogs.length);
+  expect(totalConsoleLogs).to.equal(0, 'Total errors: ' + totalConsoleLogs);
 });
