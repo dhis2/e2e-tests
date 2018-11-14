@@ -3,5 +3,5 @@
  * @param  {String}   element Element selector
  */
 module.exports = (element) => {
-    browser.clearElement(element);
+  browser.clearElement(element);
 };

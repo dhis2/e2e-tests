@@ -3,5 +3,5 @@
  * @param  {String}   key  The key to press
  */
 module.exports = (key) => {
-    browser.keys(key);
+  browser.keys(key);
 };

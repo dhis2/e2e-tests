@@ -1,12 +1,12 @@
 class Page {
-    constructor() {
-        this.title = 'Base page';
-        this.baseUrl = browser.options.baseUrl;
-    }
+  constructor () {
+    this.title = 'Base page';
+    this.baseUrl = browser.options.baseUrl;
+  }
 
-    open(path) {
-        browser.url( path);
-    }
+  open (path) {
+    browser.url(path);
+  }
 }
 
 export default Page;

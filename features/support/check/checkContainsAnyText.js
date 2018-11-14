@@ -5,37 +5,37 @@
  *                              or not
  */
 module.exports = (element, falseCase) => {
-    /**
+  /**
      * The command to perform on the browser object
      * @type {String}
      */
-    let command = 'getValue';
+  let command = 'getValue';
 
-    if (browser.getAttribute(element, 'value') === null) {
-        command = 'getText';
-    }
+  if (browser.getAttribute(element, 'value') === null) {
+    command = 'getText';
+  }
 
-    /**
+  /**
      * False case
      * @type {Boolean}
      */
-    let boolFalseCase;
+  let boolFalseCase;
 
-    /**
+  /**
      * The text of the element
      * @type {String}
      */
-    const text = browser[command](element);
+  const text = browser[command](element);
 
-    if (typeof falseCase === 'undefined') {
-        boolFalseCase = false;
-    } else {
-        boolFalseCase = !!falseCase;
-    }
+  if (typeof falseCase === 'undefined') {
+    boolFalseCase = false;
+  } else {
+    boolFalseCase = !!falseCase;
+  }
 
-    if (boolFalseCase) {
-        expect(text).to.equal('');
-    } else {
-        expect(text).to.not.equal('');
-    }
+  if (boolFalseCase) {
+    expect(text).to.equal('');
+  } else {
+    expect(text).to.not.equal('');
+  }
 };

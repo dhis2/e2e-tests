@@ -1,30 +1,34 @@
+const chai = require('chai');
+const allure = require('wdio-allure-reporter');
+
 exports.config = {
   user: process.env.USERNAME,
   key: process.env.KEY,
   
+
   specs: [
-      './features/**/*.feature'
+    './features/**/*.feature'
   ],
   // Patterns to exclude.
   exclude: [
-      // 'path/to/excluded/files'
+    // 'path/to/excluded/files'
   ],
 
   maxInstances: 10,
-  
+
   capabilities: [{
-      // maxInstances can get overwritten per capability. So if you have an in-house Selenium
-      // grid with only 5 firefox instances available you can make sure that not more than
-      // 5 instances get started at a time.
-      maxInstances: 3,
-      //
-      browserName: 'chrome'
+    // maxInstances can get overwritten per capability. So if you have an in-house Selenium
+    // grid with only 5 firefox instances available you can make sure that not more than
+    // 5 instances get started at a time.
+    maxInstances: 3,
+    //
+    browserName: 'chrome'
   }],
 
   seleniumLogs: './logs',
   seleniumInstallArgs: { version: '3.4.0' },
   seleniumArgs: { version: '3.4.0' },
- 
+
   sync: true,
   //
   // Level of logging verbosity: silent | verbose | command | data | result | error
@@ -42,7 +46,7 @@ exports.config = {
   //
   // Set a base URL in order to shorten url command calls. If your url parameter starts
   // with "/", then the base url gets prepended.
-  baseUrl: "https://play.dhis2.org/2.31-rc1/",
+  baseUrl: 'https://play.dhis2.org/2.31-rc1/',
   //
   // Default timeout for all waitFor* commands.
   waitforTimeout: 10000,
@@ -53,51 +57,51 @@ exports.config = {
   //
   // Default request retries count
   connectionRetryCount: 3,
- 
+
   services: ['browserstack'],
 
   framework: 'cucumber',
 
   reporters: [
-      'spec', 'allure',
+    'spec', 'allure'
   ],
 
   reporterOptions: {
-      allure: {
-          outputDir: 'allure-results',
-          disableWebdriverStepsReporting: true,
-          useCucumberStepReporter: true
-      }
+    allure: {
+      outputDir: 'allure-results',
+      disableWebdriverStepsReporting: true,
+      useCucumberStepReporter: true
+    }
   },
   //
   // If you are using Cucumber you need to specify the location of your step definitions.
   cucumberOpts: {
-      // <string[]> (file/dir) require files before executing features
-      require: [
-          './features/step_definitions/**/*.js',
-          './features/step_definitions/given.js',
-          './features/step_definitions/when.js',
-          './features/step_definitions/then.js',
-          './features/step_definitions/dhis2/given.js',
-          './features/step_definitions/dhis2/when.js',
-          './features/step_definitions/dhis2/then.js'
-      ],
-      backtrace: true,   // <boolean> show full backtrace for errors
-      // <string[]> ("extension:module") require files with the given EXTENSION after requiring MODULE (repeatable)
-      compiler: [
-          'js:babel-register'
-      ],
-      dryRun: false,      // <boolean> invoke formatters without executing steps
-      failFast: false,    // <boolean> abort the run on first failure
-      format: ['pretty'], // <string[]> (type[:path]) specify the output format, optionally supply PATH to redirect formatter output (repeatable)
-      colors: true,       // <boolean> disable colors in formatter output
-      snippets: true,     // <boolean> hide step definition snippets for pending steps
-      source: true,       // <boolean> hide source uris
-      profile: [],        // <string[]> (name) specify the profile to use
-      strict: true ,      // <boolean> fail if there are any undefined or pending steps
-      tags: [],           // <string[]> (expression) only execute the features or scenarios with tags matching the expression
-      timeout: 20000,     // <number> timeout for step definitions
-      ignoreUndefinedDefinitions: false, // <boolean> Enable this config to treat undefined definitions as warnings.
+    // <string[]> (file/dir) require files before executing features
+    require: [
+      './features/step_definitions/**/*.js',
+      './features/step_definitions/given.js',
+      './features/step_definitions/when.js',
+      './features/step_definitions/then.js',
+      './features/step_definitions/dhis2/given.js',
+      './features/step_definitions/dhis2/when.js',
+      './features/step_definitions/dhis2/then.js'
+    ],
+    backtrace: true,   // <boolean> show full backtrace for errors
+    // <string[]> ("extension:module") require files with the given EXTENSION after requiring MODULE (repeatable)
+    compiler: [
+      'js:babel-register'
+    ],
+    dryRun: false,      // <boolean> invoke formatters without executing steps
+    failFast: false,    // <boolean> abort the run on first failure
+    format: ['pretty'], // <string[]> (type[:path]) specify the output format, optionally supply PATH to redirect formatter output (repeatable)
+    colors: true,       // <boolean> disable colors in formatter output
+    snippets: true,     // <boolean> hide step definition snippets for pending steps
+    source: true,       // <boolean> hide source uris
+    profile: [],        // <string[]> (name) specify the profile to use
+    strict: true,      // <boolean> fail if there are any undefined or pending steps
+    tags: [],           // <string[]> (expression) only execute the features or scenarios with tags matching the expression
+    timeout: 20000,     // <number> timeout for step definitions
+    ignoreUndefinedDefinitions: false // <boolean> Enable this config to treat undefined definitions as warnings.
   },
 
   //
@@ -131,16 +135,13 @@ exports.config = {
    * @param {Array.<String>} specs List of spec file paths that are to be run
    */
   before: function (capabilities, specs) {
-      /**
+    /**
        * Setup the Chai assertion framework
        */
-      const chai = require('chai');
-      const allure = require('wdio-allure-reporter');
-      
-      global.expect = chai.expect;
-      global.assert = chai.assert;
-      global.should = chai.should();
-      global.allure = allure;
+    global.expect = chai.expect;
+    global.assert = chai.assert;
+    global.should = chai.should();
+    global.allure = allure;
   },
   //
   /**
@@ -224,9 +225,9 @@ exports.config = {
   // Suites
   // ======
   suites: {
-      login: [
-          './features/loginPage.feature'
-      ]
+    login: [
+      './features/loginPage.feature'
+    ]
   }
-   
-}
+
+};

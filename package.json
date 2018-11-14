@@ -2,11 +2,7 @@
   "name": "e2e-tests",
   "version": "1.0.0",
   "description": "DHIS2 E2E testing",
-  "dependencies": {},
-  "devDependencies": {
-    "babel-preset-es2015": "^6.24.1",
-    "babel-register": "^6.26.0",
-    "chai": "^4.1.2",
+  "dependencies": {
     "wdio-allure-reporter": "^0.8.3",
     "wdio-browserstack-service": "^0.1.16",
     "wdio-cucumber-framework": "^2.2.8",
@@ -14,7 +10,20 @@
     "wdio-spec-reporter": "^0.1.2",
     "webdriverio": "^4.14.0"
   },
+  "devDependencies": {
+    "babel-preset-es2015": "^6.24.1",
+    "babel-register": "^6.26.0",
+    "chai": "^4.1.2",
+    "eslint": "^5.9.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^8.0.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "eslint-plugin-webdriverio": "^1.0.1"
+  },
   "scripts": {
+    "lint": "./node_modules/eslint/bin/eslint.js --fix",
     "test": "./node_modules/.bin/wdio wdio.conf.js",
     "browserstack": "./node_modules/.bin/wdio wdio.remote.conf.js"
   },
