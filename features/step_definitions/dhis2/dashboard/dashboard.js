@@ -28,12 +28,14 @@ Then(
   /^every dashboard item should open without errors$/, { timeout: 120 * 1000 },
   () => {
     const testLogs = [];
+    browser.waitForVisible(dashboardPage.filtersArea.selector);
     const filters = dashboardPage.filters;
 
     expect(filters.length).to.be.above(0, 'No filters to verify');
 
     filters.forEach(filter => {
-      const filterName = filter.getText();
+      // getText() returns empty string for invisible filters.
+      const filterName = filter.element('span').getHTML(false);
       const filterHref = filter.getAttribute('href');
       console.log('opening ' + filterName);
       browser.url(filterHref);

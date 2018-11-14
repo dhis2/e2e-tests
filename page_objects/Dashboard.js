@@ -7,8 +7,10 @@ class Dashboard extends Page {
   get logoutLink () { return browser.element('a[href$="/dhis-web-commons-security/logout.action"]'); }
   get filtersArea () { return browser.element('.d2-ui-control-bar-contents'); }
   get filters () {
+    // @todo address  chained selectors with wdio 5. https://github.com/webdriverio/webdriverio/issues/2571
+    browser.waitForExist(this.filtersArea.selector + ' a');
     browser.waitForExist(this.filtersArea.elements('a').selector);
-    return this.filtersArea.elements('a').value.reduce((reduced, filter) => {
+    return browser.elements(this.filtersArea.selector + ' a').value.reduce((reduced, filter) => {
       const href = filter.getAttribute('href');
       if (!href.includes('new')) {
         reduced.push(filter);
