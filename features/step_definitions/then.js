@@ -27,7 +27,7 @@ import isEnabled from '../support/check/isEnabled';
 import isExisting from '../support/check/isExisting';
 import isVisible from '../support/check/isVisible';
 import waitFor from '../support/action/waitFor';
-import waitForVisible from '../support/action/waitForVisible';
+import waitForVisible from '../support/wait/waitForVisible';
 
 
 defineSupportCode(({ Then }) => {

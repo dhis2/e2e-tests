@@ -1,10 +1,11 @@
 var { Given, Then } = require('cucumber');
 import allure from 'wdio-allure-reporter';
+import waitForVisible from '../../../support/wait/waitForVisible';
 
 const listOfApps = [];
 Given(/^I have a list of installed core apps$/, () => {
   browser.url('dhis-web-apps')
-  browser.waitForVisible('ul');
+  waitForVisible('ul');
 
   let elements = browser.elements('a');
   elements.value.map(element => {

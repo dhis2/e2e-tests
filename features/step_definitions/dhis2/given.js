@@ -1,6 +1,7 @@
 import { defineSupportCode } from 'cucumber';
 
 import isVisible from '../../support/check/isVisible';
+import waitForVisible from '../../support/wait/waitForVisible';
 
 import login from '../../support/action/dhis2/login.js';
 import { dashboardPage } from '../../../page_objects/Dashboard';
@@ -11,7 +12,7 @@ defineSupportCode(({ Given }) => {
         () => {
             // login as standard user
             login('admin', 'district');
-            browser.waitForVisible(dashboardPage.mainPageDiv.selector);
+            waitForVisible(dashboardPage.mainPageDiv.selector);
             isVisible(dashboardPage.mainPageDiv);
         }
     );
