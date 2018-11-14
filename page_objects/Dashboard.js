@@ -5,6 +5,17 @@ class Dashboard extends Page {
     get mainPageDiv() { return browser.element('.dashboard-wrapper') }
     get userIcon() { return browser.element('//*[@id="root"]/div/div[1]/div[3]/div/div[1]') }
     get logoutLink() { return browser.element('a[href$="/dhis-web-commons-security/logout.action"]') }
+    get filtersArea() { return browser.element('.d2-ui-control-bar-contents') }
+    get filters() {
+        browser.waitForExist(this.filtersArea.elements('a').selector);
+        return this.filtersArea.elements('a').value.reduce((reduced, filter) => {
+            let href = filter.getAttribute('href');
+            if (!href.includes('new')) {
+                reduced.push(filter);
+            }
+            return reduced;
+        }, [])
+    }
 
     open() {
         super.open('dhis-web-dashboard/index.html');

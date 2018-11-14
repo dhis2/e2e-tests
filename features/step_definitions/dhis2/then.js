@@ -37,20 +37,6 @@ defineSupportCode(({ Then }) => {
     );
 
     Then(
-        /^I expect that header is visible$/,
-        () => {
-            browser.waitForExist(dashboardPage.headerDiv.selector);
-            isVisible(dashboardPage.headerDiv);
-        }
-    )
-    Then(
-        /^I expect the logout link to be present$/,
-        () => {
-            isVisible(dashboardPage.logoutLink, false);
-        }
-    );
-
-    Then(
         /^I should be able to logout$/,
         logout
     );
