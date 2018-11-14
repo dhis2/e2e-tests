@@ -1,5 +1,4 @@
 var { Given, Then } = require('cucumber');
-import allure from 'wdio-allure-reporter';
 import getConsoleLog from '../../../support/action/getConsoleLog';
 import waitForVisible from '../../../support/wait/waitForVisible';
 

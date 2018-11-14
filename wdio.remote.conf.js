@@ -135,10 +135,12 @@ exports.config = {
        * Setup the Chai assertion framework
        */
       const chai = require('chai');
-
+      const allure = require('wdio-allure-reporter');
+      
       global.expect = chai.expect;
       global.assert = chai.assert;
       global.should = chai.should();
+      global.allure = allure;
   },
   //
   /**
