@@ -1,5 +1,6 @@
 var { Given, Then } = require('cucumber');
 import allure from 'wdio-allure-reporter';
+import getConsoleLog from '../../../support/action/getConsoleLog';
 import waitForVisible from '../../../support/wait/waitForVisible';
 
 const listOfApps = [];
@@ -22,9 +23,7 @@ Then(/^every app should open without errors$/, {timeout: 120* 1000}, () => {
       console.log('opening app: ' + app);
       browser.url(app);
       browser.pause(1500);
-      var logs = browser.log('browser').value.filter((log) => {
-        return log.level === 'SEVERE';
-      });
+      var logs = getConsoleLog();
       
       var log = 'App: ' + app + ' has ' + logs.length + ' severe errors: \n' + JSON.stringify(logs, null, 1);
       testLogs.push(log);
