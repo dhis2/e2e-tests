@@ -27,7 +27,7 @@ Then(
 Then(
   /^every dashboard item should open without errors$/, { timeout: 120 * 1000 },
   () => {
-    let totalConsoleErrors = 0;
+    let totalConsoleLogs = 0;
     browser.waitForVisible(dashboardPage.filtersArea.selector);
     const filters = dashboardPage.filters;
 
@@ -45,12 +45,12 @@ Then(
 
       const consoleLogs = getConsoleLog();
       const reportLog = 'Filter: ' + filterName + ' has ' + consoleLogs.length + ' severe errors: \n' + JSON.stringify(consoleLogs, null, 1);
-      totalConsoleErrors += consoleLogs.length;
+      totalConsoleLogs += consoleLogs.length;
 
       const status = consoleLogs.length > 0 ? 'failed' : 'passed';
       allure.createStep(filterName, reportLog, 'attachment', status);
     });
 
-    expect(totalConsoleErrors).to.equal(0, 'Total errors: ' + totalConsoleErrors.length);
+    expect(totalConsoleLogs).to.equal(0, 'Total errors: ' + totalConsoleLogs);
   }
 );
