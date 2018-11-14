@@ -1,5 +1,6 @@
 import getConsoleLog from '../../../support/action/getConsoleLog';
 import waitForVisible from '../../../support/wait/waitForVisible';
+import waitForPageToLoad from '../../../support/wait/waitForPageToLoad';
 const { Given, Then } = require('cucumber');
 
 const listOfApps = [];
@@ -20,9 +21,9 @@ Then(/^every app should open without errors$/, { timeout: 120 * 1000 }, () => {
   let totalConsoleLogs = 0;
   listOfApps.forEach(app => {
     console.log('opening app: ' + app);
-
+    
     browser.url(app);
-    browser.pause(1500);
+    waitForPageToLoad();
 
     const consoleLogs = getConsoleLog();
     const reportLog = 'App: ' + app + ' has ' + consoleLogs.length + ' severe errors: \n' + JSON.stringify(consoleLogs, null, 1);

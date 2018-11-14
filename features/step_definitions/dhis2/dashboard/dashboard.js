@@ -1,6 +1,7 @@
 import { dashboardPage } from '../../../../page_objects/Dashboard';
 import isVisible from '../../../support/check/isVisible';
 import getConsoleLog from '../../../support/action/getConsoleLog';
+import waitForPageToLoad from '../../../support/wait/waitForPageToLoad';
 const { Then } = require('cucumber');
 
 Then(
@@ -41,7 +42,7 @@ Then(
       console.log('opening ' + filterName);
 
       browser.url(filterHref);
-      browser.pause(1500);
+      waitForPageToLoad();
 
       const consoleLogs = getConsoleLog();
       const reportLog = 'Filter: ' + filterName + ' has ' + consoleLogs.length + ' severe errors: \n' + JSON.stringify(consoleLogs, null, 1);
