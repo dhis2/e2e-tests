@@ -1,4 +1,4 @@
 module.exports = () => {
-  const ms = 10000;
+  const ms = 20000;
   browser.waitForVisible('circle', ms, true);
 };
