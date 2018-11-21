@@ -19,11 +19,12 @@ Given(/^I have a list of installed core apps$/, () => {
 
 Then(/^every app should open without errors$/, { timeout: 120 * 1000 }, () => {
   let totalConsoleLogs = 0;
+  getConsoleLog(); //clear error log  before test
   listOfApps.forEach(app => {
     console.log('opening app: ' + app);
     
     browser.url(app);
-    waitForPageToLoad();
+    browser.pause(5000);
 
     const consoleLogs = getConsoleLog();
     const reportLog = 'App: ' + app + ' has ' + consoleLogs.length + ' severe errors: \n' + JSON.stringify(consoleLogs, null, 1);
