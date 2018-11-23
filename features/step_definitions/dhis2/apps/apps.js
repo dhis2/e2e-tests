@@ -26,7 +26,8 @@ Then(/^every app should open without errors$/, { timeout: 120 * 1000 }, () => {
     browser.url(app);
     browser.pause(5000);
 
-    const consoleLogs = getConsoleLog();
+    const consoleLogs = filteredConsolelog();
+
     const reportLog = 'App: ' + app + ' has ' + consoleLogs.length + ' severe errors: \n' + JSON.stringify(consoleLogs, null, 1);
     totalConsoleLogs += consoleLogs.length;
 
@@ -36,3 +37,14 @@ Then(/^every app should open without errors$/, { timeout: 120 * 1000 }, () => {
 
   expect(totalConsoleLogs).to.equal(0, 'Total errors: ' + totalConsoleLogs);
 });
+
+const filteredConsolelog = () => {
+  return getConsoleLog().filter((value) => {
+    const message = value['message'];
+    console.log(message);
+    // excluding possible errors that is not considered as errors, but rather as backend functionality
+    return !(message.includes('status of 404') &&
+      (message.includes('userDataStore/') ||
+      message.includes('userSettings.json?')));
+  });
+};
