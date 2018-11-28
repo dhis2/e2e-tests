@@ -26,7 +26,7 @@ Then(
 );
 
 Then(
-  /^every dashboard item should open without errors$/, { timeout: 120 * 1000 },
+  /^every dashboard item should open without errors$/, { timeout: 500 * 1000 },
   () => {
     let totalConsoleLogs = 0;
     browser.waitForVisible(dashboardPage.filtersArea.selector);
