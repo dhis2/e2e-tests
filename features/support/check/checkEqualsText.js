@@ -6,45 +6,45 @@
  * @param  {String}   expectedText  The text to validate against
  */
 module.exports = (element, falseCase, expectedText) => {
-    /**
+  /**
      * The command to execute on the browser object
      * @type {String}
      */
-    let command = 'getValue';
+  let command = 'getValue';
 
-    if (browser.getAttribute(element, 'value') === null) {
-        command = 'getText';
-    }
+  if (browser.getAttribute(element, 'value') === null) {
+    command = 'getText';
+  }
 
-    /**
+  /**
      * The expected text to validate against
      * @type {String}
      */
-    let parsedExpectedText = expectedText;
+  let parsedExpectedText = expectedText;
 
-    /**
+  /**
      * Whether to check if the content equals the given text or not
      * @type {Boolean}
      */
-    let boolFalseCase = !!falseCase;
+  let boolFalseCase = !!falseCase;
 
-    // Check for empty element
-    if (typeof parsedExpectedText === 'function') {
-        parsedExpectedText = '';
+  // Check for empty element
+  if (typeof parsedExpectedText === 'function') {
+    parsedExpectedText = '';
 
-        boolFalseCase = !boolFalseCase;
-    }
+    boolFalseCase = !boolFalseCase;
+  }
 
-    if (parsedExpectedText === undefined && falseCase === undefined) {
-        parsedExpectedText = '';
-        boolFalseCase = true;
-    }
+  if (parsedExpectedText === undefined && falseCase === undefined) {
+    parsedExpectedText = '';
+    boolFalseCase = true;
+  }
 
-    const text = browser[command](element);
+  const text = browser[command](element);
 
-    if (boolFalseCase) {
-        parsedExpectedText.should.not.equal(text);
-    } else {
-        parsedExpectedText.should.equal(text);
-    }
+  if (boolFalseCase) {
+    parsedExpectedText.should.not.equal(text);
+  } else {
+    parsedExpectedText.should.equal(text);
+  }
 };

@@ -1,13 +1,13 @@
 import checkContainsAnyText from './checkContainsAnyText';
 
 module.exports = (element, falseCase) => {
-    let newFalseCase = true;
+  let newFalseCase = true;
 
-    if (typeof falseCase === 'function') {
-        newFalseCase = false;
-    } else if (falseCase === ' not') {
-        newFalseCase = false;
-    }
+  if (typeof falseCase === 'function') {
+    newFalseCase = false;
+  } else if (falseCase === ' not') {
+    newFalseCase = false;
+  }
 
-    checkContainsAnyText(element, newFalseCase);
+  checkContainsAnyText(element, newFalseCase);
 };
