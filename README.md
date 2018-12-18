@@ -13,10 +13,16 @@ Repository for DHIS2 E2E testing.
 
 Install the NPM dependencies:
 ```sh
-$ yarn install
+$ npm i
 ```
 
 Run the tests:
 ```sh
-$ yarn test
+$ npm test
+$ npm test -- --baseUrl=play.dhis2.org/dev/
+```
+
+## Browserstack execution
+```sh
+$ npm run-script browserstack
 ```
