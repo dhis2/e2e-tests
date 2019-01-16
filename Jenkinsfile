@@ -79,7 +79,7 @@ pipeline {
     failure {
       slackSend(
         color: '#ff0000',
-        message: 'E2E tests failed for version - ' + env.VERSION + '. Please visit ' + env.BUILD_URL + ' for more information',
+        message: "E2E tests failed for version - $VERSION . Please visit " + env.BUILD_URL + " for more information",
         channel: '@Gintare'
       )
     }
