@@ -3,8 +3,8 @@ import Page from './Page';
 class Dashboard extends Page {
   get headerDiv () { return browser.element('//*[@id="root"]/div/div[1]'); }
   get mainPageDiv () { return browser.element('.dashboard-wrapper'); }
-  get userIcon () { return browser.element('//*[@id="root"]/div/div[1]/div[3]/div/div[1]'); }
-  get logoutLink () { return browser.element('a[href$="/dhis-web-commons-security/logout.action"]'); }
+  get userIcon () { return browser.element('[class*="profile"]'); }
+  get logoutLink () { return browser.element('[class*="profile"] [class*="contents"] li:last-child div'); }
   get filtersArea () { return browser.element('.d2-ui-control-bar-contents'); }
   get filters () {
     // @todo address  chained selectors with wdio 5. https://github.com/webdriverio/webdriverio/issues/2571
