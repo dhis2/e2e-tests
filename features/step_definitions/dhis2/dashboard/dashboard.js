@@ -34,8 +34,9 @@ Then(
 
     expect(filters.length).to.be.above(0, 'No filters to verify');
 
-    getConsoleLog(); //clear browser log before test
     filters.forEach(filter => {
+      getConsoleLog(); //clear browser log before test
+
       // getText() returns empty string for invisible filters.
       const filterName = filter.element('span').getHTML(false);
       const filterHref = filter.getAttribute('href');
@@ -43,7 +44,7 @@ Then(
       console.log('opening ' + filterName);
 
       browser.url(filterHref);
-      browser.pause(5000);
+      browser.pause(7000);
 
       const consoleLogs = getConsoleLog();
       const reportLog = 'Filter: ' + filterName + ' has ' + consoleLogs.length + ' severe errors: \n' + JSON.stringify(consoleLogs, null, 1);
