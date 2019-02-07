@@ -25,7 +25,7 @@ defineSupportCode(({ Given }) => {
 
       browser.waitUntil(() => {
         const url = browser.getUrl();
-        return url.indexOf('dhis-web') > -1;
+        return url.indexOf('dhis-web') > -1 && url.indexOf('login.action') === -1;
       }, 10000);
     }
   );
