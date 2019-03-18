@@ -24,7 +24,7 @@ Then(/^every app should open without errors$/, { timeout: 500 * 1000 }, () => {
     console.log('opening app: ' + app);
 
     browser.url(app);
-    browser.pause(7000);
+    browser.pause(15000);
 
     const consoleLogs = filteredConsolelog();
 
