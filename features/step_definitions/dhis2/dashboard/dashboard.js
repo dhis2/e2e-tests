@@ -44,7 +44,7 @@ Then(
       console.log('opening ' + filterName);
 
       browser.url(filterHref);
-      browser.pause(7000);
+      browser.pause(15000);
 
       const consoleLogs = getConsoleLog();
       const reportLog = 'Filter: ' + filterName + ' has ' + consoleLogs.length + ' severe errors: \n' + JSON.stringify(consoleLogs, null, 1);
