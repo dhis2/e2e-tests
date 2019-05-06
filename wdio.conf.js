@@ -2,9 +2,10 @@ const chai = require('chai');
 const allure = require('wdio-allure-reporter');
 
 exports.config = {
-  // debug:true,
-  // execArgv: ['--inspect=127.0.0.1:5859'],
-  // execArgv: ['--inspect'],
+  debug: process.env.DEBUG === '1',
+  execArgv: process.env.DEBUG === '1' ? ['--inspect-brk=127.0.0.1:5859'] : [],
+  //execArgv: process.env.DEBUG === '1' ? ['--inspect'] : [],
+  //execArgv: ['--inspect'],
   // ==================
   // Specify Test Files
   // ==================
@@ -36,7 +37,7 @@ exports.config = {
   // and 30 processes will get spawned. The property handles how many capabilities
   // from the same test should run tests.
   //
-  maxInstances: 10,
+  maxInstances: process.env.DEBUG === '1' ? 1 : 10,
   //
   // If you have trouble getting all important capabilities together, check out the
   // Sauce Labs platform configurator - a great tool to configure your capabilities:
@@ -46,7 +47,7 @@ exports.config = {
     // maxInstances can get overwritten per capability. So if you have an in-house Selenium
     // grid with only 5 firefox instances available you can make sure that not more than
     // 5 instances get started at a time.
-    maxInstances: 1,
+    maxInstances: process.env.DEBUG === '1' ? 1 : 3,
     //
     browserName: 'chrome'
   }],
@@ -292,6 +293,13 @@ exports.config = {
   suites: {
     login: [
       './features/loginPage.feature'
+    ],
+    appsLong: [
+      './features/apps/dataVisualiser.feature',
+      './features/apps/eventVisualiser.feature',
+      './features/apps/eventsReport.feature',
+      './features/apps/maps.feature',
+      './features/apps/pivotTables.feature'
     ]
   }
 };
