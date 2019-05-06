@@ -227,6 +227,13 @@ exports.config = {
   suites: {
     login: [
       './features/loginPage.feature'
+    ],
+    appsLong: [
+      './features/apps/dataVisualiser.feature',
+      './features/apps/eventVisualiser.feature',
+      './features/apps/eventsReport.feature',
+      './features/apps/maps.feature',
+      './features/apps/pivotTables.feature'
     ]
   }
 
