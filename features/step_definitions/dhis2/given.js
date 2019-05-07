@@ -11,7 +11,7 @@ defineSupportCode(({ Given }) => {
     /^I am logged in$/,
     () => {
       // login as standard user
-      login('admin', 'district');
+      login('system', 'System123');
       waitForVisible(dashboardPage.mainPageDiv.selector);
       isVisible(dashboardPage.mainPageDiv);
     }
@@ -20,7 +20,7 @@ defineSupportCode(({ Given }) => {
   Given(
     /^I am authenticated$/,
     () => {
-      login('admin', 'district');
+      login('system', 'System123');
 
       browser.waitUntil(() => {
         const url = browser.getUrl();
