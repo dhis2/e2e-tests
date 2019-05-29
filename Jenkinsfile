@@ -55,7 +55,7 @@ pipeline {
       steps {
         unstash 'source'
         sh "npm install"
-        sh "npm run-script browserstack -- --baseUrl=\"https://verify.dhis2.org/${VERSION}_smoke\""
+        sh "npm run-script browserstack -- --baseUrl=\"https://verify.dhis2.org/${VERSION}_smoke/\""
         stash name: 'source'
       }
     }
