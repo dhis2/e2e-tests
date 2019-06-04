@@ -8,6 +8,7 @@ pipeline {
     ALLURE_RESULTS_DIR = "allure-results"
     ALLURE_REPORT_DIR = "allure-report"
     ALLURE_REPORT_DIR_PATH = "$JENKINS_HOME/jobs/$JOB_NAME/allure"
+    INSTANCE_NAME = ""
   }
   tools {
     nodejs "node"
@@ -23,9 +24,11 @@ pipeline {
           }
 
           ALLURE_REPORT_DIR += "-$VERSION"
-          echo "${VERSION}"
+          echo "Version: ${VERSION}"
           currentBuild.description = "${VERSION}"
           
+          INSTANCE_NAME = "${VERSION}_smoke"
+          echo "Instance name: ${INSTANCE_NAME}"
           // prepare workspace for allure reports
           if (!fileExists("$ALLURE_REPORT_DIR_PATH")) {
               sh "mkdir $ALLURE_REPORT_DIR_PATH"
@@ -51,11 +54,19 @@ pipeline {
         }
       }
     }
+    stage('Update instance') {
+      steps {
+        script {
+          unstash 'source'
+          sh "instance_name=$INSTANCE_NAME ./update-instance.sh"
+        } 
+      }
+    }
     stage('Build') {
       steps {
         unstash 'source'
         sh "npm install"
-        sh "npm run-script browserstack -- --baseUrl=\"https://verify.dhis2.org/${VERSION}_smoke/\""
+        sh "npm run-script browserstack -- --baseUrl=\"https://verify.dhis2.org/${INSTANCE_NAME}/\""
         stash name: 'source'
       }
     }
