@@ -1,7 +1,7 @@
 #!/bin/sh
 
 instance_host='[\"verify.dhis2.org\"]'
-instance_name="dev_smoke"
+instance_name=$instance_name
 instance_action="reset_war"
 credentials=$AWX_BOT_CREDENTIALS
 aws_url="https://awx.dhis2.org/api/v2"
