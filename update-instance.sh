@@ -1,5 +1,5 @@
 #!/bin/sh
-
+'''
 instance_host='[\"verify.dhis2.org\"]'
 instance_name=$instance_name
 instance_action="reset_war"
@@ -29,3 +29,4 @@ do
 done
 
 
+'''
