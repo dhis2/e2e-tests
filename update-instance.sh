@@ -9,7 +9,7 @@ aws_url="https://awx.dhis2.org/api/v2"
 job_trigger_response=$(curl -v -u $credentials \
   -d '{\"extra_vars\":{\"instance_host\":'$instance_host',\"instance_name\": \"'$instance_name'\",\"instance_action\": \"'$instance_action'\"}}' \
   -H "Content-Type: application/json" \
-  -s $aws_url/job_templates/10/launch/ | python -m json.tool)
+  -s https://awx.dhis2.org/api/v2/job_templates/10/launch/ | python -m json.tool)
 
 job_id=$(echo $job_trigger_response | python -c 'import sys, json; print json.load(sys.stdin)["job"]')
 
@@ -22,7 +22,7 @@ do
     sleep 10 
     job_response=$(curl -v -u $credentials \
        -X GET \
-       -s $aws_url/jobs/$job_id/ | python -m json.tool) 
+       -s https://awx.dhis2.org/api/v2/jobs/$job_id/ | python -m json.tool) 
        
     status=$(echo $job_response | python -c 'import sys, json; print json.load(sys.stdin)["status"]')
 
