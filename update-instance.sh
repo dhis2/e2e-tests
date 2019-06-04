@@ -6,7 +6,7 @@ instance_action="reset_war"
 credentials=$AWX_BOT_CREDENTIALS
 aws_url="https://awx.dhis2.org/api/v2"
 
-job_trigger_response=$(curl -u $credentials \
+job_trigger_response=$(curl -v -u $credentials \
   -d '{\"extra_vars\":{\"instance_host\":'$instance_host',\"instance_name\": \"'$instance_name'\",\"instance_action\": \"'$instance_action'\"}}' \
   -H "Content-Type: application/json" \
   -s $aws_url/job_templates/10/launch/ | python -m json.tool)
@@ -20,7 +20,7 @@ while [ "$status" != "successful" ]
 do 
     echo $status
     sleep 10 
-    job_response=$(curl -u $credentials \
+    job_response=$(curl -v -u $credentials \
        -X GET \
        -s $aws_url/jobs/$job_id/ | python -m json.tool) 
        
