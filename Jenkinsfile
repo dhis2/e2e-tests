@@ -9,6 +9,7 @@ pipeline {
     ALLURE_REPORT_DIR = "allure-report"
     ALLURE_REPORT_DIR_PATH = "$JENKINS_HOME/jobs/$JOB_NAME/allure"
     INSTANCE_NAME = ""
+    AWX_BOT_CREDENTIALS = credentials('awx-bot-user-credentials')
   }
   tools {
     nodejs "node"
