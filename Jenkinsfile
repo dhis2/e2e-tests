@@ -50,7 +50,7 @@ pipeline {
     stage('Checkout') {
       steps {
         script {      
-          git url: "${GIT_URL}", branch: "AUTO-41-fix"
+          git url: "${GIT_URL}"
           stash name: 'source'
         }
       }
