@@ -7,7 +7,7 @@ credentials=$awx_credentials
 awx_url="https://awx.dhis2.org/api/v2"
 
 job_trigger_response=$(curl -v -u $credentials \
-  -d '{\"extra_vars\":{\"instance_host\":$instance_host,\"instance_name\": \"$instance_name\",\"instance_action\": \"$instance_action\"}}' \
+  -d "{\"extra_vars\":{\"instance_host\":$instance_host,\"instance_name\": \"$instance_name\",\"instance_action\": \"$instance_action\"}}" \
   -H "Content-Type: application/json" \
   -s https://awx.dhis2.org/api/v2/job_templates/10/launch/ | python -m json.tool)
 
