@@ -4,7 +4,7 @@ instance_host="[\"verify.dhis2.org\"]"
 instance_name=$instance_name
 instance_action="reset_war"
 credentials=$awx_credentials
-aws_url="https://awx.dhis2.org/api/v2"
+awx_url="https://awx.dhis2.org/api/v2"
 
 job_trigger_response=$(curl -i -u $credentials \
   -d "{\"extra_vars\":{\"instance_host\":$instance_host,\"instance_name\": \"$instance_name\",\"instance_action\": \"$instance_action\"}}" \
