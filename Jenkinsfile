@@ -59,7 +59,7 @@ pipeline {
       steps {
         script {
           unstash 'source'
-          sh "instance_name=$INSTANCE_NAME ./update-instance.sh"
+          sh "instance_name=$INSTANCE_NAME awx_credentials=$AWX_BOT_CREDENTIALS ./update-instance.sh"
         } 
       }
     }
