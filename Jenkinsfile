@@ -1,7 +1,7 @@
 pipeline {
   agent any
   environment {
-    VERSION = "2.32dev"
+    VERSION = "2.31dev"
     INSTANCE_NAME = "${VERSION}_smoke"
     INSTANCE_URL = "https://verify.dhis2.org/${INSTANCE_NAME}/"
     GIT_URL = "https://github.com/dhis2/e2e-tests/"
