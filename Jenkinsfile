@@ -1,36 +1,30 @@
 pipeline {
   agent any
   environment {
-    VERSION = "dev"
+    VERSION = "2.32dev"
+    INSTANCE_NAME = "${VERSION}_smoke"
+    INSTANCE_URL = "https://verify.dhis2.org/${INSTANCE_NAME}/"
     GIT_URL = "https://github.com/dhis2/e2e-tests/"
     USERNAME = "$BROWSERSTACK_USERNAME"
     KEY = "$BROWSERSTACK_KEY"
     ALLURE_RESULTS_DIR = "allure-results"
-    ALLURE_REPORT_DIR = "allure-report"
-    ALLURE_REPORT_DIR_PATH = "$JENKINS_HOME/jobs/$JOB_NAME/allure"
-    INSTANCE_NAME = ""
+    ALLURE_REPORT_DIR = "allure-report-$VERSION"
+    ALLURE_REPORT_DIR_PATH = "$JENKINS_HOME/jobs/$JOB_NAME/allure"  
     AWX_BOT_CREDENTIALS = credentials('awx-bot-user-credentials')
   }
+
   tools {
     nodejs "node"
   }
+
+  triggers {
+    cron('H 5 * * *')
+  }
+
   stages {
     stage ("Prepare") {
       steps {
-        script {
-          // if build is initialized by upstream project - get version from upstream project
-          def upstreamProject = "${currentBuild.buildCauses.upstreamProject[0]}"
-          if (upstreamProject != 'null') {
-              VERSION = upstreamProject.substring(upstreamProject.lastIndexOf("-") + 1, upstreamProject.length())
-          }
-
-          ALLURE_REPORT_DIR += "-$VERSION"
-          echo "Version: ${VERSION}"
-          currentBuild.description = "${VERSION}"
-          
-          INSTANCE_NAME = "${VERSION}_smoke"
-          echo "Instance name: ${INSTANCE_NAME}"
-          // prepare workspace for allure reports
+        script {       
           if (!fileExists("$ALLURE_REPORT_DIR_PATH")) {
               sh "mkdir $ALLURE_REPORT_DIR_PATH"
           }
@@ -47,14 +41,7 @@ pipeline {
         }
       }
     }
-    stage('Checkout') {
-      steps {
-        script {      
-          git url: "${GIT_URL}"
-          stash name: 'source'
-        }
-      }
-    }
+    
     stage('Update instance') {
       steps {
         script {
@@ -67,7 +54,7 @@ pipeline {
       steps {
         unstash 'source'
         sh "npm install"
-        sh "npm run-script browserstack -- --baseUrl=\"https://verify.dhis2.org/${INSTANCE_NAME}/\""
+        sh "npm run-script browserstack -- --baseUrl=\"${INSTANCE_URL}\""
         stash name: 'source'
       }
     }
@@ -91,7 +78,7 @@ pipeline {
     failure {
       slackSend(
         color: '#ff0000',
-        message: "E2E tests failed for version - $VERSION . Please visit " + env.BUILD_URL + " for more information",
+        message: "E2E tests initialized from branch $GIT_BRANCH for version - $VERSION failed. Please visit " + env.BUILD_URL + " for more information",
         channel: '@Gintare'
       )
     }
