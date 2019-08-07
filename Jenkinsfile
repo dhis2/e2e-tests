@@ -33,14 +33,12 @@ pipeline {
       steps {
         sh "npm install"
         sh "npm run-script browserstack -- --baseUrl=\"${INSTANCE_URL}\""
-        stash name: 'source'
       }
     }
   }
     
   post {
     always {
-      unstash 'source'
       script {
         allure([
           includeProperties: false,
