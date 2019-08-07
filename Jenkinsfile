@@ -25,14 +25,12 @@ pipeline {
     stage('Update instance') {
       steps {
         script {
-          unstash 'source'
           sh "instance_name=$INSTANCE_NAME awx_credentials=$AWX_BOT_CREDENTIALS ./update-instance.sh"
         } 
       }
     }
     stage('Build') {
       steps {
-        unstash 'source'
         sh "npm install"
         sh "npm run-script browserstack -- --baseUrl=\"${INSTANCE_URL}\""
         stash name: 'source'
