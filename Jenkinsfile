@@ -9,7 +9,6 @@ pipeline {
     KEY = "$BROWSERSTACK_KEY"
     ALLURE_RESULTS_DIR = "allure-results"
     ALLURE_REPORT_DIR = "allure-report-$VERSION"
-    ALLURE_REPORT_DIR_PATH = "$JENKINS_HOME/jobs/$JOB_NAME/allure"  
     AWX_BOT_CREDENTIALS = credentials('awx-bot-user-credentials')
   }
 
@@ -22,26 +21,7 @@ pipeline {
   }
 
   stages {
-    stage ("Prepare") {
-      steps {
-        script {       
-          if (!fileExists("$ALLURE_REPORT_DIR_PATH")) {
-              sh "mkdir $ALLURE_REPORT_DIR_PATH"
-          }
-
-          dir("$ALLURE_RESULTS_DIR", {
-            deleteDir()
-          })
-    
-          sh "mkdir ${WORKSPACE}/$ALLURE_RESULTS_DIR"
-          
-          if (fileExists("$ALLURE_REPORT_DIR_PATH/$ALLURE_REPORT_DIR/history")) {
-            sh "cp  -r $ALLURE_REPORT_DIR_PATH/$ALLURE_REPORT_DIR/history ${WORKSPACE}/$ALLURE_RESULTS_DIR/history"
-          } 
-        }
-      }
-    }
-    
+        
     stage('Update instance') {
       steps {
         script {
@@ -70,7 +50,7 @@ pipeline {
           properties: [],
           reportBuildPolicy: 'ALWAYS',
           results: [[path: "./$ALLURE_RESULTS_DIR"]],
-          report: "$ALLURE_REPORT_DIR_PATH/$ALLURE_REPORT_DIR"
+          report: "./$ALLURE_REPORT_DIR"
           ])  
         }
       }
