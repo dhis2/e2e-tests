@@ -7,9 +7,10 @@ pipeline {
     GIT_URL = "https://github.com/dhis2/e2e-tests/"
     USERNAME = "$BROWSERSTACK_USERNAME"
     KEY = "$BROWSERSTACK_KEY"
+    AWX_BOT_CREDENTIALS = credentials('awx-bot-user-credentials')
+    ALLURE_REPORT_DIR_PATH = "$JENKINS_HOME/jobs/$JOB_NAME/branches/$GIT_BRANCH/allure"
     ALLURE_RESULTS_DIR = "allure-results"
     ALLURE_REPORT_DIR = "allure-report-$VERSION"
-    AWX_BOT_CREDENTIALS = credentials('awx-bot-user-credentials')
   }
 
   tools {
@@ -29,18 +30,31 @@ pipeline {
         } 
       }
     }
+    stage('Prepare reports dir') {
+      if (!fileExists("$ALLURE_REPORT_DIR_PATH")) {
+        sh "mkdir $ALLURE_REPORT_DIR_PATH"
+      }
+      dir("$ALLURE_RESULTS_DIR", {
+        deleteDir()
+      })
+    
+      sh "mkdir ${WORKSPACE}/$ALLURE_RESULTS_DIR"
+          
+      if (fileExists("$ALLURE_REPORT_DIR_PATH/$ALLURE_REPORT_DIR/history")) {
+        sh "cp  -r $ALLURE_REPORT_DIR_PATH/$ALLURE_REPORT_DIR/history ${WORKSPACE}/$ALLURE_RESULTS_DIR/history"
+      } 
+    }
+
     stage('Build') {
       steps {
         sh "npm install"
         sh "npm run-script browserstack -- --baseUrl=\"${INSTANCE_URL}\""
-        stash name: 'source'
       }
     }
   }
     
   post {
     always {
-      unstash 'source'
       script {
         allure([
           includeProperties: false,
