@@ -21,8 +21,7 @@ pipeline {
     cron('H 5 * * *')
   }
 
-  stages {
-        
+  stages {     
     stage('Update instance') {
       steps {
         script {
@@ -31,18 +30,22 @@ pipeline {
       }
     }
     stage('Prepare reports dir') {
-      if (!fileExists("$ALLURE_REPORT_DIR_PATH")) {
-        sh "mkdir $ALLURE_REPORT_DIR_PATH"
-      }
-      dir("$ALLURE_RESULTS_DIR", {
-        deleteDir()
-      })
+      steps {
+        script {
+          if (!fileExists("$ALLURE_REPORT_DIR_PATH")) {
+            sh "mkdir $ALLURE_REPORT_DIR_PATH"
+          }
+          dir("$ALLURE_RESULTS_DIR", {
+            deleteDir()
+          })
     
-      sh "mkdir ${WORKSPACE}/$ALLURE_RESULTS_DIR"
-          
-      if (fileExists("$ALLURE_REPORT_DIR_PATH/$ALLURE_REPORT_DIR/history")) {
-        sh "cp  -r $ALLURE_REPORT_DIR_PATH/$ALLURE_REPORT_DIR/history ${WORKSPACE}/$ALLURE_RESULTS_DIR/history"
-      } 
+          sh "mkdir ${WORKSPACE}/$ALLURE_RESULTS_DIR"
+              
+          if (fileExists("$ALLURE_REPORT_DIR_PATH/$ALLURE_REPORT_DIR/history")) {
+            sh "cp  -r $ALLURE_REPORT_DIR_PATH/$ALLURE_REPORT_DIR/history ${WORKSPACE}/$ALLURE_RESULTS_DIR/history"
+          } 
+        } 
+      }      
     }
 
     stage('Build') {
