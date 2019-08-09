@@ -8,7 +8,7 @@ pipeline {
     USERNAME = "$BROWSERSTACK_USERNAME"
     KEY = "$BROWSERSTACK_KEY"
     AWX_BOT_CREDENTIALS = credentials('awx-bot-user-credentials')
-    ALLURE_REPORT_DIR_PATH = "$JOB_URL/branches/$GIT_BRANCH/allure"
+    ALLURE_REPORT_DIR_PATH = "$JENKINS_HOME/jobs/$JOB_BASE_NAME/branches/$GIT_BRANCH/allure"
     ALLURE_RESULTS_DIR = "allure-results"
     ALLURE_REPORT_DIR = "allure-report-$VERSION"
   }
