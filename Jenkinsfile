@@ -66,7 +66,7 @@ pipeline {
           properties: [],
           reportBuildPolicy: 'ALWAYS',
           results: [[path: "./$ALLURE_RESULTS_DIR"]],
-          report: "./$ALLURE_REPORT_DIR"
+          report: "$ALLURE_REPORT_DIR_PATH/$ALLURE_REPORT_DIR"
           ])  
         }
       }
