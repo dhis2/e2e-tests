@@ -2,7 +2,7 @@
 pipeline {
   agent any
   environment {
-    VERSION = "2.31dev"
+    VERSION = "2.32dev"
     INSTANCE_NAME = "${VERSION}_smoke"
     INSTANCE_URL = "https://verify.dhis2.org/${INSTANCE_NAME}/"
     GIT_URL = "https://github.com/dhis2/e2e-tests/"
@@ -66,7 +66,7 @@ pipeline {
           properties: [],
           reportBuildPolicy: 'ALWAYS',
           results: [[path: "./$ALLURE_RESULTS_DIR"]],
-          report: "./$ALLURE_REPORT_DIR"
+          report: "$ALLURE_REPORT_DIR_PATH/$ALLURE_REPORT_DIR"
           ])  
         }
       }
