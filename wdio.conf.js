@@ -4,8 +4,8 @@ const allure = require('wdio-allure-reporter');
 exports.config = {
   debug: process.env.DEBUG === '1',
   execArgv: process.env.DEBUG === '1' ? ['--inspect-brk=127.0.0.1:5859'] : [],
-  //execArgv: process.env.DEBUG === '1' ? ['--inspect'] : [],
-  //execArgv: ['--inspect'],
+  // execArgv: process.env.DEBUG === '1' ? ['--inspect'] : [],
+  // execArgv: ['--inspect'],
   // ==================
   // Specify Test Files
   // ==================
@@ -49,7 +49,13 @@ exports.config = {
     // 5 instances get started at a time.
     maxInstances: process.env.DEBUG === '1' ? 1 : 3,
     //
-    browserName: 'chrome'
+    browserName: 'chrome',
+    chromeOptions: {
+      'args': [
+        '--allow-running-insecure-content',
+        '--disable-web-security'
+      ]
+    }
   }],
 
   seleniumLogs: './logs',

@@ -4,7 +4,6 @@ const allure = require('wdio-allure-reporter');
 exports.config = {
   user: process.env.USERNAME,
   key: process.env.KEY,
-  
 
   specs: [
     './features/**/*.feature'
@@ -22,7 +21,13 @@ exports.config = {
     // 5 instances get started at a time.
     maxInstances: 3,
     //
-    browserName: 'chrome'
+    browserName: 'chrome',
+    chromeOptions: {
+      'args': [
+        '--allow-running-insecure-content',
+        '--disable-web-security'
+      ]
+    }
   }],
 
   seleniumLogs: './logs',
