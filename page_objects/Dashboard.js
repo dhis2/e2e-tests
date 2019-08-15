@@ -5,7 +5,7 @@ class Dashboard extends Page {
   get mainPageDiv () { return browser.element('.dashboard-wrapper'); }
   get userIcon () { return browser.element('[class*="profile"]'); }
   get logoutLink () { return browser.element('[class*="profile"] [class*="contents"] li:last-child div'); }
-  get filtersArea () { return browser.element('.d2-ui-control-bar-contents'); }
+  get filtersArea () { return browser.element('[class*="ControlBar_content"]'); }
   get filters () {
     // @todo address  chained selectors with wdio 5. https://github.com/webdriverio/webdriverio/issues/2571
     browser.waitForExist(this.filtersArea.selector + ' a');
