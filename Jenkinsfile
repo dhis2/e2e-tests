@@ -1,6 +1,7 @@
 @Library('pipeline-library') _
 pipeline {
   agent any
+  options { disableConcurrentBuilds() }
   environment {
     VERSION = "dev"
     INSTANCE_NAME = "${VERSION}_smoke"
