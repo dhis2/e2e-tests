@@ -2,23 +2,26 @@
 
 url=$url
 crendentials=$credentials
-declare -a report_tables=("CurZOghc7Mh" "jhr1eSnZeMr")
+declare -a report_tables=('CurZOghc7Mh' 'jhr1eSnZeMr')
 declare -a maps=("AHWtSmx21sx" "gJ1BHisY9Wm")
 declare -a charts=("ME1zXcf4zvu" "bDhkM10HzKO")
 
 # $1- resource
 # $2 - array of uids
 function send_delete_request() {
-  echo "Params: $1, $2"
-  for id in $2 
-    do
-      echo "Deleting from $1, uid: $id"
+  resource=$1; shift
+  ids=( "$@" )
+  echo "Params: $resource, ${ids[@]}"
+
+  echo $arr
+  for id in "${ids[@]}"; do
+      echo "Deleting from $resource, uid: $id"
       response=$(curl -u $crendentials \
       -X DELETE \
       -s \
       -o /dev/null \
       --write-out "%{http_code}" \
-      $url/api/$1/$id )
+      $url/api/$resource/$id )
       echo "Status code: $response"
     done
 }
