@@ -19,6 +19,7 @@ Given(/^I have a list of installed core apps$/, () => {
 
 Then(/^every app should open without errors$/, { timeout: 500 * 1000 }, () => {
   let totalConsoleLogs = 0;
+  let lastOpenedApp = "undefined-app";
   listOfApps.forEach(app => {
     getConsoleLog(); // clear error log  before test
     console.log('opening app: ' + app);
@@ -26,25 +27,28 @@ Then(/^every app should open without errors$/, { timeout: 500 * 1000 }, () => {
     browser.url(app);
     browser.pause(15000);
 
-    const consoleLogs = filteredConsolelog();
+    const consoleLogs = filteredConsolelog(lastOpenedApp);
 
     const reportLog = 'App: ' + app + ' has ' + consoleLogs.length + ' severe errors: \n' + JSON.stringify(consoleLogs, null, 1);
     totalConsoleLogs += consoleLogs.length;
 
     const status = consoleLogs.length > 0 ? 'failed' : 'passed';
     allure.createStep(app, reportLog, 'attachment', status);
+    lastOpenedApp = app;
   });
 
   expect(totalConsoleLogs).to.equal(0, 'Total errors: ' + totalConsoleLogs);
 });
 
-const filteredConsolelog = () => {
+const filteredConsolelog = (lastOpenedApp) => {
   return getConsoleLog().filter((value) => {
     const message = value['message'];
     console.log(message);
     // excluding possible errors that is not considered as errors, but rather as backend functionality
     return !(message.includes('status of 404') &&
       (message.includes('userDataStore/') ||
-      message.includes('userSettings.json?')));
+      message.includes('userSettings.json?'))) && 
+      !message.includes(lastOpenedApp) && 
+      !message.includes("manifest.json");
   });
 };
