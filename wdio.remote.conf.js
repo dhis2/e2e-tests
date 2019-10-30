@@ -1,10 +1,19 @@
 const chai = require('chai');
-const allure = require('wdio-allure-reporter');
+require('@babel/register');
 
 exports.config = {
+  runner: 'local',
   user: process.env.USERNAME,
   key: process.env.KEY,
-
+  //
+  // ====================
+  // Runner Configuration
+  // ====================
+  //
+  // WebdriverIO allows it to run your tests in arbitrary locations (e.g. locally or
+  // on a remote machine).
+  //
+  // Override default path ('/wd/hub') for chromedriver service.
   specs: [
     './features/**/*.feature'
   ],
@@ -12,46 +21,68 @@ exports.config = {
   exclude: [
     // 'path/to/excluded/files'
   ],
-
-  maxInstances: 10,
-
+  //
+  // ============
+  // Capabilities
+  // ============
+  // Define your capabilities here. WebdriverIO can run multiple capabilities at the same
+  // time. Depending on the number of capabilities, WebdriverIO launches several test
+  // sessions. Within your capabilities you can overwrite the spec and exclude options in
+  // order to group specific specs to a specific capability.
+  //
+  // First, you can define how many instances should be started at the same time. Let's
+  // say you have 3 different capabilities (Chrome, Firefox, and Safari) and you have
+  // set maxInstances to 1; wdio will spawn 3 processes. Therefore, if you have 10 spec
+  // files and you set maxInstances to 10, all spec files will get tested at the same time
+  // and 30 processes will get spawned. The property handles how many capabilities
+  // from the same test should run tests.
+  //
+  maxInstances: process.env.DEBUG === '1' ? 1 : 10,
+  //
+  // If you have trouble getting all important capabilities together, check out the
+  // Sauce Labs platform configurator - a great tool to configure your capabilities:
+  // https://docs.saucelabs.com/reference/platforms-configurator
+  //
   capabilities: [{
     // maxInstances can get overwritten per capability. So if you have an in-house Selenium
     // grid with only 5 firefox instances available you can make sure that not more than
     // 5 instances get started at a time.
-    maxInstances: 3,
+    maxInstances: process.env.DEBUG === '1' ? 1 : 3,
+    platformName: 'WINDOWS',
     //
     browserName: 'chrome',
-    chromeOptions: {
-      'args': [
+    browserVersion: '78.0.3904.70',
+    'bstack:options': {
+      'os': 'Windows',
+      'osVersion': '10',
+      'local': 'false',
+      'seleniumVersion': '3.14.0'           
+  },
+    'goog:chromeOptions': {
+       'args': [
         '--allow-running-insecure-content',
         '--disable-web-security'
       ]
     }
   }],
 
-  seleniumLogs: './logs',
-  seleniumInstallArgs: { version: '3.4.0' },
-  seleniumArgs: { version: '3.4.0' },
-
-  sync: true,
-  //
-  // Level of logging verbosity: silent | verbose | command | data | result | error
-  logLevel: 'error',
-  //
-  // Enables colors for log output.
-  coloredLogs: true,
-  //
-  // If you only want to run your tests until a specific amount of tests have failed use
-  // bail (default is 0 - don't bail, run all tests).
-  bail: 0,
-  //
-  // Saves a screenshot to a given path if a command fails.
   screenshotPath: './errorShots/',
   //
-  // Set a base URL in order to shorten url command calls. If your url parameter starts
-  // with "/", then the base url gets prepended.
-  baseUrl: 'https://play.dhis2.org/2.31-rc1/',
+  // ===================
+  // Test Configurations
+  // ===================
+  // Define all options that are relevant for the WebdriverIO instance here
+  //
+  // Level of logging verbosity: trace | debug | info | warn | error | silent
+  logLevel: 'error',
+  coloredLogs: true,
+  bail: 0,
+  //
+  // Set a base URL in order to shorten url command calls. If your `url` parameter starts
+  // with `/`, the base url gets prepended, not including the path portion of your baseUrl.
+  // If your `url` parameter starts without a scheme or `/` (like `some/path`), the base url
+  // gets prepended directly.
+  baseUrl: 'https://play.dhis2.org/dev/',
   //
   // Default timeout for all waitFor* commands.
   waitforTimeout: 10000,
@@ -62,40 +93,68 @@ exports.config = {
   //
   // Default request retries count
   connectionRetryCount: 3,
-
+  //
+  // Test runner services
+  // Services take over a specific job you don't want to take care of. They enhance
+  // your test setup with almost no effort. Unlike plugins, they don't add new
+  // commands. Instead, they hook themselves up into the test process.
   services: ['browserstack'],
-
-  framework: 'cucumber',
-
-  reporters: [
-    'spec', 'allure'
-  ],
-
-  reporterOptions: {
-    allure: {
-      outputDir: 'allure-results',
-      disableWebdriverStepsReporting: true,
-      useCucumberStepReporter: true
+  seleniumLogs: './logs',
+  
+ /*  seleniumInstallArgs: { version: '3.4.0' },
+  seleniumArgs: { version: '3.4.0' }, */
+  /* seleniumInstallArgs: {
+    version: "3.141.59",
+    drivers: {
+      chrome: {
+        version: '77.0.3865.40', // depending on when u see this, you may want something newer
+        arch: process.arch,
+        baseURL: 'https://chromedriver.storage.googleapis.com',
+      },
     }
   },
+  seleniumArgs: {
+    version: "3.141.59",
+    drivers: {
+      chrome: {
+        version: '77.0.3865.40',
+        arch: process.arch
+      },
+    },
+  }, */
+
+  // Framework you want to run your specs with.
+  // The following are supported: Mocha, Jasmine, and Cucumber
+  // see also: https://webdriver.io/docs/frameworks.html
+  //
+  // Make sure you have the wdio adapter package for the specific framework installed
+  // before running any tests.
+  framework: 'cucumber',
+  //
+  // The number of times to retry the entire specfile when it fails as a whole
+  // specFileRetries: 1,
+  //
+  // Test reporter for stdout.
+  // The only one supported by default is 'dot'
+  // see also: https://webdriver.io/docs/dot-reporter.html
+  reporters: [
+    'spec',
+    ['allure', {
+      outputDir: 'allure-results',
+      disableWebdriverStepsReporting: true,
+      useCucumberStepReporter: true,
+      disableWebdriverScreenshotsReporting: false
+    }]
+  ],
+
   //
   // If you are using Cucumber you need to specify the location of your step definitions.
   cucumberOpts: {
-    // <string[]> (file/dir) require files before executing features
     require: [
-      './features/step_definitions/**/*.js',
-      './features/step_definitions/given.js',
-      './features/step_definitions/when.js',
-      './features/step_definitions/then.js',
-      './features/step_definitions/dhis2/given.js',
-      './features/step_definitions/dhis2/when.js',
-      './features/step_definitions/dhis2/then.js'
+      './step_definitions/**/**/*.js'
     ],
     backtrace: true,   // <boolean> show full backtrace for errors
-    // <string[]> ("extension:module") require files with the given EXTENSION after requiring MODULE (repeatable)
-    compiler: [
-      'js:babel-register'
-    ],
+    requireModule: [],  // <string[]> ("extension:module") require files with the given EXTENSION after requiring MODULE (repeatable)
     dryRun: false,      // <boolean> invoke formatters without executing steps
     failFast: false,    // <boolean> abort the run on first failure
     format: ['pretty'], // <string[]> (type[:path]) specify the output format, optionally supply PATH to redirect formatter output (repeatable)
@@ -103,10 +162,11 @@ exports.config = {
     snippets: true,     // <boolean> hide step definition snippets for pending steps
     source: true,       // <boolean> hide source uris
     profile: [],        // <string[]> (name) specify the profile to use
-    strict: true,      // <boolean> fail if there are any undefined or pending steps
-    tags: [],           // <string[]> (expression) only execute the features or scenarios with tags matching the expression
-    timeout: 20000,     // <number> timeout for step definitions
-    ignoreUndefinedDefinitions: false // <boolean> Enable this config to treat undefined definitions as warnings.
+    strict: false,      // <boolean> fail if there are any undefined or pending steps
+    tagExpression: '',  // <string> (expression) only execute the features or scenarios with tags matching the expression
+    timeout: 60000,     // <number> timeout for step definitions
+    ignoreUndefinedDefinitions: false, // <boolean> Enable this config to treat undefined definitions as warnings.
+    failAmbiguousDefinitions: true
   },
 
   //
@@ -141,38 +201,13 @@ exports.config = {
    */
   before: function (capabilities, specs) {
     /**
-       * Setup the Chai assertion framework
-       */
+     * Setup the Chai assertion framework
+     */
     global.expect = chai.expect;
     global.assert = chai.assert;
     global.should = chai.should();
-    global.allure = allure;
+    global.allure = require('@wdio/allure-reporter').default
   },
-  //
-  /**
-   * Hook that gets executed before the suite starts
-   * @param {Object} suite suite details
-   */
-  // beforeSuite: function (suite) {
-  // },
-  /**
-   * Hook that gets executed _before_ a hook within the suite starts (e.g. runs before calling
-   * beforeEach in Mocha)
-   */
-  // beforeHook: function () {
-  // },
-  /**
-   * Hook that gets executed _after_ a hook within the suite starts (e.g. runs after calling
-   * afterEach in Mocha)
-   */
-  // afterHook: function () {
-  // },
-  /**
-   * Function to be executed before a test (in Mocha/Jasmine) or a step (in Cucumber) starts.
-   * @param {Object} test test details
-   */
-  // beforeTest: function (test) {
-  // },
   /**
    * Runs before a WebdriverIO command gets executed.
    * @param {String} commandName hook command name
@@ -181,6 +216,37 @@ exports.config = {
   // beforeCommand: function (commandName, args) {
   // },
   /**
+   * Runs before a Cucumber feature
+   */
+  // beforeFeature: function (uri, feature, scenarios) {
+  // },
+  /**
+   * Runs before a Cucumber scenario
+   */
+  // beforeScenario: function (uri, feature, scenario, sourceLocation) {
+  // },
+  /**
+   * Runs before a Cucumber step
+   */
+  // beforeStep: function (uri, feature, stepData, context) {
+  // },
+  /**
+   * Runs after a Cucumber step
+   */
+  // afterStep: function (uri, feature, { error, result, duration, passed }, stepData, context) {
+  // },
+  /**
+   * Runs after a Cucumber scenario
+   */
+  // afterScenario: function (uri, feature, scenario, result, sourceLocation) {
+  // },
+  /**
+   * Runs after a Cucumber feature
+   */
+  // afterFeature: function (uri, feature, scenarios) {
+  // },
+
+  /**
    * Runs after a WebdriverIO command gets executed
    * @param {String} commandName hook command name
    * @param {Array} args arguments that command would receive
@@ -188,18 +254,6 @@ exports.config = {
    * @param {Object} error error object if any
    */
   // afterCommand: function (commandName, args, result, error) {
-  // },
-  /**
-   * Function to be executed after a test (in Mocha/Jasmine) or a step (in Cucumber) starts.
-   * @param {Object} test test details
-   */
-  // afterTest: function (test) {
-  // },
-  /**
-   * Hook that gets executed after the suite has ended
-   * @param {Object} suite suite details
-   */
-  // afterSuite: function (suite) {
   // },
   /**
    * Gets executed after all tests are done. You still have access to all global variables from
@@ -219,13 +273,22 @@ exports.config = {
   // afterSession: function (config, capabilities, specs) {
   // },
   /**
-   * Gets executed after all workers got shut down and the process is about to exit. It is not
-   * possible to defer the end of the process using a promise.
+   * Gets executed after all workers got shut down and the process is about to exit. An error
+   * thrown in the onComplete hook will result in the test run failing.
    * @param {Object} exitCode 0 - success, 1 - fail
+   * @param {Object} config wdio configuration object
+   * @param {Array.<Object>} capabilities list of capabilities details
+   * @param {<Object>} results object containing test results
    */
-  // onComplete: function(exitCode) {
-  // }
-  //
+  // onComplete: function(exitCode, config, capabilities, results) {
+  // },
+  /**
+  * Gets executed when a refresh happens.
+  * @param {String} oldSessionId session ID of the old session
+  * @param {String} newSessionId session ID of the new session
+  */
+  //onReload: function(oldSessionId, newSessionId) {
+  //}
   // ======
   // Suites
   // ======
@@ -241,5 +304,4 @@ exports.config = {
       './features/apps/pivotTables.feature'
     ]
   }
-
 };

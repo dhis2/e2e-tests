@@ -1,16 +1,17 @@
 import Page from './Page';
+import { waitForElementToExist, waitForVisible } from '@support/wait';
 
 class Dashboard extends Page {
-  get headerDiv () { return browser.element('//*[@id="root"]/div/div[1]'); }
-  get mainPageDiv () { return browser.element('.dashboard-wrapper'); }
-  get userIcon () { return browser.element('[class*="profile"]'); }
-  get logoutLink () { return browser.element('[class*="profile"] [class*="contents"] li:last-child div'); }
-  get filtersArea () { return browser.element('[class*="ControlBar_content"]'); }
+  get headerDiv () { return browser.$('//*[@id="root"]/div/div[1]'); }
+  get mainPageDiv () { return browser.$('.dashboard-wrapper'); }
+  get userIcon () { return browser.$('[class*="profile"]'); }
+  get logoutLink () { return browser.$('[class*="profile"] [class*="contents"] li:last-child div'); }
+  get filtersArea () { return browser.$('[class*="ControlBar_content"]'); }
   get filters () {
-    // @todo address  chained selectors with wdio 5. https://github.com/webdriverio/webdriverio/issues/2571
-    browser.waitForExist(this.filtersArea.selector + ' a');
-    browser.waitForExist(this.filtersArea.elements('a').selector);
-    return browser.elements(this.filtersArea.selector + ' a').value.reduce((reduced, filter) => {
+    waitForVisible(this.filtersArea);
+    const filters = this.filtersArea.$$('a');
+   
+    return filters.reduce((reduced, filter) => {
       const href = filter.getAttribute('href');
       if (!href.includes('new')) {
         reduced.push(filter);
@@ -27,7 +28,7 @@ class Dashboard extends Page {
     this.open();
 
     // open the user's menu
-    this.userIcon.waitForExist();
+    waitForElementToExist(this.userIcon);
     this.userIcon.click();
 
     this.logoutLink.click();
