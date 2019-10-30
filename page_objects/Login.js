@@ -1,11 +1,12 @@
 import Page from './Page';
+import { waitForElementToExist, waitForVisible } from '@support/wait';
 
 class Login extends Page {
-  get loginForm () { return browser.element('#loginForm'); }
-  get loginMessage () { return browser.element('#loginMessage'); }
-  get usernameInput () { return browser.element('#j_username'); }
-  get passwordInput () { return browser.element('#j_password'); }
-  get submitButton () { return browser.element('input[type=submit]'); }
+  get loginForm () { return browser.$('#loginForm'); }
+  get loginMessage () { return browser.$('#loginMessage'); }
+  get usernameInput () { return browser.$('#j_username'); }
+  get passwordInput () { return browser.$('#j_password'); }
+  get submitButton () { return browser.$('input[type=submit]'); }
 
   open () {
     super.open('dhis-web-commons/security/login.action');
@@ -13,9 +14,7 @@ class Login extends Page {
 
   doLogin (username, password) {
     this.open();
-
-    browser.waitForExist(this.loginForm.selector);
-
+    waitForElementToExist(this.loginForm);
     this.usernameInput.setValue(username);
     this.passwordInput.setValue(password);
     this.submitButton.click();
