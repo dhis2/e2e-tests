@@ -26,4 +26,7 @@ do
        
     status=$(echo $job_response | python -c 'import sys, json; print json.load(sys.stdin)["status"]')
 
+    if [ "$status" = 'failed' ]; then
+      exit 0
+    fi
 done
