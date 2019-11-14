@@ -3,13 +3,8 @@
   "version": "1.0.0",
   "description": "DHIS2 E2E testing",
   "dependencies": {
-    "webdriverio": "^5.15.4"
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.6.4",
-    "@babel/core": "^7.6.4",
-    "@babel/preset-env": "^7.6.3",
-    "@babel/register": "^7.6.2",
+    "@applitools/eyes-selenium": "^4.31.16",
+    "@applitools/eyes-webdriverio": "^5.8.3",
     "@wdio/allure-reporter": "^5.15.3",
     "@wdio/browserstack-service": "^5.13.2",
     "@wdio/cli": "^5.15.4",
@@ -18,27 +13,35 @@
     "@wdio/selenium-standalone-service": "^5.15.0",
     "@wdio/spec-reporter": "^5.15.2",
     "@wdio/sync": "^5.15.1",
-    "chai": "^4.1.2",
     "chromedriver": "^78.0.1",
-    "eslint": "^6.1.0",
+    "wdio-applitools-cucumber-service": "^1.0.4",
+    "wdio-chromedriver-service": "^5.0.2",
+    "webdriverio": "^5.15.4"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.6.4",
+    "@babel/core": "^7.6.4",
+    "@babel/preset-env": "^7.6.3",
+    "@babel/register": "^7.6.2",
+    "chai": "^4.1.2",
     "eslint-config-standard": "^13.0.1",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-node": "^9.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.0",
     "eslint-plugin-webdriverio": "^1.0.1",
-    "link-module-alias": "^1.2.0",
-    "wdio-chromedriver-service": "^5.0.2"
+    "link-module-alias": "^1.2.0"
   },
   "_moduleAliases": {
     "@support": "./support",
     "@page_objects": "./page_objects"
   },
+  "_moduleAliasIgnoreWarning": true,
   "scripts": {
     "postinstall": "link-module-alias",
     "lint": "./node_modules/eslint/bin/eslint.js . --fix",
     "browserstack": "./node_modules/.bin/wdio wdio.remote.conf.js",
-    "test": "./node_modules/.bin/wdio wdio.conf.js"
+    "test": "./node_modules/.bin/wdio wdio.conf.js --suite apps"
   },
   "author": "Edoardo Sabadelli",
   "maintainers": [
