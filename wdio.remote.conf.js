@@ -101,7 +101,7 @@ exports.config = {
   services: [
     [ 'applitools-cucumber' , {
       appName: "DHIS2 - master",
-      apiKey: "bXsiJJwhyXeJkXvCWyrWjbNxAJ445MvFFgayUjWiUbQ110",
+      apiKey: process.env.APPLITOOLS_API_KEY,
       forceFullPageScreenshot: true,
     }],
     'browserstack'
