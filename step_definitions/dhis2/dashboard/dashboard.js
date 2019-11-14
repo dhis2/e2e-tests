@@ -27,7 +27,7 @@ Then(
 );
 
 Then(
-  /^every dashboard item should open without errors$/, { timeout: 500 * 1000 },
+  /^every dashboard item should open without errors$/, { timeout: 1000 * 1000 },
   () => {
     let totalConsoleLogs = 0;
     const filters = dashboardPage.filters;

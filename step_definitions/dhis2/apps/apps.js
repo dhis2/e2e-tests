@@ -17,7 +17,7 @@ Given(/^I have a list of installed core apps$/, () => {
   expect(listOfApps.length).to.be.above(0, 'No apps to open');
 });
 
-Then(/^every app should open without errors$/, { timeout: 500 * 1000 }, () => {
+Then(/^every app should open without errors$/, { timeout: 1000 * 1000 }, () => {
   let totalConsoleLogs = 0;
   let lastOpenedApp = "undefined-app";
   listOfApps.forEach(app => {
