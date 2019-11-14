@@ -1,6 +1,7 @@
 import { getConsoleLog, saveScreenshot } from '@support/action';
 import { waitForVisible, waitForPageToLoad } from '@support/wait';
 import { Given, Then } from 'cucumber';
+import { Target } from '@applitools/eyes-webdriverio';
 
 const listOfApps = [];
 Given(/^I have a list of installed core apps$/, () => {
@@ -37,6 +38,8 @@ Then(/^every app should open without errors$/, { timeout: 500 * 1000 }, () => {
       saveScreenshot();
     }
     lastOpenedApp = app;
+    
+    browser.takeSnapshotOfTarget('App - ' + app, Target.window().fully());
   });
 
   expect(totalConsoleLogs).to.equal(0, 'Total errors: ' + totalConsoleLogs);

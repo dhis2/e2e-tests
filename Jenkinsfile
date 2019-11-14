@@ -13,6 +13,7 @@ pipeline {
     ALLURE_REPORT_DIR_PATH = "$JENKINS_HOME/jobs/${getJobName()}/branches/$GIT_BRANCH/allure"
     ALLURE_RESULTS_DIR = "allure-results"
     ALLURE_REPORT_DIR = "allure-report-$VERSION"
+    APPLITOOLS_API_KEY = "$APPLITOOLS_API_KEY"
   }
 
   tools {

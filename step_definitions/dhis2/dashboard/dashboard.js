@@ -3,6 +3,7 @@ import { isVisible}  from '@support/check';
 import { getConsoleLog, saveScreenshot }  from '@support/action';
 import { waitForElementToExist } from '@support/wait';
 import { Then } from 'cucumber';
+import { Target } from '@applitools/eyes-webdriverio';
 
 Then(
   /^I expect that header is visible$/,
@@ -54,6 +55,8 @@ Then(
       if (status === 'failed') {
         saveScreenshot();
       }
+
+      browser.takeSnapshotOfTarget('Dashboard - ' + filterName, Target.window().fully());
     });
 
     expect(totalConsoleLogs).to.equal(0, 'Total errors: ' + totalConsoleLogs);
