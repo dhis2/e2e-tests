@@ -52,11 +52,10 @@ Then(
 
       const status = consoleLogs.length > 0 ? 'failed' : 'passed';
       allure.addStep(filterName, {content: reportLog, name: 'Console errors'}, status);
-      if (status === 'failed') {
-        saveScreenshot();
-      }
 
-      browser.takeSnapshotOfTarget('Dashboard - ' + filterName, Target.window().fully());
+      if (status == 'failed') {
+         saveScreenshot();
+      }
     });
 
     expect(totalConsoleLogs).to.equal(0, 'Total errors: ' + totalConsoleLogs);

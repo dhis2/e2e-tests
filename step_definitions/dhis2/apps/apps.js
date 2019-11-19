@@ -34,12 +34,11 @@ Then(/^every app should open without errors$/, { timeout: 1000 * 1000 }, () => {
 
     const status = consoleLogs.length > 0 ? 'failed' : 'passed';
     allure.addStep(app, {content: reportLog, name: 'Console errors'}, status);
-    if (status === 'failed') {
+
+    if (status == 'failed') {
       saveScreenshot();
     }
     lastOpenedApp = app;
-    
-    browser.takeSnapshotOfTarget('App - ' + app, Target.window().fully());
   });
 
   expect(totalConsoleLogs).to.equal(0, 'Total errors: ' + totalConsoleLogs);
