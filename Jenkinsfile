@@ -5,12 +5,14 @@ pipeline {
   environment {
     VERSION = "dev"
     INSTANCE_NAME = "${VERSION}_smoke"
-    INSTANCE_URL = "https://verify.dhis2.org/${INSTANCE_NAME}/"
+    INSTANCE_DOMAIN = "https://verify.dhis2.org"
+    INSTANCE_URL = ""
     GIT_URL = "https://github.com/dhis2/e2e-tests/"
     USERNAME = "$BROWSERSTACK_USERNAME"
     KEY = "$BROWSERSTACK_KEY"
     AWX_BOT_CREDENTIALS = credentials('awx-bot-user-credentials')
-    ALLURE_REPORT_DIR_PATH = "$JENKINS_HOME/jobs/${getJobName()}/branches/$GIT_BRANCH/allure"
+    BRANCH_PATH = "${getBranchPath()}"
+    ALLURE_REPORT_DIR_PATH = "${BRANCH_PATH}/allure"
     ALLURE_RESULTS_DIR = "allure-results"
     ALLURE_REPORT_DIR = "allure-report-$VERSION"
     APPLITOOLS_API_KEY = "$APPLITOOLS_API_KEY"
@@ -25,9 +27,26 @@ pipeline {
   }
 
   stages {     
+    stage('Configure job') {
+      when {
+        buildingTag()
+      }
+
+      steps {
+        script {
+          VERSION = "${env.BRANCH_NAME}".split("-")[0]
+          INSTANCE_NAME = "${env.BRANCH_NAME}" 
+          BRANCH_PATH = "${getBranchPath(true)}"
+          ALLURE_REPORT_DIR_PATH = "${BRANCH_PATH}/allure"
+        }
+     
+      }
+
+    }
     stage('Update instance') {
       steps {
         script {
+          INSTANCE_URL = "${INSTANCE_DOMAIN}/${INSTANCE_NAME}/"
           sh "instance_name=$INSTANCE_NAME awx_credentials=$AWX_BOT_CREDENTIALS ./update-instance.sh"
         } 
       }
