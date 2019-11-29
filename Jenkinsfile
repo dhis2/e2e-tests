@@ -23,7 +23,7 @@ pipeline {
   }
 
   triggers {
-    cron('H 5 * * *')
+    cron(env.BRANCH_NAME.contains('.') ? '' : 'H 5 * * *')
   }
 
   stages {     
