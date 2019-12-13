@@ -1,5 +1,5 @@
+@DHIS2-8010
 Feature: Dashboard page
-
     Background:
         Given I open up the application
         And I am logged in
