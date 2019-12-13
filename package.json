@@ -30,7 +30,8 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.0",
     "eslint-plugin-webdriverio": "^1.0.1",
-    "link-module-alias": "^1.2.0"
+    "link-module-alias": "^1.2.0",
+    "request": "^2.88.0"
   },
   "_moduleAliases": {
     "@support": "./support",
@@ -41,7 +42,7 @@
     "postinstall": "link-module-alias",
     "lint": "./node_modules/eslint/bin/eslint.js . --fix",
     "browserstack": "./node_modules/.bin/wdio wdio.remote.conf.js",
-    "test": "./node_modules/.bin/wdio wdio.conf.js --suite apps"
+    "test": "./node_modules/.bin/wdio wdio.conf.js"
   },
   "author": "Edoardo Sabadelli",
   "maintainers": [
