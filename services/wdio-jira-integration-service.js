@@ -64,7 +64,6 @@ class WdioJiraService {
     this.stepFailures = false;
 
     const tags = feature.document.feature.tags;
-    console.log("tags " + tags);
     if (!tags || !tags.length) {
       return;
     }
@@ -84,7 +83,7 @@ class WdioJiraService {
     }
 
     this.jira_issue = tags[0].name.replace('@', '');
-    console.log(this.jira_issue);
+    console.log(`JIRA issue number: ${this.jira_issue}`);
 
     browser.call(() => {
       return this.jiraService.createExecution(this.jira_issue)
@@ -119,9 +118,6 @@ class WdioJiraService {
   }
 
   afterStep(uri, feature, { error, result, duration, passed }) {
-    console.log(!this.isConfigured)
-    console.log(!this.jira_issue);
-    console.log(!this.isConfigured || !this.jira_issue);
     if (!this.isConfigured || !this.jira_issue) {
       return;
     }
@@ -132,26 +128,14 @@ class WdioJiraService {
   }
 
   afterScenario(uri, feature, scenario, result) {
-    console.log('afterScenario');
-    console.log(!this.isConfigured)
-    console.log(!this.jira_issue);
-    console.log(!this.isConfigured || !this.jira_issue);
-    console.log("feature tag" + this.featureTags);
     if (!this.isConfigured || !this.jira_issue || this.featureTags) {
-      console.log('after scenario return');
       return;
     }
-  
-    console.log("result " + result);
-    console.log(result.status);
+
     this._createOrUpdateExecution(result.status);
   }
 
   afterFeature() {
-    console.log('afterFeature');
-    console.log(!this.isConfigured)
-    console.log(!this.jira_issue);
-    console.log(!this.isConfigured || !this.jira_issue);
     if (!this.isConfigured || !this.jira_issue || !this.featureTags) {
       return;
     }
@@ -177,14 +161,12 @@ class WdioJiraService {
   _createOrUpdateExecution(status) {
     let _status = this._getStatus(status);
 
-    console.log('updating with status ' + _status);
     browser.call(() => {
       return this.jiraService.updateExecutionStatus(this.executionId, _status);
     })
   }
 
   _getStatus(statusString) {
-    console.log('incoming ' + statusString);
     let _status = statusString == 'passed' ? 1 : 2;
 
     return _status;
