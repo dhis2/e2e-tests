@@ -36,6 +36,7 @@ class WdioJiraService {
       throw new Error('username or password property is not configured');
     }
 
+    console.log('JIRA service configured. Will push to version: ' + this.options.versionName)
     this.jiraService = new JiraService(username, password, this.options.instanceUrl, this.options.projectId, this.options.versionName, cycleName);
     this.isConfigured = true;
   }
