@@ -15,7 +15,7 @@ else
   current_major_version=$(echo "${current_branch}" | sed 's/v//g')
   patches=($(echo "${tags[*]}" |
      tr ' ' '\n' | 
-     grep -o -E "^2.${current_major_version}.\d" ))
+     grep -o -E "^2.${current_major_version}.[0-9]" ))
   
   last_patch=$(echo "${patches[*]}" | tr ' ' '\n' | sort -nr | head -n1 )
 
