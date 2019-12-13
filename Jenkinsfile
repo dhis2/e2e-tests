@@ -16,7 +16,7 @@ pipeline {
     ALLURE_RESULTS_DIR = "allure-results"
     ALLURE_REPORT_DIR = "allure-report-$VERSION"
     APPLITOOLS_API_KEY = "$APPLITOOLS_API_KEY"
-    JIRA_USERMAE = "$JIRA_USERNAME"
+    JIRA_USERNAME = "$JIRA_USERNAME"
     JIRA_PASSWORD = "$JIRA_PASSWORD"
     JIRA_RELEASE_VERSION_NAME = sh(script: './get_next_version.sh', returnStoud: true)
   }
