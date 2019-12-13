@@ -51,7 +51,10 @@ Then(
       totalConsoleLogs += consoleLogs.length;
 
       const status = consoleLogs.length > 0 ? 'failed' : 'passed';
-      allure.addStep(filterName, {content: reportLog, name: 'Console errors'}, status);
+
+      // due to the test being dynamic, these has to be done here instead of using hooks. 
+      allure.addStep(filterName, {content: reportLog, name: 'Console errors'}, status);  
+      browser.addJiraStepExecution(`I open ${filterName}`, null, 'There should be no console errors', status)
 
       if (status == 'failed') {
          saveScreenshot();

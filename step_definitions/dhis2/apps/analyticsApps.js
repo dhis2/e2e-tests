@@ -35,7 +35,7 @@ function initTestData (dataUrlPart, appNm, appUrlPattern) {
   favoritePattern = appUrlPattern;
 }
 
-Then(/^every favorite should open without errors$/, { timeout: 1000 * 1000 }, () => {
+Then(/^every favorite should open without errors$/, { timeout: 1000 * 10000 }, () => {
   let totalConsoleLogs = 0;
   let totalFavoritesWithNoData = 0;
   listOfFavorites.forEach((favorite) => {
@@ -59,7 +59,10 @@ Then(/^every favorite should open without errors$/, { timeout: 1000 * 1000 }, ()
     totalConsoleLogs += consoleLogs.length;
     const status = consoleLogs.length > 0 || dataExist === false ? 'failed' : 'passed';
 
+     // due to the test being dynamic, these has to be done here instead of using hooks. 
     allure.addStep(favorite.displayName, {content: reportLog, name: 'Console errors'}, status);
+    browser.addJiraStepExecution(`I open ${favorite.displayName}`, null, 'There should be no console errors', status)
+    
     if (status === 'failed') {
       saveScreenshot();
     }
