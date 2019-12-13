@@ -1,3 +1,5 @@
+#!/bin/sh
+
 VERSION=0;
 current_branch=$(git rev-parse --abbrev-ref HEAD)
 all_branches=$(git ls-remote --heads origin  | sed 's?.*refs/heads/??' )
