@@ -5,7 +5,7 @@ pipeline {
   environment {
     VERSION = "dev"
     INSTANCE_NAME = "${VERSION}_smoke"
-    INSTANCE_DOMAIN = "https://verify.dhis2.org"
+    INSTANCE_DOMAIN = "https://smoke.dhis2.org"
     INSTANCE_URL = ""
     GIT_URL = "https://github.com/dhis2/e2e-tests/"
     USERNAME = "$BROWSERSTACK_USERNAME"
