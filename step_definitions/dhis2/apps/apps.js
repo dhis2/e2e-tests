@@ -1,7 +1,6 @@
 import { getConsoleLog, saveScreenshot } from '@support/action';
 import { waitForVisible, waitForPageToLoad } from '@support/wait';
 import { Given, Then } from 'cucumber';
-import { Target } from '@applitools/eyes-webdriverio';
 
 const listOfApps = [];
 Given(/^I have a list of installed core apps$/, () => {
@@ -33,8 +32,11 @@ Then(/^every app should open without errors$/, { timeout: 1000 * 1000 }, () => {
     totalConsoleLogs += consoleLogs.length;
 
     const status = consoleLogs.length > 0 ? 'failed' : 'passed';
+    
+    // due to the test being dynamic, these has to be done here instead of using hooks. 
     allure.addStep(app, {content: reportLog, name: 'Console errors'}, status);
-
+    browser.addJiraStepExecution(`I open ${app}`, null, 'There should be no console errors', status)
+    
     if (status == 'failed') {
       saveScreenshot();
     }

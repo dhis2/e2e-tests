@@ -1,6 +1,6 @@
 const chai = require('chai');
 require('@babel/register');
-
+const jiraService = require('./services/wdio-jira-integration-service').default;
 exports.config = {
   //
   // ====================
@@ -89,6 +89,15 @@ exports.config = {
   // your test setup with almost no effort. Unlike plugins, they don't add new
   // commands. Instead, they hook themselves up into the test process.
   services: [
+    [ jiraService, {
+      isEnabled: true,
+      instanceUrl: "https://jira.dhis2.org",
+      username: process.env.JIRA_USERNAME,
+      password: process.env.JIRA_PASSWORD,
+      projectId: "10000",
+      testCycle: "automated-tests",
+      versionName: process.env.JIRA_RELEASE_VERSION_NAME  
+    }],
     [ 'applitools-cucumber' , {
       appName: "DHIS2 - master",
       apiKey: process.env.APPLITOOLS_API_KEY,

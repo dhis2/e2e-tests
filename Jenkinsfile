@@ -16,6 +16,9 @@ pipeline {
     ALLURE_RESULTS_DIR = "allure-results"
     ALLURE_REPORT_DIR = "allure-report-$VERSION"
     APPLITOOLS_API_KEY = "$APPLITOOLS_API_KEY"
+    JIRA_USERNAME = "$JIRA_USERNAME"
+    JIRA_PASSWORD = "$JIRA_PASSWORD"
+    JIRA_RELEASE_VERSION_NAME = sh(script: './get_next_version.sh', returnStdout: true)
   }
 
   tools {
@@ -38,6 +41,7 @@ pipeline {
           INSTANCE_NAME = "${env.BRANCH_NAME}" 
           BRANCH_PATH = "${getBranchPath(true)}"
           ALLURE_REPORT_DIR_PATH = "${BRANCH_PATH}/allure"
+          JIRA_RELEASE_VERSION_NAME = "${VERSION}"
         }
      
       }
