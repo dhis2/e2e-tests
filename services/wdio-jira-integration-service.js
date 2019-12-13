@@ -37,7 +37,7 @@ class WdioJiraService {
     }
 
     console.log('JIRA service configured. Will push to version: ' + this.options.versionName)
-    this.jiraService = new JiraService(username, password, this.options.instanceUrl, this.options.projectId, this.options.versionName, cycleName);
+    this.jiraService = new JiraService(username, password, this.options.instanceUrl, this.options.projectId, this.options.versionName.trim(), cycleName);
     this.isConfigured = true;
   }
 

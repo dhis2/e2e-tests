@@ -1,6 +1,6 @@
 #!/bin/sh
 
-instance_host="[\"verify.dhis2.org\"]"
+instance_host="[\"smoke.dhis2.org\"]"
 instance_name=$instance_name
 instance_action="reset_war"
 credentials=$awx_credentials
