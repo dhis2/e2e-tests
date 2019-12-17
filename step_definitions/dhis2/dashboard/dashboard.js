@@ -38,7 +38,7 @@ Then(
       getConsoleLog(); // clear browser log before test
 
       // getText() returns empty string for invisible filters.
-      const filterName = filter.$('span span').getHTML(false);
+      const filterName = filter.$('span').getHTML(false);
       const filterHref = filter.getAttribute('href');
 
       console.log('opening ' + filterName);
