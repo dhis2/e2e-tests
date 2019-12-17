@@ -40,8 +40,9 @@ pipeline {
           VERSION = "${env.BRANCH_NAME}".split("-")[0]
           INSTANCE_NAME = "${env.BRANCH_NAME}" 
           BRANCH_PATH = "${getBranchPath(true)}"
-          ALLURE_REPORT_DIR_PATH = "${BRANCH_PATH}/allure"
-          JIRA_RELEASE_VERSION_NAME = "${VERSION}"
+          ALLURE_REPORT_DIR_PATH = "${BRANCH_PATH}/allure"      
+          JIRA_RELEASE_VERSION_NAME = "$VERSION"
+          echo "Version: $VERSION, JIRA_RELEASE_VERSION_NAME: $JIRA_RELEASE_VERSION_NAME"
         }
      
       }
