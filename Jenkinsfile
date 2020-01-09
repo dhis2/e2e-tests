@@ -28,6 +28,7 @@ pipeline {
       steps {
         script {
           sh "instance_name=$INSTANCE_NAME awx_credentials=$AWX_BOT_CREDENTIALS ./update-instance.sh"
+          sh "credentials=system:System123 url=${INSTANCE_URL} ./delete-data.sh"
         } 
       }
     }
