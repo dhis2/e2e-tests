@@ -1,10 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 
 url=$url
 crendentials=$credentials
 declare -a report_tables=('CurZOghc7Mh' 'jhr1eSnZeMr')
 declare -a maps=("AHWtSmx21sx" "gJ1BHisY9Wm")
-declare -a charts=("ME1zXcf4zvu" "bDhkM10HzKO", "jQPC2FMKqij")
+declare -a charts=("ME1zXcf4zvu" "bDhkM10HzKO" "jQPC2FMKqij")
 
 # $1- resource
 # $2 - array of uids
