@@ -51,7 +51,7 @@ pipeline {
       steps {
         script {
           INSTANCE_URL = "${INSTANCE_DOMAIN}/${INSTANCE_NAME}/"
-          sh "instance_name=$INSTANCE_NAME awx_credentials=$AWX_BOT_CREDENTIALS ./update-instance.sh"
+          awx.resetWar("$AWX_BOT_CREDENTIALS", "smoke.dhis2.org", "${INSTANCE_NAME}")
           sh "credentials=system:System123 url=${INSTANCE_URL} ./delete-data.sh"
         } 
       }
