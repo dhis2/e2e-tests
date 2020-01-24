@@ -6,7 +6,6 @@ class WdioJiraService {
     this.isConfigured = false;
   }
 
-  
   _configure() {
     if (!this.options.isEnabled) {
       return;
@@ -52,7 +51,7 @@ class WdioJiraService {
 
     global.browser.addCommand('addJiraStepExecution', (step, data, result, status) => {
        this._createOrUpdateTestStep(step, data, result);
-       this._createOrUpdateTestStepExecution(status);
+       return this._createOrUpdateTestStepExecution(status)
     })
   }
 
@@ -155,6 +154,7 @@ class WdioJiraService {
       return this.jiraService.createOrUpdateTestStep(this.jira_issue, text, data, result)
         .then((id) => {
           this.last_step_id = id;
+          this.last_step_name = text;
         });
     })
   }
@@ -167,27 +167,43 @@ class WdioJiraService {
     })
   }
 
+  _createOrUpdateTestStepExecution(status) {
+    let _status = this._getStatus(status);
+    this.stepFailures = _status == 2 ? true: this.stepFailures;
+    
+    return browser.call(() => {
+      return this.jiraService.getStepResultForStepWithinExecution(this.executionId, this.last_step_id)
+        .then(stepResult => {
+          if (!stepResult) {
+            return this.jiraService.createStepResult(this.executionId, this.last_step_id, this.jira_issue, _status)
+              .then(() => {
+                return {
+                  stepName: this.last_step_name,
+                  previousStatus: undefined,
+                  status: _status
+                }
+              })
+          }
+
+          return this.jiraService.updateStepResult(stepResult.id, _status)
+            .then(() => {
+              return {
+                stepName: this.last_step_name,
+                previousStatus: stepResult.status,
+                status: _status
+              }
+            });
+        })
+    })
+  }
+
   _getStatus(statusString) {
     let _status = statusString == 'passed' ? 1 : 2;
 
     return _status;
   }
 
-  _createOrUpdateTestStepExecution(status) {
-    let _status = this._getStatus(status);
-    this.stepFailures = _status == 2 ? true: this.stepFailures;
-    
-    browser.call(() => {
-      return this.jiraService.getStepResultForStepWithinExecution(this.executionId, this.last_step_id)
-        .then(stepResult => {
-          if (!stepResult) {
-            return this.jiraService.createStepResult(this.executionId, this.last_step_id, this.jira_issue, _status);
-          }
-
-          return this.jiraService.updateStepResult(stepResult, _status);
-        })
-    })
-  }
+ 
 }
 
 export default WdioJiraService;
