@@ -76,6 +76,9 @@ pipeline {
     }
 
     stage('Build') {
+      environment {
+        JIRA_RELEASE_VERSION_NAME = "$JIRA_RELEASE_VERSION_NAME"
+      }
       steps {
         sh "npm install"
         sh "npm run-script browserstack -- --baseUrl=\"${INSTANCE_URL}\""
