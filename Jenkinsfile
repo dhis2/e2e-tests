@@ -13,7 +13,7 @@ pipeline {
     AWX_BOT_CREDENTIALS = credentials('awx-bot-user-credentials')
     BRANCH_PATH = "${getBranchPath()}"
     ALLURE_REPORT_DIR_PATH = "${BRANCH_PATH}/allure"
-    ALLURE_RESULTS_DIR = "allure-results"
+    ALLURE_RESULTS_DIR = "./reports/allure-results"
     ALLURE_REPORT_DIR = "allure-report-$VERSION"
     APPLITOOLS_API_KEY = "$APPLITOOLS_API_KEY"
     JIRA_USERNAME = "$JIRA_USERNAME"
@@ -98,15 +98,19 @@ pipeline {
           results: [[path: "./$ALLURE_RESULTS_DIR"]],
           report: "$ALLURE_REPORT_DIR_PATH/$ALLURE_REPORT_DIR"
           ])  
-        }
+        }     
       }
       
     failure {
-      slackSend(
-        color: '#ff0000',
-        message: "E2E tests initialized from branch $GIT_BRANCH for version - $VERSION failed. Please visit " + env.BUILD_URL + " for more information",
-        channel: '@Gintare'
-      )
+      script {
+         if (fileExists('./reports/new_failures.json')) {
+          slackSend(
+            color: '#ff0000',
+            message: "E2E tests initialized from branch $GIT_BRANCH for version - $VERSION has new errors. Please visit " + env.BUILD_URL + " for more information",
+            channel: '@Gintare'
+          )
+        } 
+      }
     }
   }
 }

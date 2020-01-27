@@ -27,7 +27,7 @@ export default class JiraService {
           return Promise.resolve(undefined);
         };
 
-        return Promise.resolve(matchingResults[0].id);
+        return Promise.resolve(matchingResults[0]);
       })
   }
 
