@@ -68,7 +68,7 @@ pipeline {
             })
           }   
     
-          sh "mkdir ${WORKSPACE}/$ALLURE_RESULTS_DIR"
+          sh "mkdir -p ${WORKSPACE}/$ALLURE_RESULTS_DIR"
               
           if (fileExists("$ALLURE_REPORT_DIR_PATH/$ALLURE_REPORT_DIR/history")) {
             sh "cp  -r $ALLURE_REPORT_DIR_PATH/$ALLURE_REPORT_DIR/history ${WORKSPACE}/$ALLURE_RESULTS_DIR/history"
