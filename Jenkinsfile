@@ -97,7 +97,7 @@ pipeline {
           jdk: '',
           properties: [],
           reportBuildPolicy: 'ALWAYS',
-          results: [[path: "./$ALLURE_RESULTS_DIR"]],
+          results: [[path: "$ALLURE_RESULTS_DIR"]],
           report: "$ALLURE_REPORT_DIR_PATH/$ALLURE_REPORT_DIR"
           ])  
         }     
@@ -105,7 +105,7 @@ pipeline {
       
     failure {
       script {
-         if (fileExists('./reports/new_failures.json')) {
+         if (!fileExists("$ALLURE_RESULTS_DIR") || fileExists('./reports/new_failures.json')) {
           slackSend(
             color: '#ff0000',
             message: "E2E tests initialized from branch $GIT_BRANCH for version - $VERSION has new errors. Please visit " + env.BUILD_URL + " for more information",
