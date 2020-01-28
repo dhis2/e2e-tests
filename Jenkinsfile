@@ -61,10 +61,12 @@ pipeline {
         script {
           if (!fileExists("$ALLURE_REPORT_DIR_PATH")) {
             sh "mkdir $ALLURE_REPORT_DIR_PATH"
-          }
-          dir("$ALLURE_RESULTS_DIR", {
-            deleteDir()
-          })
+          } 
+          if (fileExists("$ALLURE_RESULTS_DIR")) {
+            dir("$ALLURE_RESULTS_DIR", {
+              deleteDir()
+            })
+          }   
     
           sh "mkdir ${WORKSPACE}/$ALLURE_RESULTS_DIR"
               
