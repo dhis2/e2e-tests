@@ -13,7 +13,7 @@ pipeline {
     AWX_BOT_CREDENTIALS = credentials('awx-bot-user-credentials')
     BRANCH_PATH = "${getBranchPath()}"
     ALLURE_REPORT_DIR_PATH = "${BRANCH_PATH}/allure"
-    ALLURE_RESULTS_DIR = "allure-results"
+    ALLURE_RESULTS_DIR = "reports/allure-results"
     ALLURE_REPORT_DIR = "allure-report-$VERSION"
     APPLITOOLS_API_KEY = "$APPLITOOLS_API_KEY"
     JIRA_USERNAME = "$JIRA_USERNAME"
@@ -51,7 +51,7 @@ pipeline {
       steps {
         script {
           INSTANCE_URL = "${INSTANCE_DOMAIN}/${INSTANCE_NAME}/"
-          sh "instance_name=$INSTANCE_NAME awx_credentials=$AWX_BOT_CREDENTIALS ./update-instance.sh"
+          awx.resetWar("$AWX_BOT_CREDENTIALS", "smoke.dhis2.org", "${INSTANCE_NAME}")
           sh "credentials=system:System123 url=${INSTANCE_URL} ./delete-data.sh"
         } 
       }
@@ -61,12 +61,14 @@ pipeline {
         script {
           if (!fileExists("$ALLURE_REPORT_DIR_PATH")) {
             sh "mkdir $ALLURE_REPORT_DIR_PATH"
-          }
-          dir("$ALLURE_RESULTS_DIR", {
-            deleteDir()
-          })
+          } 
+          if (fileExists("$ALLURE_RESULTS_DIR")) {
+            dir("$ALLURE_RESULTS_DIR", {
+              deleteDir()
+            })
+          }   
     
-          sh "mkdir ${WORKSPACE}/$ALLURE_RESULTS_DIR"
+          sh "mkdir -p ${WORKSPACE}/$ALLURE_RESULTS_DIR"
               
           if (fileExists("$ALLURE_REPORT_DIR_PATH/$ALLURE_REPORT_DIR/history")) {
             sh "cp  -r $ALLURE_REPORT_DIR_PATH/$ALLURE_REPORT_DIR/history ${WORKSPACE}/$ALLURE_RESULTS_DIR/history"
@@ -91,22 +93,33 @@ pipeline {
     always {
       script {
         allure([
-          includeProperties: false,
+          includeProperties: true,
           jdk: '',
-          properties: [],
+          properties: [
+            [
+              key: 'allure.results.directory',
+              value: "$ALLURE_RESULTS_DIR"
+            ]
+          ],
           reportBuildPolicy: 'ALWAYS',
-          results: [[path: "./$ALLURE_RESULTS_DIR"]],
+          results: [[path: "$ALLURE_RESULTS_DIR"]],
           report: "$ALLURE_REPORT_DIR_PATH/$ALLURE_REPORT_DIR"
           ])  
-        }
+        }     
       }
       
     failure {
-      slackSend(
-        color: '#ff0000',
-        message: "E2E tests initialized from branch $GIT_BRANCH for version - $VERSION failed. Please visit " + env.BUILD_URL + " for more information",
-        channel: '@Gintare'
-      )
+      script {
+        def prefix = ""
+        if (fileExists('./reports/new_failures.json')) {
+          prefix = "NEW ERRORS FOUND! "
+        }
+        slackSend(
+            color: '#ff0000',
+            message: "${prefix}E2E tests initialized from branch $GIT_BRANCH for version - $VERSION failed. Please visit " + env.BUILD_URL + " for more information",
+            channel: '@Gintare'
+        )
+      }
     }
   }
 }

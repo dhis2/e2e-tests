@@ -1,6 +1,7 @@
 import { getConsoleLog, saveScreenshot } from '@support/action';
 import { waitForVisible } from '@support/wait';
 import { Given, Then } from 'cucumber';
+import { reportStep } from '@support/reporting'
 
 let listOfFavorites = [];
 let appName = '';
@@ -59,13 +60,8 @@ Then(/^every favorite should open without errors$/, { timeout: 1000 * 10000 }, (
     totalConsoleLogs += consoleLogs.length;
     const status = consoleLogs.length > 0 || dataExist === false ? 'failed' : 'passed';
 
-     // due to the test being dynamic, these has to be done here instead of using hooks. 
-    allure.addStep(favorite.displayName, {content: reportLog, name: 'Console errors'}, status);
-    browser.addJiraStepExecution(`I open ${favorite.displayName}`, null, 'There should be no console errors', status)
-    
-    if (status === 'failed') {
-      saveScreenshot();
-    }
+    // due to the test being dynamic, these has to be done here instead of using hooks. 
+    reportStep(`I open ${favorite.displayName}`, 'There should be no console errors', status , reportLog);
   });
 
   console.log('Total errors ' + (totalConsoleLogs + totalFavoritesWithNoData));

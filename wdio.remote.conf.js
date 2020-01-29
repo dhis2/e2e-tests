@@ -157,7 +157,7 @@ exports.config = {
   reporters: [
     'spec',
     ['allure', {
-      outputDir: 'allure-results',
+      outputDir: './reports/allure-results',
       disableWebdriverStepsReporting: true,
       useCucumberStepReporter: true,
       disableWebdriverScreenshotsReporting: false
@@ -220,6 +220,7 @@ exports.config = {
     /**
      * Setup the Chai assertion framework
      */
+    global.__basedir = __dirname;
     global.expect = chai.expect;
     global.assert = chai.assert;
     global.should = chai.should();
