@@ -4,6 +4,7 @@ import { getConsoleLog, saveScreenshot }  from '@support/action';
 import { waitForElementToExist } from '@support/wait';
 import { Then } from 'cucumber';
 import { Target } from '@applitools/eyes-webdriverio';
+import { reportStep } from '@support/reporting'
 
 Then(
   /^I expect that header is visible$/,
@@ -53,12 +54,7 @@ Then(
       const status = consoleLogs.length > 0 ? 'failed' : 'passed';
 
       // due to the test being dynamic, these has to be done here instead of using hooks. 
-      allure.addStep(filterName, {content: reportLog, name: 'Console errors'}, status);  
-      browser.addJiraStepExecution(`I open ${filterName}`, null, 'There should be no console errors', status)
-
-      if (status == 'failed') {
-         saveScreenshot();
-      }
+      reportStep(`I open ${filterName}`, 'There should be no console errors', status , reportLog)
     });
 
     expect(totalConsoleLogs).to.equal(0, 'Total errors: ' + totalConsoleLogs);
