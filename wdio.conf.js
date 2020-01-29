@@ -113,7 +113,7 @@ exports.config = {
     version: "3.141.59",
     drivers: {
       chrome: {
-        version: '77.0.3865.40', // depending on when u see this, you may want something newer
+        version: '79.0.3945.36', // depending on when u see this, you may want something newer
         arch: process.arch,
         baseURL: 'https://chromedriver.storage.googleapis.com',
       },
@@ -123,7 +123,7 @@ exports.config = {
     version: "3.141.59",
     drivers: {
       chrome: {
-        version: '77.0.3865.40',
+        version: '79.0.3945.36',
         arch: process.arch
       },
     },
@@ -146,7 +146,7 @@ exports.config = {
   reporters: [
     'spec',
     ['allure', {
-      outputDir: 'allure-results',
+      outputDir: './reports/allure-results',
       disableWebdriverStepsReporting: true,
       useCucumberStepReporter: true,
       disableWebdriverScreenshotsReporting: false
@@ -209,6 +209,7 @@ exports.config = {
     /**
      * Setup the Chai assertion framework
      */
+    global.__basedir = __dirname;
     global.expect = chai.expect;
     global.assert = chai.assert;
     global.should = chai.should();
