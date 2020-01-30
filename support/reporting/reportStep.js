@@ -36,7 +36,7 @@ var trackStatusChange = function (name, oldStatus, newStatus) {
         });
       }
 
-      fs.appendFile(reportsdir + '/new_failures.txt', `${JSON.stringify(json)}\r\n`, () => {
+      fs.appendFile(reportsdir + '/new_failures.json', `${JSON.stringify(json)}\r\n`, () => {
         console.log('ok')
       });
     });
