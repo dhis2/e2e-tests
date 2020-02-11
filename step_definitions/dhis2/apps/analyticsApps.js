@@ -8,27 +8,31 @@ let appName = '';
 let favoritePattern = '/';
 
 Given(/^I have a list of favorites saved in data-visualizer app$/, () => {
-  initTestData('charts', 'dhis-web-data-visualizer', '#/');
+  initTestData('charts', '.json?fields=id,displayName&paging=false', 'dhis-web-data-visualizer', '#/');
+});
+
+Given(/^I have a list of pivot tables saved in data-visualizer app$/, () => {
+  initTestData('visualizations','.json?filter=type:eq:PIVOT_TABLE&fields=id,displayName&paging=false','dhis-web-data-visualizer', '#/');
 });
 
 Given(/^I have a list of favorites saved in event-visualizer app$/, () => {
-  initTestData('eventCharts', 'dhis-web-event-visualizer', '?id=');
+  initTestData('eventCharts','.json?fields=id,displayName&paging=false', 'dhis-web-event-visualizer', '?id=');
 });
 
 Given(/^I have a list of favorites saved in maps app$/, () => {
-  initTestData('maps', 'dhis-web-maps', '?id=');
+  initTestData('maps','.json?fields=id,displayName&paging=false', 'dhis-web-maps', '?id=');
 });
 
 Given(/^I have a list of favorites saved in pivot app$/, () => {
-  initTestData('reportTables', 'dhis-web-pivot', '?id=');
+  initTestData('reportTables','.json?fields=id,displayName&paging=false', 'dhis-web-pivot', '?id=');
 });
 
 Given(/^I have a list of favorites saved in event reports app$/, () => {
-  initTestData('eventReports', 'dhis-web-event-reports', '?id=');
+  initTestData('eventReports','.json?fields=id,displayName&paging=false','dhis-web-event-reports', '?id=');
 });
 
-function initTestData (dataUrlPart, appNm, appUrlPattern) {
-  browser.url('api/' + dataUrlPart + '.json?fields=id,displayName&paging=false');
+function initTestData (dataUrlPart, queryParams, appNm, appUrlPattern) {
+  browser.url('api/' + dataUrlPart + queryParams);
   waitForVisible(browser.$('body pre'));
 
   listOfFavorites = JSON.parse(browser.$('body pre').getHTML(false))[dataUrlPart];
