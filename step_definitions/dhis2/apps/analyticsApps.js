@@ -1,4 +1,4 @@
-import { getConsoleLog, saveScreenshot } from '@support/action';
+import { getFilteredConsoleLog, getConsoleLog, saveScreenshot } from '@support/action';
 import { waitForVisible } from '@support/wait';
 import { Given, Then } from 'cucumber';
 import { reportStep } from '@support/reporting'
@@ -51,7 +51,7 @@ Then(/^every favorite should open without errors$/, { timeout: 1000 * 10000 }, (
     browser.pause(4000);
 
     const dataExist = !browser.$('//*[contains(translate(text(), "No", "no"), "no data")]').isExisting();
-    const consoleLogs = getConsoleLog();
+    const consoleLogs = getFilteredConsoleLog();
 
     let reportLog = 'Favorite: \n' + favorite.displayName + ' has following errors: ';
 
