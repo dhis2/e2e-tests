@@ -1,4 +1,4 @@
-import { getConsoleLog } from './getConsoleLog'
+import getConsoleLog from './getConsoleLog'
 
 module.exports = () => {
   return getConsoleLog().filter((value) => {
