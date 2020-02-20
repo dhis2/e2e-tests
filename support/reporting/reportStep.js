@@ -2,15 +2,18 @@ import { saveScreenshot } from '@support/action';
 import fs from 'fs';
 
 module.exports = (stepName, expectedResult, status, allureContent) => {
-  const execution = browser.addJiraStepExecution(`${stepName}`, null, expectedResult, status)
+  try {
+    const execution = browser.addJiraStepExecution(`${stepName}`, null, expectedResult, status)
 
-  if (["passed", 1, "1"].includes(execution.previousStatus)
-    && !["passed", 1, "1"].includes(execution.status)) {
-    trackStatusChange(execution.stepName, execution.previousStatus, execution.status);
-    
-    stepName = `NEW FAILURE! ${stepName}`
+    if (["passed", 1, "1"].includes(execution.previousStatus)
+      && !["passed", 1, "1"].includes(execution.status)) {
+      trackStatusChange(execution.stepName, execution.previousStatus, execution.status);
+      
+      stepName = `NEW FAILURE! ${stepName}`
+    } 
   }
-
+  catch(e) { }
+  
   allure.addStep(stepName, { content: allureContent, name: 'Errors' }, status);
 
   if (status == 'failed') {
