@@ -1,4 +1,4 @@
-import { getConsoleLog, saveScreenshot } from '@support/action';
+import { getConsoleLog, getFilteredConsoleLog, saveScreenshot } from '@support/action';
 import { waitForVisible, waitForPageToLoad } from '@support/wait';
 import { Given, Then } from 'cucumber';
 import { reportStep } from '@support/reporting'
@@ -43,15 +43,8 @@ Then(/^every app should open without errors$/, { timeout: 1000 * 1000 }, () => {
 });
 
 const filteredConsolelog = (lastOpenedApp) => {
-  return getConsoleLog().filter((value) => {
+  return getFilteredConsoleLog().filter((value) => {
     const message = value['message'];
-    console.log(message);
-    // excluding possible errors that is not considered as errors, but rather as backend functionality
-    return !(message.includes('status of 404') &&
-      (message.includes('userDataStore/') ||
-      message.includes('staticContent/logo_banner') || //https://jira.dhis2.org/browse/DHIS2-7656
-      message.includes('userSettings.json?'))) && 
-      !message.includes(lastOpenedApp) && 
-      !message.includes("manifest.json");
+    return !message.includes(lastOpenedApp)
   });
 };
