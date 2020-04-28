@@ -1,6 +1,6 @@
 import { dashboardPage } from '@page_objects/Dashboard';
 import { isVisible}  from '@support/check';
-import { getConsoleLog, saveScreenshot }  from '@support/action';
+import { getFilteredConsoleLog, saveScreenshot }  from '@support/action';
 import { waitForElementToExist } from '@support/wait';
 import { Then } from 'cucumber';
 import { Target } from '@applitools/eyes-webdriverio';
@@ -36,7 +36,7 @@ Then(
     expect(filters.length).to.be.above(0, 'No filters to verify');
 
     filters.forEach(filter => {
-      getConsoleLog(); // clear browser log before test
+      getFilteredConsoleLog(); // clear browser log before test
 
       // getText() returns empty string for invisible filters.
       const filterName = filter.$('span').getHTML(false);
@@ -47,7 +47,7 @@ Then(
       browser.url(filterHref);
       browser.pause(10000);
 
-      const consoleLogs = getConsoleLog();
+      const consoleLogs = getFilteredConsoleLog();
       const reportLog = 'Filter: ' + filterName + ' has ' + consoleLogs.length + ' severe errors: \n' + JSON.stringify(consoleLogs, null, 1);
       totalConsoleLogs += consoleLogs.length;
 

@@ -1,4 +1,4 @@
-import { getConsoleLog, saveScreenshot } from '@support/action';
+import { getFilteredConsoleLog, saveScreenshot } from '@support/action';
 import { waitForVisible } from '@support/wait';
 import { Given, Then } from 'cucumber';
 import { reportStep } from '@support/reporting'
@@ -40,14 +40,14 @@ Then(/^every favorite should open without errors$/, { timeout: 1000 * 10000 }, (
   let totalConsoleLogs = 0;
   let totalFavoritesWithNoData = 0;
   listOfFavorites.forEach((favorite) => {
-    getConsoleLog();
+    getFilteredConsoleLog();
     console.log('Opening favorite ' + favorite.displayName);
 
     browser.url(appName + '/' + favoritePattern + favorite.id);
     browser.pause(4000);
 
     const dataExist = !browser.$('//*[contains(translate(text(), "No", "no"), "no data")]').isExisting();
-    const consoleLogs = getConsoleLog();
+    const consoleLogs = getFilteredConsoleLog();
 
     let reportLog = 'Favorite: \n' + favorite.displayName + ' has following errors: ';
 
