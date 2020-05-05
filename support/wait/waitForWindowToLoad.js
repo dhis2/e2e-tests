@@ -3,7 +3,7 @@ module.exports = () => {
   var maxRetries = 50;
   
   const pageSource = () => {
-    return browser.getPageSource();
+    return browser.getPageSource().length;
   }
 
   var source = pageSource();
@@ -20,13 +20,12 @@ module.exports = () => {
         console.log('finished waiting')
         return true;
       }
-      console.log(`It's a match! retries ${retries}`)
+      
       retries--;
       return false;
     }
     
     else {
-      console.log(`not a match!`)
       retries = 10;
       source = newSource;
       return false;
