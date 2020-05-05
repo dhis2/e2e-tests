@@ -1,5 +1,5 @@
 module.exports = () => {
-  var retries = 10;
+  var retries = 5;
   var maxRetries = 50;
   
   const pageSource = () => {
@@ -20,18 +20,17 @@ module.exports = () => {
         console.log('finished waiting')
         return true;
       }
-      
       retries--;
       return false;
     }
     
     else {
-      retries = 10;
+      retries = 5;
       source = newSource;
       return false;
     }
   }
   browser.waitUntil(() => {
     return check()
-  }, 40000, 'Page didnt load in 40s', 200)
+  }, 40000, 'Page didnt load in 40s', 400)
 }
