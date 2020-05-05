@@ -1,5 +1,5 @@
 import { getConsoleLog, getFilteredConsoleLog, saveScreenshot } from '@support/action';
-import { waitForVisible, waitForPageToLoad } from '@support/wait';
+import { waitForVisible, waitForWindowToLoad } from '@support/wait';
 import { Given, Then } from 'cucumber';
 import { reportStep } from '@support/reporting'
 
