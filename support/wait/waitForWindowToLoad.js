@@ -20,6 +20,7 @@ module.exports = () => {
         console.log('finished waiting')
         return true;
       }
+      
       retries--;
       return false;
     }
