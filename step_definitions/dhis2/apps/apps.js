@@ -21,7 +21,7 @@ Then(/^every app should open without errors$/, { timeout: 1000 * 1000 }, () => {
   let totalConsoleLogs = 0;
   let lastOpenedApp = "undefined-app";
   listOfApps.forEach(app => {
-    getConsoleLog(); // clear error log  before test
+    getFilteredConsoleLog(); // clear error log  before test
     console.log('opening app: ' + app);
 
     browser.url(app);
