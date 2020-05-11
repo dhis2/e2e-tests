@@ -3,7 +3,7 @@ module.exports = () => {
   var maxRetries = 20;
   
   const pageSource = () => {
-    return browser.$('html').getHTML()
+    return browser.$('body').getHTML()
   }
 
   var source = pageSource();
