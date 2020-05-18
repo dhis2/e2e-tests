@@ -1,7 +1,7 @@
 import { dashboardPage } from '@page_objects/Dashboard';
-import { isVisible}  from '@support/check';
-import { getConsoleLog, getFilteredConsoleLog, saveScreenshot }  from '@support/action';
-import { waitForElementToExist } from '@support/wait';
+import { isVisible } from '@support/check';
+import { getConsoleLog, getFilteredConsoleLog, saveScreenshot } from '@support/action';
+import { waitForElementToExist, waitForWindowToLoad } from '@support/wait';
 import { Then } from 'cucumber';
 import { reportStep } from '@support/reporting'
 
@@ -44,7 +44,7 @@ Then(
       console.log('opening ' + filterName);
 
       browser.url(filterHref);
-      browser.pause(10000);
+      waitForWindowToLoad();
 
       const consoleLogs = getFilteredConsoleLog();
       const reportLog = 'Filter: ' + filterName + ' has ' + consoleLogs.length + ' severe errors: \n' + JSON.stringify(consoleLogs, null, 1);
@@ -53,7 +53,7 @@ Then(
       const status = consoleLogs.length > 0 ? 'failed' : 'passed';
 
       // due to the test being dynamic, these has to be done here instead of using hooks. 
-      reportStep(`I open ${filterName}`, 'There should be no console errors', status , reportLog)
+      reportStep(`I open ${filterName}`, 'There should be no console errors', status, reportLog)
     });
 
     expect(totalConsoleLogs).to.equal(0, 'Total errors: ' + totalConsoleLogs);
