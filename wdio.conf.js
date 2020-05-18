@@ -113,7 +113,7 @@ exports.config = {
     version: "3.141.59",
     drivers: {
       chrome: {
-        version: '79.0.3945.36', // depending on when u see this, you may want something newer
+        version: '81.0.4044.69', // depending on when u see this, you may want something newer
         arch: process.arch,
         baseURL: 'https://chromedriver.storage.googleapis.com',
       },
@@ -123,7 +123,7 @@ exports.config = {
     version: "3.141.59",
     drivers: {
       chrome: {
-        version: '79.0.3945.36',
+        version: '81.0.4044.69',
         arch: process.arch
       },
     },
