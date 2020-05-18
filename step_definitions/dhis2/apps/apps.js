@@ -1,5 +1,5 @@
 import { getConsoleLog, getFilteredConsoleLog, saveScreenshot } from '@support/action';
-import { waitForVisible, waitForPageToLoad } from '@support/wait';
+import { waitForVisible, waitForWindowToLoad } from '@support/wait';
 import { Given, Then } from 'cucumber';
 import { reportStep } from '@support/reporting'
 
@@ -25,7 +25,7 @@ Then(/^every app should open without errors$/, { timeout: 1000 * 1000 }, () => {
     console.log('opening app: ' + app);
 
     browser.url(app);
-    browser.pause(15000);
+    waitForWindowToLoad();
 
     const consoleLogs = filteredConsolelog(lastOpenedApp);
 
