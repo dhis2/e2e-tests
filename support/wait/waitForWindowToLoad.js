@@ -1,9 +1,9 @@
 module.exports = () => {
-  var retries = 5;
-  var maxRetries = 50;
+  var retries = 3;
+  var maxRetries = 20;
   
   const pageSource = () => {
-    return browser.getPageSource().length;
+    return browser.$('body').getHTML()
   }
 
   var source = pageSource();
@@ -25,12 +25,12 @@ module.exports = () => {
     }
     
     else {
-      retries = 5;
+      retries = 3;
       source = newSource;
       return false;
     }
   }
   browser.waitUntil(() => {
     return check()
-  }, 40000, 'Page didnt load in 40s', 400)
+  }, 40000, 'Page didnt load in 40s', 700)
 }
