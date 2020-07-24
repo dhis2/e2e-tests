@@ -1,4 +1,3 @@
-export { default as clickElement } from './clickElement';
 export { default as getConsoleLog } from './getConsoleLog'
 export { default as getFilteredConsoleLog } from './getFilteredConsoleLog'
 export { default as pressButton } from './pressButton';
