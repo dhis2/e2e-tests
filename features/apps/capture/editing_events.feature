@@ -5,6 +5,7 @@ Background: Background name
   And I open the capture app
 
 
+@DHIS2-5287
 Scenario: Deletes event
   Given I select org unit "Ngelehun CHC"
   And I select the program "Information Campaign"

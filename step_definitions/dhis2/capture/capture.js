@@ -30,7 +30,7 @@ Given(/^there is at least one event in the list/, () => {
 })
 
 When(/^I click on event content button/, () => {
-  captureIndexPage.tableRows[1].$('[data-test="dhis-capture-event-content-menu"]').click();
+  captureIndexPage.tableRows[1].$('[data-test="dhis2-capture-event-content-menu"]').click();
 })
 
 When(/^I click on delete event button/, () => {
