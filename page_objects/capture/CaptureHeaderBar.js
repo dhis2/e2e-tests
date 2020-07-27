@@ -2,7 +2,7 @@ import Page from '../Page'
 
 class CaptureHeaderBar extends Page {
   get newEventButton() {
-    return browser.$('[data-test="new-event-button"]');
+    return browser.$('[data-test="dhis2-capture-new-event-button"]');
   }
 }
 

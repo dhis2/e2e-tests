@@ -15,7 +15,7 @@ class CaptureNewEventForm extends Page {
   }
 
   get mainButton() {
-    return browser.$('[data-test="main-button"]');
+    return browser.$('[data-test="dhis2-capture-main-button"]');
   }
 
   fillAndSave() {

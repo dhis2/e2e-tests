@@ -7,7 +7,7 @@ class CaptureIndexPage extends Page {
   }
 
   get tableRows() {
-    return browser.$$('[data-test="event-list-table"] tbody [data-test="table-row"]')
+    return browser.$$('[data-test="dhis2-capture-event-list-table"] tbody [data-test="dhis2-capture-table-row"]')
   }
 
   get tableRowCount() {
@@ -19,7 +19,7 @@ class CaptureIndexPage extends Page {
   }
 
   get deleteEventButton() {
-    return browser.$('[data-test="delete-event-button"]');
+    return browser.$('[data-test="dhis2-capture-delete-event-button"]');
   }
 
   open() {
