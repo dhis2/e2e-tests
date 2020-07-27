@@ -7,7 +7,7 @@ class CaptureIndexPage extends Page {
   }
 
   get tableRows() {
-    return browser.$$('[data-test="event-list-table"] [data-test="table-row"]')
+    return browser.$$('[data-test="event-list-table"] tbody [data-test="table-row"]')
   }
 
   get tableRowCount() {
@@ -38,8 +38,6 @@ class CaptureIndexPage extends Page {
     this.ouSearch.setValue(name);
     browser.$('//*[contains(text(), "' + name + '")]').click();
   }
-
-
 }
 
 export default CaptureIndexPage;

@@ -1,5 +1,6 @@
 import { Given, Then, When } from 'cucumber';
-import { captureIndexPage } from '@page_objects/capture/CaptureIndexPage';
+import { captureHeaderBar, captureIndexPage, captureNewEventForm } from '@page_objects/capture';
+import { waitForWindowToLoad } from '@support/wait';
 
 Given(/^I open the capture app/, () => {
   captureIndexPage.open();
@@ -13,30 +14,31 @@ Given(/^I select the program "(.+)"/, (program) => {
   captureIndexPage.selectProgram(program);
 })
 
+var eventCount;
+
 Given(/^there is at least one event in the list/, () => {
-  if (captureIndexPage.tableRowCount > 1) {
-    console.log('tableRowCount > 1')
+  eventCount = captureIndexPage.tableRowCount;
+  console.log('event count ' + eventCount)
+  if (eventCount > 1) {
     return;
   }
 
-  console.log('tableRowCount !> 1')
-})
-let count;
-Given(/^I have the table rows count/, () => {
-  count = captureIndexPage.tableRowCount;
+  captureHeaderBar.newEventButton.click();
+  waitForWindowToLoad();
+  captureNewEventForm.fillAndSave();
+  eventCount += 1;
 })
 
 When(/^I click on event content button/, () => {
   captureIndexPage.tableRows[1].$('[data-test="event-content-menu"]').click();
-  browser.pause(2000);
 })
 
 When(/^I click on delete event button/, () => {
   captureIndexPage.deleteEventButton.click();
-  browser.pause(2000)
+  waitForWindowToLoad();
 })
 
 Then(/^there is one less event in the list/, () => {
-  expect(captureIndexPage.tableRowCount -1).to.be.equal(count - 1)
+  expect(captureIndexPage.tableRowCount).to.be.equal(eventCount - 1)
 })
 
