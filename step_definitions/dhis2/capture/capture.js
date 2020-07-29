@@ -42,3 +42,24 @@ Then(/^there is one less event in the list/, () => {
   expect(captureIndexPage.tableRowCount).to.be.equal(eventCount - 1)
 })
 
+Given(/^I click on new event button/, () => {
+  captureHeaderBar.newEventButton.click();
+  waitForWindowToLoad();
+})
+
+Given(/^I fill the new event form/, () => {
+  captureNewEventForm.fill();
+})
+
+Given(/^I add new comment "(.+)"/, (comment) => {
+  captureNewEventForm.commentsSection.newCommentButton.click();
+  captureNewEventForm.commentsSection.newCommentTextField.setValue(comment)
+  captureNewEventForm.commentsSection.saveCommentButton.click();
+})
+
+Then(/^the comment "(.+)" should be saved/, (comment) => {
+  expect(captureNewEventForm.commentsSection.comments.length).to.be.greaterThan(0);
+  expect(captureNewEventForm.commentsSection.comments[0].$('[data-test="dhis2-capture-comment-text"] p').getText()).to.equal(comment);
+})
+
+
