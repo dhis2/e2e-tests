@@ -1,6 +1,7 @@
 import Page from '../Page'
 import { waitForWindowToLoad } from '@support/wait'
 import CaptureCommentsSection from './CaptureCommentsSection';
+var moment = require('moment');
 
 class CaptureNewEventForm extends Page {
   get dateFields() {
@@ -25,7 +26,7 @@ class CaptureNewEventForm extends Page {
 
   fill() {
     this.dateFields.forEach(dateField => {
-      dateField.setValue('2019-10-04');
+      dateField.setValue(moment().format('YYYY-MM-DD'));
       browser.keys(['Tab']);
     });
 
