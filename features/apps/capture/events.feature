@@ -25,7 +25,7 @@ Scenario Outline: Adds event with a comment
   Then the author of <comment> should be "system" user
   And the comment <comment> should be displayed correctly
   Examples:
-      | comment                                                     |
-      | "Test comment with *bold* _italic_ https://play.dhis2.org"  |
+      | comment                                                      |
+      | "Test comment with *bold* _italic_ https://play.dhis2.org/"  |
      
 

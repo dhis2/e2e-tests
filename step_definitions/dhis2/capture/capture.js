@@ -91,12 +91,12 @@ Then(/^the comment "(.+)" should be displayed correctly/, (comment) => {
   }
 
   if (comment.includes('https')) {
-    let regex = /\b(https?:\/\/\S*\b)/g;
+    let regex = /\b(https?:\/\/\S*\b\/)/g;
     var commentUrl = comment.match(regex)[0];
     console.log(commentUrl);
 
     expect(commentElementText.$('a').getText()).to.equal(commentUrl);
-    //expect(commentElementText.$('a').getAttribute('href')).to.equal(commentUrl);
+    expect(commentElementText.$('a').getAttribute('href')).to.equal(commentUrl);
   }
 })
 
