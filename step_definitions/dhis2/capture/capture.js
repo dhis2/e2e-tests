@@ -29,8 +29,8 @@ Given(/^there is at least one event in the list/, () => {
   eventCount += 1;
 })
 
-When(/^I click on event content button/, () => {
-  captureIndexPage.tableRows[1].$('[data-test="dhis2-capture-event-content-menu"]').click();
+When(/^I click on event content button for the (\d+) event/, (number) => {
+  captureIndexPage.tableRows[number - 1].$('[data-test="dhis2-capture-event-content-menu"]').click();
 })
 
 When(/^I click on delete event button/, () => {
@@ -38,9 +38,24 @@ When(/^I click on delete event button/, () => {
   waitForWindowToLoad();
 })
 
-Then(/^there is one less event in the list/, () => {
-  expect(captureIndexPage.tableRowCount).to.be.equal(eventCount - 1)
+var eventId;
+When(/^I have the id of the (\d+) event on the list/,(number) => {
+  captureIndexPage.tableRows[number -1].click();
+  waitForWindowToLoad();
+
+  eventId = browser.getUrl().match(/([^\/]+$)/)[0];
+  expect(eventId).to.not.be.undefined;
+
+  browser.back();
+  waitForWindowToLoad();
 })
+
+Then(/^the event with that id is deleted/, () => {
+  captureViewEventPage.open(eventId);
+
+  expect(browser.$('#app').getText()).to.contain('Event could not be loaded. Are you sure it exists?');
+})
+
 
 Given(/^I click on new event button/, () => {
   captureHeaderBar.newEventButton.click();

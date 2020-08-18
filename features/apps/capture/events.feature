@@ -10,9 +10,10 @@ Background: Opens the capture app
 @DHIS2-5287
 Scenario: Deletes event
   Given there is at least one event in the list
-  When I click on event content button
+  And I have the id of the 1 event on the list
+  When I click on event content button for the 1 event
   And I click on delete event button
-  Then there is one less event in the list
+  Then the event with that id is deleted
 
 @DHIS2-4457
 Scenario Outline: Adds event with a comment
