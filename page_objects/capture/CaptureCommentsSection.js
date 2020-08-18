@@ -5,6 +5,10 @@ class CaptureCommentsSection extends Page {
     return browser.$$('[data-test="dhis2-capture-comment"]');
   }
 
+  get commentsListElement() {
+    return browser.$('[data-test="dhis2-capture-comments-list"]');
+  }
+
   get newCommentButton() {
     return browser.$('[data-test="dhis2-capture-new-comment-button"]');
   }
@@ -15,6 +19,10 @@ class CaptureCommentsSection extends Page {
 
   get saveCommentButton() {
     return browser.$('[data-test="dhis2-capture-comment-buttons-container"] button:first-of-type');
+  }
+
+  commentByValue(val) {
+    return this.commentsListElement.$(`//li[//p[text()="${val}"]]`);
   }
 }
 

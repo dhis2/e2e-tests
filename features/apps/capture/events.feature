@@ -14,9 +14,16 @@ Scenario: Deletes event
   And I click on delete event button
   Then there is one less event in the list
 
-Scenario: Adds event with a comment
+Scenario Outline: Adds event with a comment
   Given I click on new event button
   And I fill the new event form
-  And I add new comment "Test comment"
-  Then the comment "Test comment" should be saved
+  And I add new comment <comment>
+  When I save the event
+  And I open the last saved event
+  Then the comment <comment> should be displayed
+  And the author of <comment> should be "system" user
+  Examples:
+      | comment                             |
+      | "Test comment"                      |
+      | "Test comment with *bold* _italic_" |
 
