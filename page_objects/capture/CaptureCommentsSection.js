@@ -22,7 +22,7 @@ class CaptureCommentsSection extends Page {
   }
 
   commentByValue(val) {
-    return this.commentsListElement.$(`//li[//p[text()="${val}"]]`);
+    return this.commentsListElement.$(`//li[//p[.="${val}"]]`);
   }
 }
 

@@ -20,10 +20,9 @@ Scenario Outline: Adds event with a comment
   And I add new comment <comment>
   When I save the event
   And I open the last saved event
-  Then the comment <comment> should be displayed
-  And the author of <comment> should be "system" user
+  Then the author of <comment> should be "system" user
+  And the comment <comment> should be displayed correctly
   Examples:
       | comment                             |
-      | "Test comment"                      |
-      | "Test comment with *bold* _italic_" |
+      | "Test comment with *bold* _italic_ https://play.dhis2.org"  |
 

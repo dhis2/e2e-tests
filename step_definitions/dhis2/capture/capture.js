@@ -63,9 +63,26 @@ When(/^I save the event/, () => {
 })
 
 
-Then(/^the comment "(.+)" should be displayed/, (comment) => {
+Then(/^the comment "(.+)" should be displayed correctly/, (comment) => {
   expect(captureNewEventForm.commentsSection.comments.length).to.be.greaterThan(0);
-  expect(captureNewEventForm.commentsSection.comments[0].$('[data-test="dhis2-capture-comment-text"] p').getText()).to.equal(comment);
+  var commentElementText = captureNewEventForm.commentsSection.comments[0].$('[data-test="dhis2-capture-comment-text"] p');
+  
+  if (comment.includes('*bold*')) {
+    expect(commentElementText.$('strong').getText()).to.equal('bold')
+  }
+
+  if (comment.includes('_italic_')) {
+    expect(commentElementText.$('em').getText()).to.equal('italic');
+  }
+
+  if (comment.includes('https')) {
+    let regex = /\b(https?:\/\/\S*\b)/g;
+    var commentUrl = comment.match(regex)[0];
+    console.log(commentUrl);
+
+    expect(commentElementText.$('a').getText()).to.equal(commentUrl);
+    //expect(commentElementText.$('a').getAttribute('href')).to.equal(commentUrl);
+  }
 })
 
 When(/^I open the last saved event/, () => {
@@ -80,7 +97,8 @@ When(/^I open the last saved event/, () => {
 })
 
 Then(/^the author of "(.+)" should be "(.+)" user/, (commnt, user) => {
-  expect(captureCommentsSection.commentByValue(commnt).$('[data-test=dhis2-capture-comment-user]').getText()).to.equal(user);
+  let commentText = commnt.replace(/\*/g, '').replace(/_/g, '');
+  expect(captureCommentsSection.commentByValue(commentText).$('[data-test=dhis2-capture-comment-user]').getText()).to.equal(user);
 })
 
 
