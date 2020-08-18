@@ -14,6 +14,7 @@ Scenario: Deletes event
   And I click on delete event button
   Then there is one less event in the list
 
+@DHIS2-4457
 Scenario Outline: Adds event with a comment
   Given I click on new event button
   And I fill the new event form
@@ -23,6 +24,7 @@ Scenario Outline: Adds event with a comment
   Then the author of <comment> should be "system" user
   And the comment <comment> should be displayed correctly
   Examples:
-      | comment                             |
+      | comment                                                     |
       | "Test comment with *bold* _italic_ https://play.dhis2.org"  |
+     
 
