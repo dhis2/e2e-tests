@@ -15,7 +15,7 @@ class CaptureIndexPage extends Page {
   }
 
   get ouSearch() {
-    return browser.$('[data-test=\'capture-ui-input\']')
+    return browser.$('[data-test="dhis2-capture-org-unit-selector-container"] [data-test="capture-ui-input"]')
   }
 
   get deleteEventButton() {

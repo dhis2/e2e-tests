@@ -1,5 +1,7 @@
 import Page from '../Page'
 import { waitForWindowToLoad } from '@support/wait'
+import CaptureCommentsSection from './CaptureCommentsSection';
+var moment = require('moment');
 
 class CaptureNewEventForm extends Page {
   get dateFields() {
@@ -14,13 +16,17 @@ class CaptureNewEventForm extends Page {
     return browser.$$('[class*="textFieldCustomForm"] [data-test="capture-ui-input"]');
   }
 
-  get mainButton() {
+  get mainSaveButton() {
     return browser.$('[data-test="dhis2-capture-main-button"]');
   }
 
-  fillAndSave() {
+  get commentsSection() {
+    return new CaptureCommentsSection();
+  }
+
+  fill() {
     this.dateFields.forEach(dateField => {
-      dateField.setValue('2019-10-04');
+      dateField.setValue(moment().format('YYYY-MM-DD'));
       browser.keys(['Tab']);
     });
 
@@ -32,8 +38,11 @@ class CaptureNewEventForm extends Page {
     this.textFields.forEach((textField) => {
       textField.setValue(33);
     })
+  }
 
-    this.mainButton.click(); 
+  fillAndSave() {
+    this.fill();
+    this.mainSaveButton.click(); 
     waitForWindowToLoad();
   }
 }
