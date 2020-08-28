@@ -253,6 +253,15 @@ exports.config = {
   // afterFeature: function (uri, feature, scenarios) {
   // },
 
+  afterTest: function (test) {
+    // if test passed, ignore, else take and save screenshot.
+    if (test.passed) {
+        return;
+    }
+    
+    browser.saveScreenshot(filePath);
+},
+
   /**
    * Runs after a WebdriverIO command gets executed
    * @param {String} commandName hook command name
