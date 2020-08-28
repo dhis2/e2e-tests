@@ -52,7 +52,7 @@ When(/^I have the id of the (\d+) event on the list/,(number) => {
 Then(/^the event with that id is deleted/, () => {
   captureViewEventPage.open(eventId);
 
-  expect(browser.$('#app').getText()).to.contain('Event could not be loaded. Are you sure it exists?');
+  expect(browser.$('#root').getText()).to.contain('Event could not be loaded. Are you sure it exists?');
 })
 
 
