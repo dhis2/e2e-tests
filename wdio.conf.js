@@ -240,8 +240,11 @@ exports.config = {
   /**
    * Runs after a Cucumber step
    */
-  // afterStep: function (uri, feature, { error, result, duration, passed }, stepData, context) {
-  // },
+  afterStep: function (test, context, { error, result, duration, passed, retries }) {
+    if (error) {
+      browser.takeScreenshot();
+    }
+  },
   /**
    * Runs after a Cucumber scenario
    */
@@ -252,15 +255,6 @@ exports.config = {
    */
   // afterFeature: function (uri, feature, scenarios) {
   // },
-
-  afterTest: function (test) {
-    // if test passed, ignore, else take and save screenshot.
-    if (test.passed) {
-        return;
-    }
-    
-    browser.saveScreenshot(filePath);
-},
 
   /**
    * Runs after a WebdriverIO command gets executed

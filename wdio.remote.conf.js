@@ -251,8 +251,11 @@ exports.config = {
   /**
    * Runs after a Cucumber step
    */
-  // afterStep: function (uri, feature, { error, result, duration, passed }, stepData, context) {
-  // },
+  afterStep: function (test, context, { error, result, duration, passed, retries }) {
+    if (error) {
+      browser.takeScreenshot();
+    }
+  },
   /**
    * Runs after a Cucumber scenario
    */
