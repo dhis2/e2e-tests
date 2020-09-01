@@ -1,5 +1,5 @@
 import Page from '../Page'
-import { waitForWindowToLoad } from '@support/wait'
+import { waitForWindowToLoad, waitForVisible } from '@support/wait'
 import CaptureCommentsSection from './CaptureCommentsSection';
 var moment = require('moment');
 
@@ -32,6 +32,7 @@ class CaptureNewEventForm extends Page {
 
     this.selectFields.forEach((selectField) => {
       selectField.click();
+      waitForVisible(browser.$('.Select-menu-outer:last-child'));
       browser.$('.Select-menu-outer:last-child').click();
     })
 
