@@ -6,6 +6,10 @@ class CaptureIndexPage extends Page {
     return browser.$('.orgunit');
   }
 
+  get eventsTable() {
+    return browser.$('[data-test="dhis2-capture-event-list-table"]');
+  }
+  
   get tableRows() {
     return browser.$$('[data-test="dhis2-capture-event-list-table"] tbody [data-test="dhis2-capture-table-row"]')
   }
