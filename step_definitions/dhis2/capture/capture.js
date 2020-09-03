@@ -74,6 +74,8 @@ Given(/^I add new comment "(.+)"/, (comment) => {
 When(/^I save the event/, () => {  
   captureNewEventForm.mainSaveButton.click();
   waitForWindowToLoad();
+
+  expect(captureIndexPage.eventsTable.isExisting()).to.equal(true)
 })
 
 
