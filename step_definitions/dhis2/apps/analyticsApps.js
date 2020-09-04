@@ -43,11 +43,15 @@ function initTestData (dataUrlPart, queryParams, appNm, appUrlPattern) {
 Then(/^every favorite should open without errors$/, { timeout: 1000 * 10000 }, () => {
   let totalConsoleLogs = 0;
   let totalFavoritesWithNoData = 0;
+
   listOfFavorites.forEach((favorite) => {
     getConsoleLog();
+    
     console.log('Opening favorite ' + favorite.displayName);
 
     browser.url(appName + '/' + favoritePattern + favorite.id);
+    browser.refresh();
+    
     waitForWindowToLoad();
 
     const dataExist = !browser.$('//*[contains(translate(text(), "No", "no"), "no data")]').isExisting();
