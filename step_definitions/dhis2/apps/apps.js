@@ -10,7 +10,7 @@ Given(/^I have a list of installed core apps$/, () => {
 
   const elements = browser.$$('a');
   elements.map(element => {
-    if (element.getText() === 'log out' || element.getText() === 'dhis-web-core-resource') return;
+    if (element.getText() === 'log out' || element.getText() === 'dhis-web-core-resource' || element.getText() === 'Apps Bundle JSON') return;
     listOfApps.push(element.getText());
   });
 
