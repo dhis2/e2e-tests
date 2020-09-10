@@ -50,8 +50,7 @@ Then(/^every favorite should open without errors$/, { timeout: 1000 * 10000 }, (
     console.log('Opening favorite ' + favorite.displayName);
 
     browser.url(appName + '/' + favoritePattern + favorite.id);
-    browser.refresh();
-    
+
     waitForWindowToLoad();
 
     const dataExist = !browser.$('//*[contains(translate(text(), "No", "no"), "no data")]').isExisting();
@@ -70,6 +69,8 @@ Then(/^every favorite should open without errors$/, { timeout: 1000 * 10000 }, (
 
     // due to the test being dynamic, these has to be done here instead of using hooks. 
     reportStep(`I open ${favorite.displayName}`, 'There should be no console errors', status , reportLog);
+  
+    console.log(reportLog);
   });
 
   console.log('Total errors ' + (totalConsoleLogs + totalFavoritesWithNoData));
