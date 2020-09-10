@@ -6,7 +6,7 @@ import { reportStep } from '@support/reporting'
 const listOfApps = [];
 Given(/^I have a list of installed core apps$/, () => {
   browser.url('dhis-web-apps');
-  waitForVisible(browser.$('ul'));
+  waitForVisible(browser.$('table'));
 
   const elements = browser.$$('a');
   elements.map(element => {
