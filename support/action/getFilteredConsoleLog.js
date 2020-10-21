@@ -12,6 +12,7 @@ module.exports = () => {
       !message.includes('MIME type') && 
       !message.includes("Cannot read property 'formatDate' of undefined") &&
       !message.includes("manifest.json") && 
-      !message.includes('Failed to fetch')
+      !message.includes('Failed to fetch')  &&
+      !message.includes('files/script') // https://jira.dhis2.org/browse/DHIS2-8864
     });
 }
