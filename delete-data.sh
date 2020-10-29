@@ -3,8 +3,8 @@
 url=$url
 crendentials=$credentials
 declare -a report_tables=('CurZOghc7Mh' 'jhr1eSnZeMr')
-declare -a maps=("AHWtSmx21sx" "gJ1BHisY9Wm", "bX1XOjbCzWP")
-declare -a charts=("ME1zXcf4zvu" "bDhkM10HzKO" "jQPC2FMKqij", "E65eFFxBFjk", "ZVElqaI9Kyp")
+declare -a maps=("AHWtSmx21sx" "gJ1BHisY9Wm"  "bX1XOjbCzWP")
+declare -a charts=("ME1zXcf4zvu" "bDhkM10HzKO" "jQPC2FMKqij" "E65eFFxBFjk" "ZVElqaI9Kyp")
 
 # $1- resource
 # $2 - array of uids
