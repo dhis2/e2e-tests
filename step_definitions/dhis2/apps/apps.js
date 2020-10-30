@@ -3,12 +3,13 @@ import { waitForVisible, waitForWindowToLoad } from '@support/wait';
 import { Given, Then } from 'cucumber';
 import { reportStep } from '@support/reporting'
 
-const listOfApps = [];
+const listOfApps = ['dhis-web-dataentry/index.action', 'dhis-web-approval/index.action'];
 Given(/^I have a list of installed core apps$/, () => {
   browser.url('dhis-web-apps');
   waitForVisible(browser.$('table'));
 
   const elements = browser.$$('a');
+  
   elements.map(element => {
     if (element.getText() === 'log out' || element.getText() === 'dhis-web-core-resource' || element.getText() === 'Apps Bundle JSON') return;
     listOfApps.push(element.getText());
