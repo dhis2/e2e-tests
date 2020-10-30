@@ -13,7 +13,7 @@
     "@wdio/selenium-standalone-service": "^5.16.5",
     "@wdio/spec-reporter": "^5.16.5",
     "@wdio/sync": "^5.16.5",
-    "chromedriver": "^78.0.1",
+    "chromedriver": "^86.0.0",
     "moment": "^2.27.0",
     "wdio-applitools-cucumber-service": "^1.0.6",
     "wdio-chromedriver-service": "^5.0.2",
