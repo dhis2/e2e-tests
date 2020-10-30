@@ -1,6 +1,9 @@
 const chai = require('chai');
 require('@babel/register');
 const jiraService = require('./services/wdio-jira-integration-service').default;
+const drivers = {
+  chrome: { version: '86.0.4240.22' }, // https://chromedriver.chromium.org/
+}
 exports.config = {
   //
   // ====================
@@ -88,6 +91,7 @@ exports.config = {
   // Services take over a specific job you don't want to take care of. They enhance
   // your test setup with almost no effort. Unlike plugins, they don't add new
   // commands. Instead, they hook themselves up into the test process.
+  
   services: [
     [ jiraService, {
       isEnabled: true,
@@ -103,31 +107,14 @@ exports.config = {
       apiKey: process.env.APPLITOOLS_API_KEY,
       forceFullPageScreenshot: true,
     }],
-    'selenium-standalone'
+    ['selenium-standalone', {
+      logPath: 'logs',
+      installArgs: { drivers },
+      args: { drivers },
+    }]
   ],
 
   seleniumLogs: './logs',
-  //seleniumInstallArgs: { version: "3.141.59" },
-  //seleniumArgs: { version: "3.141.59" },
-  seleniumInstallArgs: {
-    version: "3.141.59",
-    drivers: {
-      chrome: {
-        version: '81.0.4044.69', // depending on when u see this, you may want something newer
-        arch: process.arch,
-        baseURL: 'https://chromedriver.storage.googleapis.com',
-      },
-    }
-  },
-  seleniumArgs: {
-    version: "3.141.59",
-    drivers: {
-      chrome: {
-        version: '81.0.4044.69',
-        arch: process.arch
-      },
-    },
-  },
 
   // Framework you want to run your specs with.
   // The following are supported: Mocha, Jasmine, and Cucumber
@@ -240,8 +227,11 @@ exports.config = {
   /**
    * Runs after a Cucumber step
    */
-  // afterStep: function (uri, feature, { error, result, duration, passed }, stepData, context) {
-  // },
+  afterStep: function (test, context, { error, result, duration, passed, retries }) {
+    if (error) {
+      browser.takeScreenshot();
+    }
+  },
   /**
    * Runs after a Cucumber scenario
    */
