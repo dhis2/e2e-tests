@@ -7,9 +7,7 @@ module.exports = (stepName, expectedResult, status, allureContent) => {
 
     if (["passed", 1, "1"].includes(execution.previousStatus)
       && !["passed", 1, "1"].includes(execution.status)) {
-      trackStatusChange(execution.stepName, execution.previousStatus, execution.status);
-      
-      stepName = `NEW FAILURE! ${stepName}`
+        stepName = `NEW FAILURE! ${stepName}`
     } 
   }
   catch(e) { }
@@ -19,29 +17,4 @@ module.exports = (stepName, expectedResult, status, allureContent) => {
   if (status == 'failed') {
     saveScreenshot();
   }
-}
-
-var trackStatusChange = function (name, oldStatus, newStatus) {
-  console.error(`New test failure found`);
-
-  let json = {
-    "name": name,
-    "oldStatus": oldStatus,
-    "newStatus": newStatus
-  }
-
-  browser.call(() => {
-    let reportsdir = __basedir + '/reports';
-    fs.exists(reportsdir, (exists) => {
-      if (!exists) {
-        fs.mkdir(reportsdir, () => {
-          console.log('Reports dir created.')
-        });
-      }
-
-      fs.appendFile(reportsdir + '/new_failures.json', `${JSON.stringify(json)}\r\n`, () => {
-        console.log('ok')
-      });
-    });
-  })
 }

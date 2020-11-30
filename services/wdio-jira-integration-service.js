@@ -1,4 +1,5 @@
 import JiraService from "./jira-service";
+import fs from 'fs';
 
 class WdioJiraService {
   constructor(config) {
@@ -50,8 +51,12 @@ class WdioJiraService {
     }
 
     global.browser.addCommand('addJiraStepExecution', (step, data, result, status) => {
-       this._createOrUpdateTestStep(step, data, result);
-       return this._createOrUpdateTestStepExecution(status)
+      this._createOrUpdateTestStep(step, data, result);
+     
+      var execution = this._createOrUpdateTestStepExecution(status);
+      this._trackExecutionChange(execution);
+
+      return execution;
     })
   }
 
@@ -124,7 +129,9 @@ class WdioJiraService {
 
     let status = passed ? 'passed' : 'failed';
 
-    this._createOrUpdateTestStepExecution(status); 
+    var execution = this._createOrUpdateTestStepExecution(status);
+    
+    this._trackExecutionChange(execution); 
   }
 
   afterScenario(uri, feature, scenario, result) {
@@ -202,8 +209,36 @@ class WdioJiraService {
 
     return _status;
   }
+  
+  _trackExecutionChange(execution) {
+    if (!(["passed", 1, "1"].includes(execution.previousStatus) && !["passed", 1, "1"].includes(execution.status))) {
+      return;
+    } 
 
- 
+    console.error(`New test failure found`);
+  
+    let json = {
+      "name": execution.stepName,
+      "oldStatus": execution.previousStatus,
+      "newStatus": execution.status
+    }
+  
+    browser.call(() => {
+      let reportsdir = __basedir + '/reports';
+      let file = '/new_failures.json';
+      fs.exists(reportsdir, (exists) => {
+        if (!exists) {
+          fs.mkdir(reportsdir, () => {
+            console.log('Reports dir created.')
+          });
+        }
+  
+        fs.appendFile(reportsdir + file, `${JSON.stringify(json)}\r\n`, () => {
+          console.log('Failure' + json + 'added to ' + reportsdir + file);
+        });
+      });
+    })
+  }
 }
 
 export default WdioJiraService;
