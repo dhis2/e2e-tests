@@ -234,7 +234,7 @@ class WdioJiraService {
         }
   
         fs.appendFile(reportsdir + file, `${JSON.stringify(json)}\r\n`, () => {
-          console.log('Failure' + json + 'added to ' + reportsdir + file);
+          console.log(`Failure ${JSON.stringify(json)} added to ${reportsdir}${file}`);
         });
       });
     })
