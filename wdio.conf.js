@@ -102,11 +102,6 @@ exports.config = {
       testCycle: "automated-tests",
       versionName: process.env.JIRA_RELEASE_VERSION_NAME  
     }],
-    [ 'applitools-cucumber' , {
-      appName: "DHIS2 - master",
-      apiKey: process.env.APPLITOOLS_API_KEY,
-      forceFullPageScreenshot: true,
-    }],
     ['selenium-standalone', {
       logPath: 'logs',
       installArgs: { drivers },
