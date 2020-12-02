@@ -99,13 +99,11 @@ class WdioJiraService {
     })
   }
 
-  beforeStep(uri, feature, stepData) {
+  beforeStep(details) {
     if (!this.isConfigured || !this.jira_issue) {
       return;
     }
-
-    const step = stepData.step;
-
+    const step = details.step.step;
     const isExpectedResult = step.keyword.includes('Then') ||
       (step.keyword.includes('And') && this.last_tag.includes('Then'));
 
@@ -122,16 +120,14 @@ class WdioJiraService {
     this.last_tag = step.keyword;
   }
 
-  afterStep(uri,context, { error, result, duration, passed }, details) {
+  afterStep(details,context, { error, result, duration, passed }) {
     if (!this.isConfigured || !this.jira_issue) {
       return;
     }
-    console.log(details.step.text);
-    console.log(passed)
   
     let status = passed ? 'passed' : 'failed';
     var execution = this._createOrUpdateTestStepExecution(status);
-    if (details.step.text.includes('every')) return;
+    if (details.step.step.text.includes('every')) return;
     this._trackExecutionChange(execution); 
   }
 
