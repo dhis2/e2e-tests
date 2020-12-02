@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "DHIS2 E2E testing",
   "dependencies": {
-    "@wdio/allure-reporter": "^5.16.0",
+    "@wdio/allure-reporter": "^6.8.1",
     "@wdio/browserstack-service": "^6.10.4",
     "@wdio/cli": "^6.10.5",
     "@wdio/cucumber-framework": "^6.10.4",
