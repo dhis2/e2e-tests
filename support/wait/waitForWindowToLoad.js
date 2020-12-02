@@ -30,7 +30,12 @@ module.exports = () => {
       return false;
     }
   }
-  browser.waitUntil(() => {
-    return check()
-  }, 40000, 'Page didnt load in 40s', 700)
+
+  browser.waitUntil(
+    () => { return check()}, 
+    {
+      timeout: 40000, 
+      timeoutMsg: 'Page didnt load in 40s',
+      interval: 700
+    })
 }
