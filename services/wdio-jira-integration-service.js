@@ -211,33 +211,32 @@ class WdioJiraService {
   }
   
   _trackExecutionChange(execution) {
-    if (!(["passed", 1, "1"].includes(execution.previousStatus) && !["passed", 1, "1"].includes(execution.status))) {
-      return;
-    } 
-
-    console.error(`New test failure found`);
-  
-    let json = {
-      "name": execution.stepName,
-      "oldStatus": execution.previousStatus,
-      "newStatus": execution.status
-    }
-  
-    browser.call(() => {
-      let reportsdir = __basedir + '/reports';
-      let file = '/new_failures.json';
-      fs.exists(reportsdir, (exists) => {
-        if (!exists) {
-          fs.mkdir(reportsdir, () => {
-            console.log('Reports dir created.')
+    if (["passed", 1, "1"].includes(execution.previousStatus) && !["passed", 1, "1"].includes(execution.status)) {
+      
+      console.error(`New test failure found`);
+    
+      let json = {
+        "name": execution.stepName,
+        "oldStatus": execution.previousStatus,
+        "newStatus": execution.status
+      }
+    
+      browser.call(() => {
+        let reportsdir = __basedir + '/reports';
+        let file = '/new_failures.json';
+        fs.exists(reportsdir, (exists) => {
+          if (!exists) {
+            fs.mkdir(reportsdir, () => {
+              console.log('Reports dir created.')
+            });
+          }
+    
+          fs.appendFile(reportsdir + file, `${JSON.stringify(json)}\r\n`, () => {
+            console.log(`Failure ${JSON.stringify(json)} added to ${reportsdir}${file}`);
           });
-        }
-  
-        fs.appendFile(reportsdir + file, `${JSON.stringify(json)}\r\n`, () => {
-          console.log(`Failure ${JSON.stringify(json)} added to ${reportsdir}${file}`);
         });
-      });
-    })
+      })
+    } 
   }
 }
 
