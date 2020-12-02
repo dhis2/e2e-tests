@@ -122,15 +122,16 @@ class WdioJiraService {
     this.last_tag = step.keyword;
   }
 
-  afterStep(uri, feature, { error, result, duration, passed }) {
+  afterStep(uri,context, { error, result, duration, passed }, details) {
     if (!this.isConfigured || !this.jira_issue) {
       return;
     }
-
+    console.log(details.step.text);
+    console.log(passed)
+  
     let status = passed ? 'passed' : 'failed';
-
     var execution = this._createOrUpdateTestStepExecution(status);
-    
+    if (details.step.text.includes('every')) return;
     this._trackExecutionChange(execution); 
   }
 
