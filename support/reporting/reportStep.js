@@ -15,6 +15,7 @@ module.exports = (stepName, expectedResult, status, allureContent) => {
   allure.addStep(stepName, { content: allureContent, name: 'Errors' }, status);
 
   if (status == 'failed') {
+    console.log(`${stepName} has failed`);
     saveScreenshot();
   }
 }
