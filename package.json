@@ -41,7 +41,7 @@
     "postinstall": "link-module-alias",
     "lint": "./node_modules/eslint/bin/eslint.js . --fix",
     "browserstack": "./node_modules/.bin/wdio wdio.remote.conf.js",
-    "test": "./node_modules/.bin/wdio wdio.conf.js --spec ./features/apps/apps.feature"
+    "test": "./node_modules/.bin/wdio wdio.conf.js"
   },
   "author": "Edoardo Sabadelli",
   "maintainers": [
