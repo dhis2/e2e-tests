@@ -51,7 +51,6 @@ exports.config = {
     platformName: 'WINDOWS',
     //
     browserName: 'chrome',
-    browserVersion: '78.0.3904.70',
     'bstack:options': {
       'os': 'Windows',
       'osVersion': '10',
