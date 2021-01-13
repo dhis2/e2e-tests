@@ -22,8 +22,7 @@ Given(/^there is at least one event in the list/, () => {
     return;
   }
 
-  captureHeaderBar.newEventButton.click();
-  waitForWindowToLoad();
+  captureHeaderBar.openNewEventFormInProgram();
   captureNewEventForm.fillAndSave();
   eventCount += 1;
 })
@@ -57,8 +56,7 @@ Then(/^the event with that id is deleted/, () => {
 
 
 Given(/^I click on new event button/, () => {
-  captureHeaderBar.newEventButton.click();
-  waitForWindowToLoad();
+  captureHeaderBar.openNewEventFormInProgram();
 })
 
 Given(/^I fill the new event form/, () => {
