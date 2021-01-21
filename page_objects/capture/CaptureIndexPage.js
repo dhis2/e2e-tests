@@ -7,11 +7,11 @@ class CaptureIndexPage extends Page {
   }
 
   get eventsTable() {
-    return browser.$('[data-test="dhis2-capture-event-list-table"]');
+    return browser.$('[data-test="online-list-table"]');
   }
   
   get tableRows() {
-    return browser.$$('[data-test="dhis2-capture-event-list-table"] tbody [data-test="dhis2-capture-table-row"]')
+    return browser.$$('[data-test="online-list-table"] tbody [data-test="dhis2-capture-table-row"]')
   }
 
   get tableRowCount() {
