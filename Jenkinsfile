@@ -3,7 +3,7 @@ pipeline {
   agent any
   options { disableConcurrentBuilds() }
   environment {
-    VERSION = "dev"
+    VERSION = "2.36dev"
     INSTANCE_NAME = "${VERSION}_smoke"
     INSTANCE_DOMAIN = "https://smoke.dhis2.org"
     INSTANCE_URL = ""
