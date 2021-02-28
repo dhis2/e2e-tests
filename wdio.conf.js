@@ -2,7 +2,7 @@ const chai = require('chai');
 require('@babel/register');
 const jiraService = require('./services/wdio-jira-integration-service').default;
 const drivers = {
-  chrome: { version: '86.0.4240.22' }, // https://chromedriver.chromium.org/
+  chrome: { version: '88.0.4324.96' }, // https://chromedriver.chromium.org/
 }
 exports.config = {
   //
