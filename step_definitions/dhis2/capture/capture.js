@@ -28,7 +28,7 @@ Given(/^there is at least one event in the list/, () => {
 })
 
 When(/^I click on event content button for the (\d+) event/, (number) => {
-  captureIndexPage.tableRows[number - 1].$('[data-test="dhis2-capture-event-content-menu"]').click();
+  captureIndexPage.tableRows[number - 1].$('[data-test="event-content-menu"]').click();
 })
 
 When(/^I click on delete event button/, () => {
@@ -79,7 +79,7 @@ When(/^I save the event/, () => {
 
 Then(/^the comment "(.+)" should be displayed correctly/, (comment) => {
   expect(captureNewEventForm.commentsSection.comments.length).to.be.greaterThan(0);
-  var commentElementText = captureNewEventForm.commentsSection.comments[0].$('[data-test="dhis2-capture-comment-text"] p');
+  var commentElementText = captureNewEventForm.commentsSection.comments[0].$('[data-test="comment-text"] p');
   
   if (comment.includes('*bold*')) {
     expect(commentElementText.$('strong').getText()).to.equal('bold')
@@ -111,7 +111,7 @@ When(/^I open the last saved event/, () => {
 
 Then(/^the author of "(.+)" should be "(.+)" user/, (commnt, user) => {
   let commentText = commnt.replace(/\*/g, '').replace(/_/g, '');
-  expect(captureCommentsSection.commentByValue(commentText).$('[data-test=dhis2-capture-comment-user]').getText()).to.equal(user);
+  expect(captureCommentsSection.commentByValue(commentText).$('[data-test=comment-user]').getText()).to.equal(user);
 })
 
 

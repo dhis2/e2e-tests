@@ -2,23 +2,23 @@ import Page from '../Page'
 
 class CaptureCommentsSection extends Page {
   get comments() {
-    return browser.$$('[data-test="dhis2-capture-comment"]');
+    return browser.$$('[data-test="comment"]');
   }
 
   get commentsListElement() {
-    return browser.$('[data-test="dhis2-capture-comments-list"]');
+    return browser.$('[data-test="comments-list"]');
   }
 
   get newCommentButton() {
-    return browser.$('[data-test="dhis2-capture-new-comment-button"]');
+    return browser.$('[data-test="new-comment-button"]');
   }
 
   get newCommentTextField() {
-    return browser.$('[data-test="dhis2-capture-comment-textfield"]');
+    return browser.$('[data-test="comment-textfield"]');
   }
 
   get saveCommentButton() {
-    return browser.$('[data-test="dhis2-capture-comment-buttons-container"] button:first-of-type');
+    return browser.$('[data-test="comment-buttons-container"] button:first-of-type');
   }
 
   commentByValue(val) {
