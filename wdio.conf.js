@@ -5,6 +5,8 @@ const drivers = {
   chrome: { version: '88.0.4324.96' }, // https://chromedriver.chromium.org/
 }
 exports.config = {
+  superUser: process.env.SUPER_USER || 'system',
+  superUserPassword: process.env.SUPER_USER_PASSWORD || 'System123',
   //
   // ====================
   // Runner Configuration
