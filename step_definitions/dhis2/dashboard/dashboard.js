@@ -1,9 +1,9 @@
-import { dashboardPage } from '@page_objects/Dashboard';
-import { isVisible } from '@support/check';
-import { getConsoleLog, getFilteredConsoleLog, saveScreenshot } from '@support/action';
-import { waitForElementToExist, waitForWindowToLoad } from '@support/wait';
+import { dashboardPage } from '#page_objects/Dashboard';
+import { isVisible } from '#support/check';
+import { getConsoleLog, getFilteredConsoleLog, saveScreenshot } from '#support/action';
+import { waitForElementToExist, waitForWindowToLoad } from '#support/wait';
 import { Then } from 'cucumber';
-import { reportStep } from '@support/reporting'
+import { reportStep } from '#support/reporting'
 
 Then(
   /^I expect that header is visible$/,

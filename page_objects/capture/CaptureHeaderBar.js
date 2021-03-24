@@ -1,5 +1,5 @@
 import Page from '../Page'
-import { waitForWindowToLoad } from '@support/wait'
+import { waitForWindowToLoad } from '#support/wait'
 
 class CaptureHeaderBar extends Page {
   get newEventButton() {

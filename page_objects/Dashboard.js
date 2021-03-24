@@ -1,5 +1,5 @@
 import Page from './Page';
-import { waitForElementToExist, waitForVisible } from '@support/wait';
+import { waitForElementToExist, waitForVisible } from '#support/wait';
 
 class Dashboard extends Page {
   get headerDiv () { return browser.$('[data-test="dashboards-bar"]'); }
