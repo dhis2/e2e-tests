@@ -28,13 +28,13 @@ exports.config = merge(wdioConf.config, {
     }
   }],
   waitforTimeout: 30000
-}, { arrayMerge: combineMerge })
+}, { arrayMerge: overwriteMerge })
 
 exports.config.services = exports.config.services.filter(p => {
   !p.includes('selenium-standalone')
 });
 exports.config.services.push('browserstack')
 
-console.log(exports.config.services);
+console.log(exports.config);
 
 
