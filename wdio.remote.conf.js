@@ -37,7 +37,7 @@ exports.config = merge(wdioConf.config, {
       testCycle: "automated-tests",
       versionName: process.env.JIRA_RELEASE_VERSION_NAME  
     }],
-    ['browserstack']
+    'browserstack'
   ],
   waitforTimeout: 30000
 })
