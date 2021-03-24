@@ -27,9 +27,17 @@ exports.config = merge(wdioConf.config, {
       ]
     }
   }],
+  services: [
+    [ jiraService, {
+      isEnabled: true,
+      instanceUrl: "https://jira.dhis2.org",
+      username: process.env.JIRA_USERNAME,
+      password: process.env.JIRA_PASSWORD,
+      projectId: "10000",
+      testCycle: "automated-tests",
+      versionName: process.env.JIRA_RELEASE_VERSION_NAME  
+    }],
+    ['browserstack']
+  ],
   waitforTimeout: 30000
 })
-
-exports.config.services.push('browserstack')
-exports.config.services.reduce('selenium-standalone')
-
