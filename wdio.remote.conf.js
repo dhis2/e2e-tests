@@ -1,6 +1,20 @@
 const merge = require('deepmerge');
 const wdioConf = require('./wdio.conf.js')
-const overwriteMerge = (destinationArray, sourceArray, options) => sourceArray
+const combineMerge = (target, source, options) => {
+  const destination = target.slice()
+
+  source.forEach((item, index) => {
+      if (typeof destination[index] === 'undefined') {
+          destination[index] = options.cloneUnlessOtherwiseSpecified(item, options)
+      } else if (options.isMergeableObject(item)) {
+          destination[index] = merge(target[index], item, options)
+      } else if (target.indexOf(item) === -1) {
+          destination.push(item)
+      }
+  })
+  return destination
+}
+
 exports.config = merge(wdioConf.config, {
   runner: 'local',
   maxInstances: process.env.DEBUG === '1' ? 1 : 3,
@@ -28,13 +42,13 @@ exports.config = merge(wdioConf.config, {
     }
   }],
   waitforTimeout: 30000
-}, { arrayMerge: overwriteMerge })
+}, { arrayMerge: combineMerge })
 
 exports.config.services = exports.config.services.filter(p => {
   !p.includes('selenium-standalone')
 });
 exports.config.services.push('browserstack')
 
-console.log(exports.config);
+console.log(exports.config.services);
 
 
