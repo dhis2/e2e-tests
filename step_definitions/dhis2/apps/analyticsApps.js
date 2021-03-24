@@ -1,7 +1,7 @@
-import { getFilteredConsoleLog, getConsoleLog, saveScreenshot } from '@support/action';
-import { waitForVisible, waitForWindowToLoad } from '@support/wait';
+import { getFilteredConsoleLog, getConsoleLog, saveScreenshot } from '#support/action';
+import { waitForVisible, waitForWindowToLoad } from '#support/wait';
 import { Given, Then } from 'cucumber';
-import { reportStep } from '@support/reporting'
+import { reportStep } from '#support/reporting'
 
 let listOfFavorites = [];
 let appName = '';

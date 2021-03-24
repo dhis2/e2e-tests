@@ -1,4 +1,4 @@
-import { saveScreenshot } from '@support/action';
+import { saveScreenshot } from '#support/action';
 import fs from 'fs';
 
 module.exports = (stepName, expectedResult, status, allureContent) => {

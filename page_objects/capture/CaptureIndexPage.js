@@ -1,5 +1,5 @@
 import Page from '../Page'
-import { waitForWindowToLoad, waitForElementToExist } from '@support/wait'
+import { waitForWindowToLoad, waitForElementToExist } from '#support/wait'
 
 class CaptureIndexPage extends Page {
   get orgUnits() {

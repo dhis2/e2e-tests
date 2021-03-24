@@ -34,8 +34,8 @@
     "request": "^2.88.0"
   },
   "_moduleAliases": {
-    "@support": "./support",
-    "@page_objects": "./page_objects"
+    "#support": "./support",
+    "#page_objects": "./page_objects"
   },
   "_moduleAliasIgnoreWarning": true,
   "scripts": {

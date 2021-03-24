@@ -1,4 +1,4 @@
-import { login}  from '@support/action';
+import { login}  from '#support/action';
 import { When } from 'cucumber';
 
 When(

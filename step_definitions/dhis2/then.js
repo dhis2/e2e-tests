@@ -1,9 +1,9 @@
 import { Then } from 'cucumber';
-import { isVisible}  from '@support/check';
-import { waitForElementToExist } from '@support/wait';
-import { logout } from '@support/action';
-import { loginPage } from '@page_objects/Login';
-import { dashboardPage } from '@page_objects/Dashboard';
+import { isVisible}  from '#support/check';
+import { waitForElementToExist } from '#support/wait';
+import { logout } from '#support/action';
+import { loginPage } from '#page_objects/Login';
+import { dashboardPage } from '#page_objects/Dashboard';
 
   Then(
     /^I should( not)? be authenticated$/,

@@ -1,6 +1,6 @@
 import { Given, Then, When } from 'cucumber';
-import { captureHeaderBar, captureIndexPage, captureNewEventForm, captureViewEventPage, captureCommentsSection } from '@page_objects/capture';
-import { waitForWindowToLoad } from '@support/wait';
+import { captureHeaderBar, captureIndexPage, captureNewEventForm, captureViewEventPage, captureCommentsSection } from '#page_objects/capture';
+import { waitForWindowToLoad } from '#support/wait';
 
 Given(/^I open the capture app/, () => {
   captureIndexPage.open();

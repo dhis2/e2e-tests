@@ -1,10 +1,10 @@
 import { Given } from 'cucumber';
 
-import { isVisible}  from '@support/check';
-import { waitForVisible } from '@support/wait';
+import { isVisible}  from '#support/check';
+import { waitForVisible } from '#support/wait';
 
-import { login } from '@support/action';
-import { dashboardPage } from '@page_objects/Dashboard';
+import { login } from '#support/action';
+import { dashboardPage } from '#page_objects/Dashboard';
 
 Given(
   /^I am logged in$/,
