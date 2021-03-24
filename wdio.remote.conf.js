@@ -31,4 +31,5 @@ exports.config = merge(wdioConf.config, {
 })
 
 exports.config.services.push('browserstack')
+exports.config.services.reduce('selenium-standalone')
 
