@@ -1,6 +1,5 @@
 const merge = require('deepmerge');
 const wdioConf = require('./wdio.conf.js')
-const jiraService = require('./services/wdio-jira-integration-service').default;
 
 exports.config = merge(wdioConf.config, {
   runner: 'local',
@@ -28,17 +27,13 @@ exports.config = merge(wdioConf.config, {
       ]
     }
   }],
-  services: [
-    [ jiraService, {
-      isEnabled: true,
-      instanceUrl: "https://jira.dhis2.org",
-      username: process.env.JIRA_USERNAME,
-      password: process.env.JIRA_PASSWORD,
-      projectId: "10000",
-      testCycle: "automated-tests",
-      versionName: process.env.JIRA_RELEASE_VERSION_NAME  
-    }],
-    ['browserstack']
-  ],
   waitforTimeout: 30000
 })
+
+exports.config.services = exports.config.services.filter(p => {
+  !p.includes('selenium-standalone')
+});
+exports.config.services.push('browserstack')
+
+
+
