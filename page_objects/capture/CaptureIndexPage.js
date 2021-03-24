@@ -32,7 +32,7 @@ class CaptureIndexPage extends Page {
   }
 
   selectProgram(name) {
-    waitForElementToExist('#program-selector .Select-placeholder');
+    waitForElementToExist(browser.$('#program-selector .Select-placeholder')=;
     browser.$('#program-selector .Select-placeholder').click();
     browser.$('.Select-menu-outer').$('//*[contains(text(), "' + name + '")]').click();
 
