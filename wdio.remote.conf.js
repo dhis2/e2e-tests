@@ -1,6 +1,6 @@
 const merge = require('deepmerge');
 const wdioConf = require('./wdio.conf.js')
-
+const overwriteMerge = (destinationArray, sourceArray, options) => sourceArray
 exports.config = merge(wdioConf.config, {
   runner: 'local',
   maxInstances: process.env.DEBUG === '1' ? 1 : 3,
