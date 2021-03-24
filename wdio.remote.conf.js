@@ -35,5 +35,6 @@ exports.config.services = exports.config.services.filter(p => {
 });
 exports.config.services.push('browserstack')
 
+console.log(exports.config.services);
 
 
