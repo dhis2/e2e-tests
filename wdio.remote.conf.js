@@ -42,7 +42,7 @@ exports.config = merge(wdioConf.config, {
     'browserstack'
   ],
   waitforTimeout: 30000
-}, arrayMerge: overwriteMerge)
+}, {arrayMerge: overwriteMerge})
 
 console.log(exports.config.services)
 
