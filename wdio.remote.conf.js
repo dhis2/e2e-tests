@@ -1,19 +1,5 @@
 const merge = require('deepmerge');
 const wdioConf = require('./wdio.conf.js')
-const combineMerge = (target, source, options) => {
-  const destination = target.slice()
-
-  source.forEach((item, index) => {
-      if (typeof destination[index] === 'undefined') {
-          destination[index] = options.cloneUnlessOtherwiseSpecified(item, options)
-      } else if (options.isMergeableObject(item)) {
-          destination[index] = merge(target[index], item, options)
-      } else if (target.indexOf(item) === -1) {
-          destination.push(item)
-      }
-  })
-  return destination
-}
 
 exports.config = merge(wdioConf.config, {
   runner: 'local',
@@ -41,14 +27,20 @@ exports.config = merge(wdioConf.config, {
       ]
     }
   }],
+  services: [
+    [ jiraService, {
+      isEnabled: true,
+      instanceUrl: "https://jira.dhis2.org",
+      username: process.env.JIRA_USERNAME,
+      password: process.env.JIRA_PASSWORD,
+      projectId: "10000",
+      testCycle: "automated-tests",
+      versionName: process.env.JIRA_RELEASE_VERSION_NAME  
+    }],
+    ['browserstack']
+  ],
   waitforTimeout: 30000
-}, { arrayMerge: combineMerge })
+})
 
-exports.config.services = exports.config.services.filter(p => {
-  !p.includes('selenium-standalone')
-});
-exports.config.services.push('browserstack')
-
-console.log(exports.config.services);
 
 
