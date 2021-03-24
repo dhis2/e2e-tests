@@ -41,7 +41,8 @@
     "postinstall": "link-module-alias",
     "lint": "./node_modules/eslint/bin/eslint.js . --fix",
     "browserstack": "./node_modules/.bin/wdio wdio.remote.conf.js",
-    "test": "./node_modules/.bin/wdio wdio.conf.js"
+    "test": "./node_modules/.bin/wdio wdio.conf.js ",
+    "allure": "allure generate ./reports/allure-results/ || allure open"
   },
   "author": "Edoardo Sabadelli",
   "maintainers": [
