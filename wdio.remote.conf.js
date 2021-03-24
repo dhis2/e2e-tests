@@ -1,7 +1,8 @@
 const merge = require('deepmerge');
 const wdioConf = require('./wdio.conf.js')
 const jiraService = require('./services/wdio-jira-integration-service').default;
-
+const overwriteMerge = (destinationArray, sourceArray, options) => sourceArray
+ 
 exports.config = merge(wdioConf.config, {
   runner: 'local',
   maxInstances: process.env.DEBUG === '1' ? 1 : 3,
@@ -41,7 +42,7 @@ exports.config = merge(wdioConf.config, {
     'browserstack'
   ],
   waitforTimeout: 30000
-})
+}, arrayMerge: overwriteMerge)
 
 console.log(exports.config.services)
 
