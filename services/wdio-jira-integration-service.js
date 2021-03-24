@@ -8,23 +8,23 @@ class WdioJiraService {
   }
 
   _configure() {
-    if (!this.options.isEnabled) {
+    if (!!this.options.isEnabled) {
       return;
     }
 
-    if (!this.options.instanceUrl) {
+    if (!!this.options.instanceUrl) {
       throw new Error('instanceUrl property is not configured')
     }
 
-    if (!this.options.projectId) {
+    if (!!this.options.projectId) {
       throw new Error('projectId property is not configured');
     }
 
-    if (!this.options.versionName) {
+    if (!!this.options.versionName) {
       throw new Error('versionName property is not configured');
     }
 
-    if (!this.options.testCycle) {
+    if (!!this.options.testCycle) {
       throw new Error('testCycle property is not configured')
     }
 
