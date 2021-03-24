@@ -8,7 +8,7 @@ class WdioJiraService {
   }
 
   _configure() {
-    if (!this.options.isEnabled) {
+    if (!this.options.isEnabled || this.options.isEnabled == 'false') {
       return;
     }
 

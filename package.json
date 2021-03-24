@@ -12,6 +12,7 @@
     "@wdio/spec-reporter": "^6.8.1",
     "@wdio/sync": "^6.10.4",
     "chromedriver": "^86.0.0",
+    "deepmerge": "^4.2.2",
     "moment": "^2.27.0",
     "wdio-applitools-cucumber-service": "^1.0.6",
     "wdio-chromedriver-service": "^6.0.4",
@@ -33,11 +34,12 @@
     "request": "^2.88.0"
   },
   "_moduleAliases": {
-    "@support": "./support",
-    "@page_objects": "./page_objects"
+    "#support": "./support",
+    "#page_objects": "./page_objects"
   },
   "_moduleAliasIgnoreWarning": true,
   "scripts": {
+    "preinstall": "command -v link-module-alias && link-module-alias clean || true",
     "postinstall": "link-module-alias",
     "lint": "./node_modules/eslint/bin/eslint.js . --fix",
     "browserstack": "./node_modules/.bin/wdio wdio.remote.conf.js",

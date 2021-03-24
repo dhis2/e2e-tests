@@ -1,5 +1,5 @@
 import Page from './Page';
-import { waitForElementToExist, waitForVisible } from '@support/wait';
+import { waitForElementToExist, waitForVisible } from '#support/wait';
 
 class Login extends Page {
   get loginForm () { return browser.$('#loginForm'); }

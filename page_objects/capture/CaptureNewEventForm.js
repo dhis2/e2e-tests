@@ -1,5 +1,5 @@
 import Page from '../Page'
-import { waitForWindowToLoad, waitForVisible, waitForClickable } from '@support/wait'
+import { waitForWindowToLoad, waitForVisible, waitForClickable } from '#support/wait'
 import CaptureCommentsSection from './CaptureCommentsSection';
 var moment = require('moment');
 
