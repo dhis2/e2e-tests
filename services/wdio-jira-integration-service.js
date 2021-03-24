@@ -12,11 +12,11 @@ class WdioJiraService {
       return;
     }
 
-    if (!!this.options.instanceUrl) {
+    if (!this.options.instanceUrl) {
       throw new Error('instanceUrl property is not configured')
     }
 
-    if (!!this.options.projectId) {
+    if (!this.options.projectId) {
       throw new Error('projectId property is not configured');
     }
 
@@ -24,7 +24,7 @@ class WdioJiraService {
       throw new Error('versionName property is not configured');
     }
 
-    if (!!this.options.testCycle) {
+    if (!this.options.testCycle) {
       throw new Error('testCycle property is not configured')
     }
 
