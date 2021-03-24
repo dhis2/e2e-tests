@@ -1,5 +1,5 @@
 import Page from '../Page'
-import { waitForWindowToLoad, waitForElementToExist } from '@support/wait'
+import { waitForWindowToLoad, waitForElementToExist } from '#support/wait'
 
 class CaptureIndexPage extends Page {
   get orgUnits() {
@@ -32,7 +32,7 @@ class CaptureIndexPage extends Page {
   }
 
   selectProgram(name) {
-    waitForElementToExist('#program-selector .Select-placeholder');
+    waitForElementToExist(browser.$('#program-selector .Select-placeholder'));
     browser.$('#program-selector .Select-placeholder').click();
     browser.$('.Select-menu-outer').$('//*[contains(text(), "' + name + '")]').click();
 

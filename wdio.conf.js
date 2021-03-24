@@ -5,6 +5,8 @@ const drivers = {
   chrome: { version: '86.0.4240.22' }, // https://chromedriver.chromium.org/
 }
 exports.config = {
+  superUser: process.env.SUPER_USER || 'system',
+  superUserPassword: process.env.SUPER_USER_PASSWORD || 'System123',
   //
   // ====================
   // Runner Configuration
@@ -94,7 +96,7 @@ exports.config = {
   
   services: [
     [ jiraService, {
-      isEnabled: true,
+      isEnabled: process.env.JIRA_ENABLED || true,
       instanceUrl: "https://jira.dhis2.org",
       username: process.env.JIRA_USERNAME,
       password: process.env.JIRA_PASSWORD,
@@ -290,6 +292,15 @@ exports.config = {
   // Suites
   // ======
   suites: {
+    smoke: [
+      './features/apps/dataVisualiser.feature',
+      './features/apps/eventVisualiser.feature',
+      './features/apps/eventsReport.feature',
+      './features/apps/maps.feature',
+      './features/apps/pivotTables.feature',
+      './features/apps/apps.feature',
+      './features/dashboardPage.feature'
+    ],
     login: [
       './features/loginPage.feature'
     ],
