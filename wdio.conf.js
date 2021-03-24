@@ -287,6 +287,15 @@ exports.config = {
   // Suites
   // ======
   suites: {
+    smoke: [
+      './features/apps/dataVisualiser.feature',
+      './features/apps/eventVisualiser.feature',
+      './features/apps/eventsReport.feature',
+      './features/apps/maps.feature',
+      './features/apps/pivotTables.feature',
+      './features/apps/apps.feature',
+      './features/dashboardPage.feature'
+    ],
     login: [
       './features/loginPage.feature'
     ],

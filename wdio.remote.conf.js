@@ -28,16 +28,6 @@ var overrides = {
   }],
   waitforTimeout: 30000,
   services: [
-    [ jiraService, {
-      isEnabled: true,
-      instanceUrl: "https://jira.dhis2.org",
-      username: process.env.JIRA_USERNAME,
-      password: process.env.JIRA_PASSWORD,
-      projectId: "10000",
-      testCycle: "automated-tests",
-      versionName: process.env.JIRA_RELEASE_VERSION_NAME  
-    }],
-    'browserstack'
-  ]
+    [ 'browserstack']]
 }
 exports.config = _.defaultsDeep(overrides, defaults);
