@@ -1,5 +1,6 @@
 const merge = require('deepmerge');
 const wdioConf = require('./wdio.conf.js')
+const jiraService = require('./services/wdio-jira-integration-service').default;
 
 exports.config = merge(wdioConf.config, {
   runner: 'local',
