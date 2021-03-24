@@ -28,7 +28,7 @@ exports.config = merge(wdioConf.config, {
     }
   }],
   waitforTimeout: 30000
-}, { clone: false })
+}, { arrayMerge: combineMerge })
 
 exports.config.services = exports.config.services.filter(p => {
   !p.includes('selenium-standalone')
