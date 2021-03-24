@@ -31,7 +31,7 @@ exports.config = merge(wdioConf.config, {
   }],
   services: [
     [ jiraService, {
-      isEnabled: true,
+      isEnabled: process.env.JIRA_ENABLED || true,
       instanceUrl: "https://jira.dhis2.org",
       username: process.env.JIRA_USERNAME,
       password: process.env.JIRA_PASSWORD,
