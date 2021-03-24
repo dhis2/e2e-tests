@@ -43,5 +43,5 @@ exports.config = merge(wdioConf.config, {
   waitforTimeout: 30000
 })
 
-
+console.log(exports.config.services)
 
