@@ -12,7 +12,7 @@
     "@wdio/spec-reporter": "^6.8.1",
     "@wdio/sync": "^6.10.4",
     "chromedriver": "^86.0.0",
-    "lodash": "^1.0.0",
+    "deepmerge": "^4.2.2",
     "moment": "^2.27.0",
     "wdio-applitools-cucumber-service": "^1.0.6",
     "wdio-chromedriver-service": "^6.0.4",

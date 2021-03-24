@@ -1,7 +1,7 @@
-var defaults = require("./wdio.conf.js").config;
-var _ = require("lodash");
+import merge from 'deepmerge'
+import wdioConf from './wdio.conf.js'
 
-var overrides = {
+exports.config = merge(wdioConf.config, {
   runner: 'local',
   user: process.env.USERNAME,
   key: process.env.KEY,
@@ -26,8 +26,8 @@ var overrides = {
       ]
     }
   }],
-  waitforTimeout: 30000,
-  services: [
-    [ 'browserstack']]
-}
+  waitforTimeout: 30000
+})
+
+exports.config.services.push('browserstack')
 exports.config = _.defaultsDeep(overrides, defaults);
