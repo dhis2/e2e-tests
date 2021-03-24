@@ -30,4 +30,4 @@ exports.config = merge(wdioConf.config, {
 })
 
 exports.config.services.push('browserstack')
-exports.config = _.defaultsDeep(overrides, defaults);
+
