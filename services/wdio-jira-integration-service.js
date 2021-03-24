@@ -20,7 +20,7 @@ class WdioJiraService {
       throw new Error('projectId property is not configured');
     }
 
-    if (!!this.options.versionName) {
+    if (!this.options.versionName) {
       throw new Error('versionName property is not configured');
     }
 
@@ -32,7 +32,7 @@ class WdioJiraService {
     const password = this.options.password || process.env.JIRA_PASSWORD;
     const cycleName = this.options.cycleName || 'automated-tests';
 
-    if (!username || !password) {
+    if (!!username || !!password) {
       throw new Error('username or password property is not configured');
     }
 
