@@ -39,6 +39,7 @@
   },
   "_moduleAliasIgnoreWarning": true,
   "scripts": {
+    "preinstall": "command -v link-module-alias && link-module-alias clean || true",
     "postinstall": "link-module-alias",
     "lint": "./node_modules/eslint/bin/eslint.js . --fix",
     "browserstack": "./node_modules/.bin/wdio wdio.remote.conf.js",
