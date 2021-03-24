@@ -44,5 +44,4 @@ exports.config = merge(wdioConf.config, {
   waitforTimeout: 30000
 }, {arrayMerge: overwriteMerge})
 
-console.log(exports.config.services)
 
