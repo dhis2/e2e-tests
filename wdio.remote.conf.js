@@ -3,6 +3,7 @@ const wdioConf = require('./wdio.conf.js')
 
 exports.config = merge(wdioConf.config, {
   runner: 'local',
+  maxInstances: process.env.DEBUG === '1' ? 1 : 3,
   user: process.env.USERNAME,
   key: process.env.KEY,
   capabilities: [{
