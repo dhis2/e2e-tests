@@ -8,7 +8,7 @@ all_major_versions=$(echo "$all_branches" | tr ' ' '\n' | grep -o -E '^v.*' | gr
 
 if [[ "$current_branch" == "master" ]]; then 
   last_major_version=$(echo "${all_major_versions[*]}" | sort -nr | head -n1 )
-  next_major_version=$(($last_major_version + 1))
+  next_major_version="$(($last_major_version + 1)).0" # fixed patch version
   next_major_version=$(echo $next_major_version | sed 's/^/2./')
   VERSION=$next_major_version
 else 
