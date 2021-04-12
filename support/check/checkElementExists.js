@@ -2,20 +2,10 @@ import checkIfElementExists from './checkIfElementExists';
 
 /**
  * Check if the given element exists
- * @param  {String}   isExisting Whether the element should be existing or not
- *                               (an or no)
  * @param  {String}   elem       Element selector
+ * @param  {Boolean}   isExisting Whether the element should be existing or not
+ *                               
  */
-module.exports = (isExisting, elem) => {
-  /**
-     * Falsecase assertion
-     * @type {Boolean}
-     */
-  let falseCase = true;
-
-  if (isExisting === 'an') {
-    falseCase = false;
-  }
-
-  checkIfElementExists(elem, falseCase);
+module.exports = (elem, isExisting) => {
+  checkIfElementExists(elem, isExisting);
 };
