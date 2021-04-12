@@ -1,8 +1,10 @@
+import { checkElementExist } from '#support/check'
 module.exports = () => {
   var retries = 3;
   var maxRetries = 20;
   
   const pageSource = () => {
+    checkElementExist("body");
     return browser.$('body').getHTML()
   }
 
