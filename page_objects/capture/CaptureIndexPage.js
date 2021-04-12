@@ -11,7 +11,7 @@ class CaptureIndexPage extends Page {
   }
   
   get tableRows() {
-    return browser.$$('[data-test="online-list-table"] tbody [data-test="dhis2-capture-table-row"]')
+    return browser.$$('[data-test="online-list-table"] tbody [data-test="table-row"]')
   }
 
   get tableRowCount() {
@@ -19,11 +19,11 @@ class CaptureIndexPage extends Page {
   }
 
   get ouSearch() {
-    return browser.$('[data-test="dhis2-capture-org-unit-selector-container"] [data-test="capture-ui-input"]')
+    return browser.$('[data-test="org-unit-selector-container"] [data-test="capture-ui-input"]')
   }
 
   get deleteEventButton() {
-    return browser.$('[data-test="dhis2-capture-delete-event-button"]');
+    return browser.$('[data-test="delete-event-button"]');
   }
 
   open() {

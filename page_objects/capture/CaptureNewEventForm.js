@@ -17,7 +17,7 @@ class CaptureNewEventForm extends Page {
   }
 
   get mainSaveButton() {
-    return browser.$('[data-test="dhis2-capture-main-button"]');
+    return browser.$('[data-test="main-button"]');
   }
 
   get commentsSection() {
