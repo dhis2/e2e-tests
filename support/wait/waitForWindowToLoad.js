@@ -37,6 +37,6 @@ module.exports = () => {
     {
       timeout: 40000, 
       timeoutMsg: 'Page didnt load in 40s',
-      interval: 700
+      interval: 200
     })
 }

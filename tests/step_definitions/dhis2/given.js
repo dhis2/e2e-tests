@@ -1,4 +1,4 @@
-import { Given } from 'cucumber';
+import { Given } from '@cucumber/cucumber';
 
 import { isVisible}  from '#support/check';
 import { waitForVisible } from '#support/wait';

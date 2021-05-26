@@ -92,6 +92,8 @@ pipeline {
   post {
     always {
       script {
+        awx.launchJob("$AWX_BOT_CREDENTIALS", "smoke.dhis2.org", "${INSTANCE_NAME}", "stop")
+
         allure([
           includeProperties: true,
           jdk: '',
