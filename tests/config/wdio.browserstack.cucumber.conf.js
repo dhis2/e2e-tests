@@ -1,5 +1,5 @@
-const { browserstack } = require('./wdio.browserstack.conf.js').config
-const { cucumber } = require('./wdio.cucumber.conf.js')
+const browserstack = require('./wdio.browserstack.conf.js').config
+const cucumber = require('./wdio.cucumber.conf.js')
 
 exports.config = {
   ...browserstack,
