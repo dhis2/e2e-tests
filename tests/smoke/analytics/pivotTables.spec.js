@@ -36,7 +36,7 @@ describe('Pivot tables app -> DHIS2-9193', function() {
     })
   })
 
-  it('I open the app', () => {
+  it('1. I open pivot tables app', () => {
     pivotTables.open();   
   })
 })

@@ -2,9 +2,6 @@ import { login, getConsoleLog, getFilteredConsoleLog } from '#support/action'
 import { dataVisualiser } from '#page_objects/analytics/DataVisualiser';
 
 describe('Data visualiser app -> DHIS2-9204', function() {
-  
-  it.skip('dumm', () => {})
-
   before(() => {
     login(browser.config.superUser, browser.config.superUserPassword);
     const visualisations = dataVisualiser.visualisationList;
@@ -39,7 +36,7 @@ describe('Data visualiser app -> DHIS2-9204', function() {
     })
   })
 
-  it('I open data visualiser app', function() {
+  it('1. I open data visualiser app', function() {
     dataVisualiser.open();
 
     expect(dataVisualiser.gettingStartedElement.isExisting()).to.equal(true);

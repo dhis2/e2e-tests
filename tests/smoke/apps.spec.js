@@ -4,7 +4,7 @@ import { reportStep } from '#support/reporting';
 import { appsList } from '#page_objects/AppsList';
 
 //8017
-describe('Apps should load without console errors -> DHIS2-9193', function() {
+describe('Apps -> DHIS2-9193', function() {
   const apps = ['dhis-web-dataentry/index.action', 'dhis-web-approval/index.action'];
   before(() => {
     login(browser.config.superUser, browser.config.superUserPassword);

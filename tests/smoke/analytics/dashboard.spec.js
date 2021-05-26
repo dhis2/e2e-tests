@@ -2,7 +2,7 @@ import { login, getConsoleLog, getFilteredConsoleLog } from '#support/action';
 import { dashboardPage } from '#page_objects/Dashboard';
 import { waitForWindowToLoad } from '#support/wait';
 
-describe('Dashbords should load without console errors -> DHIS2-8010', function() {
+describe('Dashboards app -> DHIS2-8010', function() {
   before(() => {
     login(browser.config.superUser, browser.config.superUserPassword);
 
@@ -31,7 +31,7 @@ describe('Dashbords should load without console errors -> DHIS2-8010', function(
     }) 
   }) 
   
-  it('I open dashboard app', function() {
+  it('1. I open dashboard app', function() {
     //this.skip();
     dashboardPage.open();
 

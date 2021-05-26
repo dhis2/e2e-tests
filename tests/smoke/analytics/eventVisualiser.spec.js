@@ -36,7 +36,7 @@ describe('Event visualiser app -> DHIS2-9193', function() {
     })
   })
 
-  it('I open event visualiser', function() {
+  it('1. I open event visualiser', function() {
     eventVisualiser.open();   
   })
 })

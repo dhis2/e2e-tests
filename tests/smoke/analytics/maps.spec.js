@@ -37,7 +37,7 @@ describe('Maps app -> DHIS2-9193', function() {
     })
   })
 
-  it('I open maps', () => {
+  it('1. I open maps', () => {
       maps.open();
 
       expect(maps.mapsContainerElement.isExisting()).to.equal(true);

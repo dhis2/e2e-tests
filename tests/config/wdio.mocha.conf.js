@@ -26,7 +26,7 @@ exports.config = {
     ],
     framework: 'mocha',
     mochaOpts: {
-      timeout: 20000 ,
+      timeout: 60000 ,
       ui: 'bdd' ,
       compilers: ['js:@babel/register']  // <number> timeout for step definitions
     },
@@ -42,8 +42,7 @@ exports.config = {
       'spec',
       ['allure', {
         outputDir: './reports/allure-results',
-        disableMochaHooks: false,
-        disableWebdriverStepsReporting: true
+        disableMochaHooks: false
       }]
     ],
   
@@ -58,7 +57,7 @@ exports.config = {
       chai.Should();
       global.allure = require('@wdio/allure-reporter').default
     },
-    afterEach: function (test, context, { error, result, duration, passed, retries }) {
+    afterTest(details,context, { error, result, duration, passed }) {
       if (error) {
         browser.takeScreenshot();
       }
