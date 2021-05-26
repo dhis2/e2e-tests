@@ -10,7 +10,7 @@ class DataVisualiser extends Page {
   }
 
   get gettingStartedElement() {
-    return browser.$('[data-test="start-screen-primary-section-title"]');
+    return browser.$('[data-test="start-screen"]');
   }
 
   open() {

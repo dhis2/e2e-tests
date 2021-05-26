@@ -28,7 +28,7 @@ exports.config = {
     mochaOpts: {
       timeout: 60000 ,
       ui: 'bdd' ,
-      compilers: ['js:@babel/register']  // <number> timeout for step definitions
+      compilers: ['js:@babel/register'] 
     },
     services: [
       exports.jiraService,

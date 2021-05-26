@@ -10,7 +10,7 @@ class Maps extends Page {
   }
 
   get mapsContainerElement() {
-    return browser.$('dhis2-map-container');
+    return browser.$('#dhis2-map-container');
   }
 
   open() {
