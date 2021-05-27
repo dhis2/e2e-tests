@@ -34,8 +34,7 @@ describe('Apps -> DHIS2-8017', function() {
       this.tests.push(newTest)
     })
   }) 
-  it('Placeholder', function() {
-    //this.skip();
+  it('Dummy', function() {
     expect(0).to.equal(0);
   })
 })

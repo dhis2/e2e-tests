@@ -29,7 +29,6 @@ describe('Dashboards app -> DHIS2-8010', function() {
   }) 
   
   it('1. I open dashboard app', function() {
-    //this.skip();
     dashboardPage.open();
 
     expect(dashboardPage.filters.length).to.be.above(0);
