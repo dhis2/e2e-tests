@@ -33,6 +33,7 @@
     "eslint-plugin-webdriverio": "^1.0.1",
     "link-module-alias": "^1.2.0",
     "mocha": "^8.4.0",
+    "npm-run-all": "^4.1.5",
     "request": "^2.88.0"
   },
   "_moduleAliases": {
@@ -44,9 +45,10 @@
     "preinstall": "command -v link-module-alias && link-module-alias clean || true",
     "postinstall": "link-module-alias",
     "lint": "./node_modules/eslint/bin/eslint.js . --fix",
-    "browserstack": "./node_modules/.bin/wdio ./tests/config/wdio.browserstack.cucumber.conf.js && ./node_modules/.bin/wdio ./tests/config/wdio.browserstack.mocha.conf.js",
-    "test": "./node_modules/.bin/wdio ./tests/config/wdio.cucumber.conf.js && ./node_modules/.bin/wdio ./tests/config/wdio.mocha.conf.js",
-    "smoke": "./node_modules/.bin/wdio ./tests/config/wdio.mocha.conf.js",
+    "wdio": "./node_modules/.bin/wdio",
+    "browserstack": "run-s -c \"wdio ./tests/config/wdio.browserstack.cucumber.conf.js\" \"wdio ./tests/config/wdio.browserstack.mocha.conf.js\"",
+    "test": "run-s -c \"wdio ./tests/config/wdio.cucumber.conf.js\" \"wdio ./tests/config/wdio.mocha.conf.js\"",
+    "smoke": "wdio ./tests/config/wdio.mocha.conf.js",
     "allure": "allure generate --clean ./reports/allure-results/ && allure open"
   },
   "author": "Edoardo Sabadelli",
