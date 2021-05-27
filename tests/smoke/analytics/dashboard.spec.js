@@ -13,7 +13,6 @@ describe('Dashboards app -> DHIS2-8010', function() {
         const filterName = filter.$('span span').getHTML(false);
         const filterHref = filter.getAttribute('href');
         const newTest = it('I open ' + filterName, function() {
-          allure.addFeature("Smoke");
           getConsoleLog(); // clear browser log before test
           console.log('opening ' + filterName);
           browser.url(filterHref);

@@ -45,7 +45,9 @@
     "postinstall": "link-module-alias",
     "lint": "./node_modules/eslint/bin/eslint.js . --fix",
     "browserstack": "./node_modules/.bin/wdio ./tests/config/wdio.browserstack.cucumber.conf.js && ./node_modules/.bin/wdio ./tests/config/wdio.browserstack.mocha.conf.js",
-    "test": "./node_modules/.bin/wdio ./tests/config/wdio.cucumber.conf.js && ./node_modules/.bin/wdio ./tests/config/wdio.mocha.conf.js"
+    "test": "./node_modules/.bin/wdio ./tests/config/wdio.cucumber.conf.js && ./node_modules/.bin/wdio ./tests/config/wdio.mocha.conf.js",
+    "smoke": "./node_modules/.bin/wdio ./tests/config/wdio.mocha.conf.js",
+    "allure": "allure generate --clean ./reports/allure-results/ && allure open"
   },
   "author": "Edoardo Sabadelli",
   "maintainers": [
