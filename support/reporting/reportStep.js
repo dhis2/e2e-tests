@@ -1,5 +1,4 @@
 import { saveScreenshot } from '#support/action';
-import fs from 'fs';
 
 module.exports = (stepName, expectedResult, status, allureContent) => {
   try {
@@ -10,7 +9,7 @@ module.exports = (stepName, expectedResult, status, allureContent) => {
         stepName = `NEW FAILURE! ${stepName}`
     } 
   }
-  catch(e) { }
+  catch(e) { console.log(e)}
   
   allure.addStep(stepName, { content: allureContent, name: 'Errors' }, status);
 

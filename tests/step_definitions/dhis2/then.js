@@ -1,4 +1,4 @@
-import { Then } from 'cucumber';
+import { Then } from '@cucumber/cucumber';
 import { isVisible}  from '#support/check';
 import { waitForElementToExist } from '#support/wait';
 import { logout } from '#support/action';
