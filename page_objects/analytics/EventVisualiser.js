@@ -21,7 +21,6 @@ class EventVisualiser extends Page {
   dataExist() {
     return !browser.$('//*[contains(translate(text(), "No", "no"), "no data")]').isExisting();
   }
-
 }
 
 export default EventVisualiser;

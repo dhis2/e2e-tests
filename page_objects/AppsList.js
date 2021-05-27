@@ -15,10 +15,7 @@ class AppsList extends Page {
 
     waitForVisible(this.table);
   }
-
-
 }
-
 
 export default AppsList;
 export const appsList = new AppsList();
