@@ -84,7 +84,7 @@ pipeline {
 
       steps {
         sh "npm install"
-        sh "npm run-script browserstack -- --baseUrl=\"${INSTANCE_URL}\""
+        sh "BASE_URL=\"${INSTANCE_URL}\" npm run browserstack"
       }
     }
   }
