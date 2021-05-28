@@ -1,5 +1,5 @@
 import { login, getConsoleLog, getFilteredConsoleLog } from '#support/action'
-import { eventVisualiser } from '#page_objects/analytics/eventVisualiser';
+import { eventVisualiser } from '#page_objects/analytics/EventVisualiser';
 
 describe('Event visualiser app -> DHIS2-9193', function() {
   before(() => {
