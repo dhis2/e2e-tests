@@ -219,7 +219,7 @@ class WdioJiraService {
       }
     
       browser.call(() => {
-        let reportsdir = __basedir + '/reports';
+        let reportsdir = process.cwd() + '/reports';
         let file = '/new_failures.json';
         fs.exists(reportsdir, (exists) => {
           if (!exists) {
