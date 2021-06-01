@@ -1,6 +1,6 @@
 import { checkElementExist } from '#support/check'
 module.exports = () => {
-  var retries = 3;
+  var retries = 5;
   var maxRetries = 20;
   
   const pageSource = () => {
@@ -26,7 +26,7 @@ module.exports = () => {
     }
     
     else {
-      retries = 3;
+      retries = 5;
       source = newSource;
       return false;
     }
