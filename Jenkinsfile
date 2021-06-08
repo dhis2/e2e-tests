@@ -26,7 +26,7 @@ pipeline {
   }
 
   triggers {
-    cron(env.BRANCH_NAME.contains('.') ? '' : 'H 6 * * *')
+    cron(env.BRANCH_NAME.contains('.') ? '' : 'H 1 * * *')
   }
 
   stages {     
@@ -72,6 +72,7 @@ pipeline {
               
           if (fileExists("$ALLURE_REPORT_DIR_PATH/$ALLURE_REPORT_DIR/history")) {
             sh "cp  -r $ALLURE_REPORT_DIR_PATH/$ALLURE_REPORT_DIR/history ${WORKSPACE}/$ALLURE_RESULTS_DIR/history"
+            sh "cp  -r $ALLURE_REPORT_DIR_PATH/$ALLURE_REPORT_DIR/data ${WORKSPACE}/$ALLURE_RESULTS_DIR/data"
           } 
         } 
       }      
@@ -84,7 +85,7 @@ pipeline {
 
       steps {
         sh "npm install"
-        sh "npm run-script browserstack -- --baseUrl=\"${INSTANCE_URL}\""
+        sh "BASE_URL=\"${INSTANCE_URL}\" npm run browserstack"
       }
     }
   }
@@ -114,7 +115,8 @@ pipeline {
         if (fileExists('./reports/new_failures.json')) {
           prefix = "NEW ERRORS FOUND! "
         }
-        slackSend(
+
+         slackSend(
             color: '#ff0000',
             message: "${prefix}E2E tests initialized from branch $GIT_BRANCH for version - $VERSION failed. Please visit " + env.BUILD_URL + " for more information",
             channel: '@Gintare;@Hella Dawit'
