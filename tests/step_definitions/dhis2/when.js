@@ -1,5 +1,5 @@
 import { login}  from '#support/action';
-import { When } from 'cucumber';
+import { When } from '@cucumber/cucumber';
 
 When(
   /^I login as "(.+)" with password as "(.+)"$/, 

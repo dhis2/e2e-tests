@@ -60,34 +60,14 @@ class WdioJiraService {
     })
   }
 
-  beforeFeature(uri, feature) {
-    if (!this.isConfigured) {
-      return;
-    }
-
-    this.feature = feature;
-    this.stepFailures = false;
-
-    const tags = feature.document.feature.tags;
-    if (!tags || !tags.length) {
-      return;
-    }
-
-    this.featureTags = tags;
-  }
-
-  beforeScenario(uri, feature, scenario) {
+  beforeHook(context) {
     if (!this.isConfigured ) {
       return;
     }
 
-    const tags = this.featureTags ? this.featureTags : scenario.tags;
-
-    if ( !tags || !tags.length) {
-      return;
-    }
-
-    this.jira_issue = tags[0].name.replace('@', '');
+    try {
+      this.jira_issue = context.parent.split("->")[1].trim();
+    } catch( e ) { console.log( "Jira issue was undefined. Skipping reporting")}
     console.log(`JIRA issue number: ${this.jira_issue}`);
 
     browser.call(() => {
@@ -99,59 +79,40 @@ class WdioJiraService {
     })
   }
 
-  beforeStep(details) {
+  beforeTest(context) {
     if (!this.isConfigured || !this.jira_issue) {
       return;
     }
-    const step = details.step.step;
-    const isExpectedResult = step.keyword.includes('Then') ||
-      (step.keyword.includes('And') && this.last_tag.includes('Then'));
+    const step = context.title;
 
-    if (this.last_step_id && isExpectedResult) {
-      browser.call(() => {
-        return this.jiraService.addResultToTheStep(this.jira_issue, this.last_step_id, step.text);
-      })
-    }
-
-    else (
-      this._createOrUpdateTestStep(step.text)
-    )
-
-    this.last_tag = step.keyword;
+    this._createOrUpdateTestStep(step)
+    
+    this.last_tag = step;
   }
 
-  afterStep(details,context, { error, result, duration, passed }) {
+  afterTest(details,context, { error, result, duration, passed }) {
     if (!this.isConfigured || !this.jira_issue) {
       return;
     }
   
     let status = passed ? 'passed' : 'failed';
     var execution = this._createOrUpdateTestStepExecution(status);
-    if (details.step.step.text.includes('every')) return;
+    //if (details.step.step.text.includes('every')) return;
     this._trackExecutionChange(execution); 
   }
 
-  afterScenario(uri, feature, scenario, result) {
-    if (!this.isConfigured || !this.jira_issue || this.featureTags) {
+  after(status) {
+    if (!this.isConfigured || !this.jira_issue) {
       return;
     }
 
-    this._createOrUpdateExecution(result.status);
-  }
-
-  afterFeature() {
-    if (!this.isConfigured || !this.jira_issue || !this.featureTags) {
-      return;
-    }
-
-    let status = this.stepFailures ? 'failed' : 'passed';
-
+    console.log(status)
     this._createOrUpdateExecution(status);
   }
 
   _createOrUpdateTestStep(text, data, result) {
     if (!this.jira_issue) {
-      throw new Error('No JIRA issue defined in scenario or feature tags');
+      return;
     }
 
     browser.call(() => {
