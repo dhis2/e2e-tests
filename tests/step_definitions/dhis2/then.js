@@ -13,7 +13,7 @@ import { dashboardPage } from '#page_objects/Dashboard';
         isVisible(loginPage.loginForm);
         isVisible(loginPage.loginMessage);
 
-        expect(loginPage.loginMessage.getText()).to.contain('Wrong username or password')
+        expect(loginPage.loginMessage.getText()).to.contain('Invalid login information')
       } else {
         waitForElementToExist(dashboardPage.headerDiv);
         isVisible(dashboardPage.headerDiv);
