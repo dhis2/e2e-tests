@@ -1,28 +1,11 @@
 const chai = require('chai');
 require('@babel/register');
-const drivers = {
-  chrome: { version: '90.0.4430.24' }, // https://chromedriver.chromium.org/
-}
+
 exports.config = {
   superUser: process.env.SUPER_USER || 'system',
   superUserPassword: process.env.SUPER_USER_PASSWORD || 'System123', 
   runner: 'local',
-  maxInstances: process.env.DEBUG === '1' ? 1 : 10,
-  capabilities: [{
-    // maxInstances can get overwritten per capability. So if you have an in-house Selenium
-    // grid with only 5 firefox instances available you can make sure that not more than
-    // 5 instances get started at a time.
-    maxInstances: process.env.DEBUG === '1' ? 1 : 3,
-    //
-    browserName: 'chrome',
-    'goog:chromeOptions': {
-      'args': [
-        '--allow-running-insecure-content',
-        '--disable-web-security'
-      ]
-    }
-  }],
-
+  maxInstances: process.env.DEBUG === '1' ? 1 : 3,
   screenshotPath: './errorShots/',
   //
   // ===================
@@ -55,15 +38,6 @@ exports.config = {
   // Services take over a specific job you don't want to take care of. They enhance
   // your test setup with almost no effort. Unlike plugins, they don't add new
   // commands. Instead, they hook themselves up into the test process.
-  
-  services: [
-    ['selenium-standalone', {
-      logPath: 'logs',
-      installArgs: { drivers },
-      args: { drivers },
-    }]
-  ],
-
   seleniumLogs: './logs',
 
   reporters: [
