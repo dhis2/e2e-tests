@@ -5,6 +5,9 @@ exports.config = {
   ...browserstack,
   ...mocha.config,
   ...{
+    capabilities: [{
+      ...browserstack.capabilities
+    }],
     services: [
       ...browserstack.services
     ]

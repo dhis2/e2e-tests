@@ -1,4 +1,4 @@
-const { config } = require('./wdio.shared.conf')
+const { config } = require('./wdio.local.conf')
 const jira = require('../../services/wdio-jira-integration-service').default;
 
 exports.jiraService = [jira, {

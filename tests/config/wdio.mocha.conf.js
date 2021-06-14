@@ -1,9 +1,6 @@
-const { config } = require('./wdio.shared.conf')
+const { config } = require('./wdio.local.conf')
 const jira = require('../../services/wdio-jira-integration-service-mocha').default;
 const chai = require('chai');
-const drivers = {
-  chrome: { version: '90.0.4430.24' }, // https://chromedriver.chromium.org/
-}
 
 exports.jiraService = [ jira, {
   isEnabled: process.env.JIRA_ENABLED || true,
@@ -31,12 +28,8 @@ exports.config = {
       compilers: ['js:@babel/register'] 
     },
     services: [
-      exports.jiraService,
-      ['selenium-standalone', {
-        logPath: 'logs',
-        installArgs: { drivers },
-        args: { drivers },
-      }]
+      ...config.services,
+      exports.jiraService
     ],
     reporters: [
       'spec',
