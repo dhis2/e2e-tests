@@ -6,7 +6,7 @@ exports.config = {
   superUserPassword: process.env.SUPER_USER_PASSWORD || 'System123', 
   runner: 'local',
   maxInstances: process.env.DEBUG === '1' ? 1 : 3,
-  screenshotPath: './errorShots/',
+  outputDir: './output',
   //
   // ===================
   // Test Configurations

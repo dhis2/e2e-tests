@@ -68,7 +68,7 @@ class WdioJiraService {
     this.feature = feature;
     this.stepFailures = false;
 
-    const tags = feature.document.feature.tags;
+    const tags = feature.tags;
     if (!tags || !tags.length) {
       return;
     }
@@ -76,12 +76,12 @@ class WdioJiraService {
     this.featureTags = tags;
   }
 
-  beforeScenario(uri, feature, scenario) {
+  beforeScenario({pickle}) {
     if (!this.isConfigured ) {
       return;
     }
 
-    const tags = this.featureTags ? this.featureTags : scenario.tags;
+    const tags = this.featureTags ? this.featureTags : pickle.tags;
 
     if ( !tags || !tags.length) {
       return;
@@ -99,11 +99,11 @@ class WdioJiraService {
     })
   }
 
-  beforeStep(details) {
+  beforeStep(step) {
     if (!this.isConfigured || !this.jira_issue) {
       return;
     }
-    const step = details.step.step;
+
     const isExpectedResult = step.keyword.includes('Then') ||
       (step.keyword.includes('And') && this.last_tag.includes('Then'));
 
@@ -120,23 +120,24 @@ class WdioJiraService {
     this.last_tag = step.keyword;
   }
 
-  afterStep(details,context, { error, result, duration, passed }) {
+  afterStep(step, scneario, { passed, error, duration }) {
     if (!this.isConfigured || !this.jira_issue) {
       return;
     }
   
     let status = passed ? 'passed' : 'failed';
     var execution = this._createOrUpdateTestStepExecution(status);
-    if (details.step.step.text.includes('every')) return;
+    if (step.text.includes('every')) return;
     this._trackExecutionChange(execution); 
   }
 
-  afterScenario(uri, feature, scenario, result) {
+  afterScenario({result}) {
+    let status = result.status === 1 ? 'passed' : 'failed';
     if (!this.isConfigured || !this.jira_issue || this.featureTags) {
       return;
     }
 
-    this._createOrUpdateExecution(result.status);
+    this._createOrUpdateExecution(status);
   }
 
   afterFeature() {

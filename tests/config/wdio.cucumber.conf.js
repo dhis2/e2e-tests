@@ -43,7 +43,7 @@ exports.config = {
       failAmbiguousDefinitions: true
     },
 
-    afterStep: function (test, context, { error, result, duration, passed, retries }) {
+    afterStep: function (step, scenario, { passed, error, duration }) {
       if (error) {
         browser.takeScreenshot();
       }
