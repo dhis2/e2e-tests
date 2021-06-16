@@ -1,8 +1,10 @@
+import { checkElementExist } from '#support/check'
 module.exports = () => {
-  var retries = 3;
+  var retries = 5;
   var maxRetries = 20;
   
   const pageSource = () => {
+    checkElementExist("body");
     return browser.$('body').getHTML()
   }
 
@@ -24,12 +26,17 @@ module.exports = () => {
     }
     
     else {
-      retries = 3;
+      retries = 5;
       source = newSource;
       return false;
     }
   }
-  browser.waitUntil(() => {
-    return check()
-  }, 40000, 'Page didnt load in 40s', 1000)
+
+  browser.waitUntil(
+    () => { return check()}, 
+    {
+      timeout: 40000, 
+      timeoutMsg: 'Page didnt load in 40s',
+      interval: 300
+    })
 }

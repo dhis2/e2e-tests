@@ -1,10 +1,10 @@
 class Page {
   constructor () {
     this.title = 'Base page';
-    this.baseUrl = browser.options.baseUrl;
   }
 
   open (path) {
+    this.baseUrl = browser.options.baseUrl;
     browser.url(path);
   }
 }
