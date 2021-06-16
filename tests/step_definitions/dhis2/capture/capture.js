@@ -1,4 +1,4 @@
-import { Given, Then, When } from 'cucumber';
+import { Given, Then, When } from '@cucumber/cucumber';
 import { captureHeaderBar, captureIndexPage, captureNewEventForm, captureViewEventPage, captureCommentsSection } from '#page_objects/capture';
 import { waitForWindowToLoad } from '#support/wait';
 

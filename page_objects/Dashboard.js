@@ -2,11 +2,11 @@ import Page from './Page';
 import { waitForElementToExist, waitForVisible } from '#support/wait';
 
 class Dashboard extends Page {
-  get headerDiv () { return browser.$('[data-test="dashboards-bar"]'); }
-  get mainPageDiv () { return browser.$('.dashboard-scroll-container'); }
+  get headerDiv () { return browser.$('//*[@id="root"]/div/div[1]'); }
+  get mainPageDiv () { return browser.$('.dashboard-wrapper'); }
   get userIcon () { return browser.$('[class*="profile"]'); }
   get logoutLink () { return browser.$('[class*="profile"] [class*="contents"] li:last-child div'); }
-  get filtersArea () { return browser.$('[data-test="dashboards-bar"]'); }
+  get filtersArea () { return browser.$('[class*="ControlBar_content"]'); }
   get filters () {
     waitForVisible(this.filtersArea);
     const filters = this.filtersArea.$$('a');

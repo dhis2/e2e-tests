@@ -3,7 +3,7 @@ require('@babel/register');
 
 exports.config = {
   superUser: process.env.SUPER_USER || 'system',
-  superUserPassword: process.env.SUPER_USER_PASSWORD || 'System123', 
+  superUserPassword: process.env.SUPER_USER_PASSWORD || 'System123',
   runner: 'local',
   maxInstances: process.env.DEBUG === '1' ? 1 : 3,
   outputDir: './output',
@@ -22,7 +22,7 @@ exports.config = {
   // with `/`, the base url gets prepended, not including the path portion of your baseUrl.
   // If your `url` parameter starts without a scheme or `/` (like `some/path`), the base url
   // gets prepended directly.
-  baseUrl: process.env.BASE_URL || 'https://smoke.dhis2.org/2.36dev_smoke/',
+  baseUrl: process.env.BASE_URL || 'https://smoke.dhis2.org/2.35dev_smoke/',
   //
   // Default timeout for all waitFor* commands.
   waitforTimeout: 10000,
