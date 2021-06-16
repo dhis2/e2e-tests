@@ -116,4 +116,3 @@ Then(/^the author of "(.+)" should be "(.+)" user/, (commnt, user) => {
   expect(captureCommentsSection.commentByValue(commentText).$('[data-test=dhis2-capture-comment-user]').getText()).to.equal(user);
 })
 
-
