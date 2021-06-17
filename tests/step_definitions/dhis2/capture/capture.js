@@ -1,4 +1,4 @@
-import { Given, Then, When } from 'cucumber';
+import { Given, Then, When } from '@cucumber/cucumber';
 import { captureHeaderBar, captureIndexPage, captureNewEventForm, captureViewEventPage, captureCommentsSection } from '#page_objects/capture';
 import { waitForWindowToLoad } from '#support/wait';
 
@@ -115,5 +115,4 @@ Then(/^the author of "(.+)" should be "(.+)" user/, (commnt, user) => {
   let commentText = commnt.replace(/\*/g, '').replace(/_/g, '');
   expect(captureCommentsSection.commentByValue(commentText).$('[data-test=dhis2-capture-comment-user]').getText()).to.equal(user);
 })
-
 

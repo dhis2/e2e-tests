@@ -3,28 +3,27 @@
   "version": "1.0.0",
   "description": "DHIS2 E2E testing",
   "dependencies": {
-    "@applitools/eyes-selenium": "^4.31.18",
-    "@applitools/eyes-webdriverio": "^5.8.3",
-    "@wdio/allure-reporter": "^5.16.0",
-    "@wdio/browserstack-service": "^5.16.5",
-    "@wdio/cli": "^5.16.7",
-    "@wdio/cucumber-framework": "^5.16.6",
-    "@wdio/local-runner": "^5.16.7",
-    "@wdio/selenium-standalone-service": "^5.16.5",
-    "@wdio/spec-reporter": "^5.16.5",
-    "@wdio/sync": "^5.16.5",
+    "@wdio/allure-reporter": "^7.2.1",
+    "@wdio/browserstack-service": "^7.2.1",
+    "@wdio/cli": "^7.2.1",
+    "@wdio/cucumber-framework": "^7.2.1",
+    "@wdio/local-runner": "^7.2.1",
+    "@wdio/selenium-standalone-service": "^7.2.1",
+    "@wdio/spec-reporter": "^7.2.1",
+    "@wdio/sync": "^7.2.1",
     "chromedriver": "^86.0.0",
     "deepmerge": "^4.2.2",
     "moment": "^2.27.0",
     "wdio-applitools-cucumber-service": "^1.0.6",
-    "wdio-chromedriver-service": "^5.0.2",
-    "webdriverio": "^5.16.7"
+    "wdio-chromedriver-service": "^6.0.4",
+    "webdriverio": "^7.2.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.0",
     "@babel/core": "^7.7.2",
     "@babel/preset-env": "^7.7.1",
     "@babel/register": "^7.7.0",
+    "@wdio/mocha-framework": "^7.2.1",
     "chai": "^4.1.2",
     "eslint-config-standard": "^13.0.1",
     "eslint-plugin-import": "^2.18.2",
@@ -33,6 +32,8 @@
     "eslint-plugin-standard": "^4.0.0",
     "eslint-plugin-webdriverio": "^1.0.1",
     "link-module-alias": "^1.2.0",
+    "mocha": "^8.4.0",
+    "npm-run-all": "^4.1.5",
     "request": "^2.88.0"
   },
   "_moduleAliases": {
@@ -44,9 +45,11 @@
     "preinstall": "command -v link-module-alias && link-module-alias clean || true",
     "postinstall": "link-module-alias",
     "lint": "./node_modules/eslint/bin/eslint.js . --fix",
-    "browserstack": "./node_modules/.bin/wdio wdio.remote.conf.js",
-    "test": "./node_modules/.bin/wdio wdio.conf.js ",
-    "allure": "allure generate ./reports/allure-results/ || allure open"
+    "wdio": "./node_modules/.bin/wdio",
+    "browserstack": "run-s -c \"wdio ./tests/config/wdio.browserstack.cucumber.conf.js\" \"wdio ./tests/config/wdio.browserstack.mocha.conf.js\"",
+    "test": "run-s -c \"wdio ./tests/config/wdio.cucumber.conf.js\" \"wdio ./tests/config/wdio.mocha.conf.js\"",
+    "smoke": "wdio ./tests/config/wdio.mocha.conf.js",
+    "allure": "allure generate --clean ./reports/allure-results/ && allure open"
   },
   "author": "Edoardo Sabadelli",
   "maintainers": [
