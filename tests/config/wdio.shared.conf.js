@@ -25,7 +25,7 @@ exports.config = {
   baseUrl: process.env.BASE_URL || 'https://smoke.dhis2.org/dev_smoke/',
   //
   // Default timeout for all waitFor* commands.
-  waitforTimeout: 10000,
+  waitforTimeout: 20000,
   //
   // Default timeout in milliseconds for request
   // if Selenium Grid doesn't send response
