@@ -9,8 +9,7 @@ module.exports = () => {
       (message.includes('userDataStore/') ||
       message.includes('staticContent/logo_banner') || //https://jira.dhis2.org/browse/DHIS2-7656
       message.includes('userSettings.json?'))) && 
-      !message.includes('MIME type') && 
-      !message.includes("Cannot read property 'formatDate' of undefined") &&
+      !message.includes('MIME type') &&
       !message.includes("manifest.json") && 
       !message.includes('Failed to fetch')  &&
       !message.includes('cacheManifest.action') && 
