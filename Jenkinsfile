@@ -3,7 +3,7 @@ pipeline {
   agent any
   options { disableConcurrentBuilds() }
   environment {
-    VERSION = "dev"
+    VERSION = "2.37dev"
     INSTANCE_NAME = "${VERSION}_smoke"
     INSTANCE_DOMAIN = "https://smoke.dhis2.org"
     INSTANCE_URL = ""
@@ -26,7 +26,7 @@ pipeline {
   }
 
   triggers {
-    cron(env.BRANCH_NAME.contains('.') ? '' : 'H 6 * * *')
+    cron(env.BRANCH_NAME.contains('.') ? '' : 'H 1 * * *')
   }
 
   stages {     
