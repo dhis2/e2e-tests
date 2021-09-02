@@ -2,7 +2,7 @@
 
 url=$url
 crendentials=$credentials
-declare -a report_tables=('CurZOghc7Mh' 'jhr1eSnZeMr')
+declare -a visualizations=('CurZOghc7Mh' 'jhr1eSnZeMr')
 declare -a maps=("AHWtSmx21sx" "gJ1BHisY9Wm", "bX1XOjbCzWP")
 declare -a charts=("ME1zXcf4zvu" "bDhkM10HzKO" "jQPC2FMKqij")
 
@@ -26,7 +26,7 @@ function send_delete_request() {
     done
 }
 
-send_delete_request "reportTables" "${report_tables[@]}"
+send_delete_request "visualizations" "${visualizations[@]}"
 send_delete_request "maps" "${maps[@]}"
 send_delete_request "charts" "${charts[@]}"
 
