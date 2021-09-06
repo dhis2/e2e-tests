@@ -3,16 +3,11 @@ import { waitForWindowToLoad } from '#support/wait';
 import { appsList } from '#page_objects/AppsList';
 
 describe('Apps -> DHIS2-8017', function() {
-  const apps = ['dhis-web-dataentry/index.action', 'dhis-web-approval/index.action'];
   before(() => {
     login(browser.config.superUser, browser.config.superUserPassword);
 
     appsList.open();
-    appsList.apps.map(element => {
-      if (element.getText() === 'log out' || element.getText() === 'dhis-web-core-resource' || element.getText() === 'Apps Bundle JSON') return;
-      apps.push(element.getText());
-    });
-
+    const apps = appsList.list;
     let lastOpenedApp = "undefined-app";
 
     apps.forEach((app) => {
