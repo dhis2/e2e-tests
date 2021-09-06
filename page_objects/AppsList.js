@@ -9,6 +9,16 @@ class AppsList extends Page {
   get table() {
     return browser.$('table');
   }
+
+  get list() {
+    const appList = ['dhis-web-dataentry/index.action', 'dhis-web-approval-classic/index.action'];
+    this.apps.map(app => {
+      if (app.getText() === 'log out' || app.getText() === 'dhis-web-core-resource' || app.getText() === 'Apps Bundle JSON') return;
+      appList.push(app.getText());
+    });
+
+    return appList;
+  }
   
   open () {
     super.open('dhis-web-apps');
