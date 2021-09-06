@@ -1,4 +1,4 @@
-import Page from './Page';
+import Page from '../Page';
 import { waitForElementToExist, waitForVisible } from '#support/wait';
 
 class Dashboard extends Page {
@@ -7,9 +7,8 @@ class Dashboard extends Page {
   get userIcon () { return browser.$('[class*="profile"]'); }
   get logoutLink () { return browser.$('[class*="profile"] [class*="contents"] li:last-child div'); }
   get filtersArea () { return browser.$('[data-test="dashboards-bar"]'); }
-  get filters () {
-    waitForVisible(this.filtersArea);
-    const filters = this.filtersArea.$$('a');
+  get filters() {
+    return this.filtersArea.$$('[data-test=dashboard-chip]')
    
     return filters.reduce((reduced, filter) => {
       const href = filter.getAttribute('href');

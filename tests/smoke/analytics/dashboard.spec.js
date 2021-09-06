@@ -1,20 +1,23 @@
 import { login, getConsoleLog, getFilteredConsoleLog } from '#support/action';
-import { dashboardPage } from '#page_objects/Dashboard';
+import { dashboardPage } from '#page_objects/analytics/Dashboard';
 import { waitForWindowToLoad } from '#support/wait';
 
 describe('Dashboards app -> DHIS2-8010', function() {
   before(() => {
     login(browser.config.superUser, browser.config.superUserPassword);
-
+    waitForWindowToLoad();
     const filters = dashboardPage.filters;
 
     filters.forEach((filter) => {
-        // getText() returns empty string for invisible filters.
-        const filterName = filter.$('span span').getHTML(false);
-        const filterHref = filter.getAttribute('href');
+        const filterName = filter.$('span span span').getHTML(false);
+        
         const newTest = it('I open ' + filterName, function() {
+           // getText() returns empty string for invisible filters.
+          const filterHref = filter.getAttribute('href');
+
           getConsoleLog(); // clear browser log before test
           console.log('opening ' + filterName);
+          
           browser.url(filterHref);
           waitForWindowToLoad();
 
@@ -25,7 +28,7 @@ describe('Dashboards app -> DHIS2-8010', function() {
       })
 
       this.tests.push(newTest)
-    }) 
+    })
   }) 
   
   it('1. I open dashboard app', function() {
