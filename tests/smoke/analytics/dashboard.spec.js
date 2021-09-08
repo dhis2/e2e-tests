@@ -4,6 +4,7 @@ import { waitForWindowToLoad } from '#support/wait';
 
 describe('Dashboards app -> DHIS2-8010', function() {
   before(() => {
+    this.timeout(100000);//haack, but dhis2 is so slow  :(
     login(browser.config.superUser, browser.config.superUserPassword);
     waitForWindowToLoad();
     const filters = dashboardPage.filters;
