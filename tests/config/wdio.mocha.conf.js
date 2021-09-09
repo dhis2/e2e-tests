@@ -36,6 +36,7 @@ exports.config = {
       ['allure', {
         outputDir: './reports/allure-results',
         disableMochaHooks: false,
+        disableWebdriverStepsReporting: true,
         disableWebdriverScreenshotsReporting: false
       }]
     ],

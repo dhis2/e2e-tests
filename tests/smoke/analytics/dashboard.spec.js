@@ -5,7 +5,6 @@ import { waitForWindowToLoad, waitForClickable } from '#support/wait';
 describe('Dashboards app -> DHIS2-8010', function() {
   before(() => {
     login(browser.config.superUser, browser.config.superUserPassword);
-    waitForWindowToLoad();
     const filters = dashboardPage.filters;
 
     filters.forEach((filter) => {
