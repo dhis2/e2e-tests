@@ -1,6 +1,6 @@
 import { login, getConsoleLog, getFilteredConsoleLog } from '#support/action';
 import { dashboardPage } from '#page_objects/analytics/Dashboard';
-import { waitForWindowToLoad } from '#support/wait';
+import { waitForWindowToLoad, waitForClickable } from '#support/wait';
 
 describe('Dashboards app -> DHIS2-8010', function() {
   before(() => {
@@ -9,6 +9,7 @@ describe('Dashboards app -> DHIS2-8010', function() {
     const filters = dashboardPage.filters;
 
     filters.forEach((filter) => {
+        waitForClickable(filter)
         const filterName = filter.$('span span span').getHTML(false);
         
         const newTest = it('I open ' + filterName, function() {
