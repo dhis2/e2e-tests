@@ -23,7 +23,7 @@ exports.config = {
     ],
     framework: 'mocha',
     mochaOpts: {
-      timeout: 60000 ,
+      timeout: 100000 ,
       ui: 'bdd' ,
       compilers: ['js:@babel/register'] 
     },
