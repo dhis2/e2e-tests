@@ -108,7 +108,14 @@ pipeline {
           ])  
         }     
       }
-      
+    
+    success {
+      script {
+        // stop the instance after to offload smoke.dhis2
+        awx.stopWar("$AWX_BOT_CREDENTIALS", "smoke.dhis2.org", "${INSTANCE_NAME}")
+      }
+    }
+    
     failure {
       script {
         def prefix = ""
