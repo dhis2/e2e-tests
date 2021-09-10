@@ -15,7 +15,9 @@ exports.config = {
         'osVersion': '10',
         'browserVersion': 'latest',
         'local': 'false',
-        'seleniumVersion': '3.14.0'
+        'networkLogs': 'true',
+        'seleniumVersion': '3.14.0',
+        'resolution': '2048x1536'
       },
       acceptInsecureCerts: true,
       'goog:chromeOptions': {
