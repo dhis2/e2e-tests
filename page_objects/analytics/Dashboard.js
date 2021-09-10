@@ -10,7 +10,11 @@ class Dashboard extends Page {
   
   get filters() {
     waitForVisible(this.filtersArea)
-    return this.filtersArea.$$('[data-test=dashboard-chip]')
+    return this.filtersArea.$$('a')
+  }
+
+  getFilterByIndex( index ) {
+    return this.filtersArea.$('a:nth-of-type(' + index + ')')
   }
 
   open () {
