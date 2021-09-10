@@ -7,9 +7,14 @@ class Dashboard extends Page {
   get userIcon () { return browser.$('[class*="profile"]'); }
   get logoutLink () { return browser.$('[class*="profile"] [class*="contents"] li:last-child div'); }
   get filtersArea () { return browser.$('[data-test="dashboards-bar"]'); }
+  
   get filters() {
     waitForVisible(this.filtersArea)
-    return this.filtersArea.$$('[data-test=dashboard-chip]')
+    return this.filtersArea.$$('a')
+  }
+
+  getFilterByIndex( index ) {
+    return this.filtersArea.$('a:nth-of-type(' + index + ')')
   }
 
   open () {

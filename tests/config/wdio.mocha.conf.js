@@ -23,7 +23,7 @@ exports.config = {
     ],
     framework: 'mocha',
     mochaOpts: {
-      timeout: 60000 ,
+      timeout: 100000 ,
       ui: 'bdd' ,
       compilers: ['js:@babel/register'] 
     },
@@ -36,6 +36,7 @@ exports.config = {
       ['allure', {
         outputDir: './reports/allure-results',
         disableMochaHooks: false,
+        disableWebdriverStepsReporting: true,
         disableWebdriverScreenshotsReporting: false
       }]
     ],
