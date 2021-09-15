@@ -4,7 +4,7 @@ import { isVisible}  from '#support/check';
 import { waitForVisible } from '#support/wait';
 
 import { login } from '#support/action';
-import { dashboardPage } from '#page_objects/Dashboard';
+import { dashboardPage } from '#page_objects/analytics/Dashboard';
 
 Given(
   /^I am logged in$/,
