@@ -1,6 +1,8 @@
 @Library('pipeline-library') _
 pipeline {
-  agent any
+  agent {
+    label "ec2-jdk11-node14"
+  }
   options { disableConcurrentBuilds() }
   environment {
     VERSION = "2.35dev"
@@ -19,15 +21,16 @@ pipeline {
     JIRA_USERNAME = "$JIRA_USERNAME"
     JIRA_PASSWORD = "$JIRA_PASSWORD"
     JIRA_RELEASE_VERSION_NAME = sh(script: './get_next_version.sh', returnStdout: true)
+    JIRA_ENABLED = false
   }
 
-  tools {
-    nodejs "node"
-  }
+  // tools {
+    // nodejs "node"
+  // }
 
-  triggers {
-    cron(env.BRANCH_NAME.contains('.') ? '' : 'H 3 * * *')
-  }
+  // triggers {
+    // cron(env.BRANCH_NAME.contains('.') ? '' : 'H 3 * * *')
+  // }
 
   stages {     
     stage('Configure job') {
@@ -60,7 +63,7 @@ pipeline {
       steps {
         script {
           if (!fileExists("$ALLURE_REPORT_DIR_PATH")) {
-            sh "mkdir $ALLURE_REPORT_DIR_PATH"
+            sh "mkdir -p $ALLURE_REPORT_DIR_PATH"
           } 
           if (fileExists("$ALLURE_RESULTS_DIR")) {
             dir("$ALLURE_RESULTS_DIR", {
@@ -68,11 +71,11 @@ pipeline {
             })
           }   
     
-          sh "mkdir -p ${WORKSPACE}/$ALLURE_RESULTS_DIR"
+          sh "mkdir -p ./$ALLURE_RESULTS_DIR"
               
           if (fileExists("$ALLURE_REPORT_DIR_PATH/$ALLURE_REPORT_DIR/history")) {
-            sh "cp  -r $ALLURE_REPORT_DIR_PATH/$ALLURE_REPORT_DIR/history ${WORKSPACE}/$ALLURE_RESULTS_DIR/history"
-            sh "cp  -r $ALLURE_REPORT_DIR_PATH/$ALLURE_REPORT_DIR/data ${WORKSPACE}/$ALLURE_RESULTS_DIR/data"
+            sh "cp  -r $ALLURE_REPORT_DIR_PATH/$ALLURE_REPORT_DIR/history ./$ALLURE_RESULTS_DIR/history"
+            sh "cp  -r $ALLURE_REPORT_DIR_PATH/$ALLURE_REPORT_DIR/data ./$ALLURE_RESULTS_DIR/data"
           } 
         } 
       }      
@@ -119,7 +122,7 @@ pipeline {
          slackSend(
             color: '#ff0000',
             message: "${prefix}E2E tests initialized from branch $GIT_BRANCH for version - $VERSION failed. Please visit " + env.BUILD_URL + " for more information",
-            channel: '@Gintare;@Hella Dawit'
+            channel: '@U01RSD1LPB3'
         )
       }
     }
