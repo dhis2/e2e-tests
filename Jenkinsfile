@@ -23,9 +23,9 @@ pipeline {
     JIRA_RELEASE_VERSION_NAME = sh(script: './get_next_version.sh', returnStdout: true)
   }
 
-  tools {
-    nodejs "node"
-  }
+  // tools {
+    // nodejs "node"
+  // }
 
   // triggers {
     // cron(env.BRANCH_NAME.contains('.') ? '' : 'H 6 * * *')
