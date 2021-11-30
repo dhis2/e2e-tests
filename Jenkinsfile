@@ -21,6 +21,7 @@ pipeline {
     JIRA_USERNAME = "$JIRA_USERNAME"
     JIRA_PASSWORD = "$JIRA_PASSWORD"
     JIRA_RELEASE_VERSION_NAME = sh(script: './get_next_version.sh', returnStdout: true)
+    JIRA_ENABLED = false
   }
 
   // tools {
