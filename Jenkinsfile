@@ -1,6 +1,5 @@
 @Library('pipeline-library') _
 pipeline {
-
   agent {
     label "ec2-jdk11-node14"
   }
@@ -26,16 +25,11 @@ pipeline {
     JIRA_USERNAME = "$JIRA_USERNAME"
     JIRA_PASSWORD = "$JIRA_PASSWORD"
     JIRA_RELEASE_VERSION_NAME = sh(script: './get_next_version.sh', returnStdout: true)
-    JIRA_ENABLED = false
   }
 
-  // tools {
-    // nodejs "node"
-  // }
-
-  // triggers {
-    // cron(env.BRANCH_NAME.contains('.') ? '' : 'H 6 * * *')
-  // }
+  triggers {
+    cron(env.BRANCH_NAME.contains('.') ? '' : 'H 6 * * *')
+  }
 
   stages {     
     stage('Configure job') {
@@ -53,8 +47,8 @@ pipeline {
           echo "Version: $VERSION, JIRA_RELEASE_VERSION_NAME: $JIRA_RELEASE_VERSION_NAME"
         }
       }
-
     }
+
     stage('Update instance') {
       steps {
         script {
@@ -64,6 +58,7 @@ pipeline {
         } 
       }
     }
+
     stage('Prepare reports dir') {
       steps {
         script {
@@ -134,7 +129,7 @@ pipeline {
          slackSend(
             color: '#ff0000',
             message: "${prefix}E2E tests initialized from branch $GIT_BRANCH for version - $VERSION failed. Please visit " + env.BUILD_URL + " for more information",
-            channel: '@U01RSD1LPB3'
+            channel: '@Gintare;@Hella Dawit'
         )
       }
     }
