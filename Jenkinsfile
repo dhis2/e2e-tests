@@ -1,9 +1,15 @@
 @Library('pipeline-library') _
 pipeline {
+
   agent {
     label "ec2-jdk11-node14"
   }
-  options { disableConcurrentBuilds() }
+
+  options {
+    disableConcurrentBuilds()
+    lock label: 'browserstack'
+  }
+
   environment {
     VERSION = "dev"
     INSTANCE_NAME = "${VERSION}_smoke"
