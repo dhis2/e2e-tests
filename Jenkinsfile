@@ -7,7 +7,6 @@ pipeline {
 
   options {
     disableConcurrentBuilds()
-    lock label: 'browserstack'
   }
 
   environment {
