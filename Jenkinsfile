@@ -3,9 +3,9 @@ pipeline {
   agent any
   options { disableConcurrentBuilds() }
   environment {
-    VERSION = "2.36dev"
-    INSTANCE_NAME = "${VERSION}_smoke"
-    INSTANCE_DOMAIN = "https://smoke.dhis2.org"
+    VERSION = "newdemos"
+    INSTANCE_NAME = "dev/${VERSION}"
+    INSTANCE_DOMAIN = "https://demos.dhis2.org"
     INSTANCE_URL = ""
     GIT_URL = "https://github.com/dhis2/e2e-tests/"
     USERNAME = "$BROWSERSTACK_USERNAME"
@@ -16,6 +16,7 @@ pipeline {
     ALLURE_RESULTS_DIR = "reports/allure-results"
     ALLURE_REPORT_DIR = "allure-report-$VERSION"
     APPLITOOLS_API_KEY = "$APPLITOOLS_API_KEY"
+    JIRA_ENABLED = false
     JIRA_USERNAME = "$JIRA_USERNAME"
     JIRA_PASSWORD = "$JIRA_PASSWORD"
     JIRA_RELEASE_VERSION_NAME = sh(script: './get_next_version.sh', returnStdout: true)
@@ -29,7 +30,7 @@ pipeline {
     cron(env.BRANCH_NAME.contains('.') ? '' : 'H 1 * * *')
   }
 
-  stages {     
+  stages {
     stage('Configure job') {
       when {
         buildingTag()
@@ -38,9 +39,9 @@ pipeline {
       steps {
         script {
           VERSION = "${env.BRANCH_NAME}".split("-")[0]
-          INSTANCE_NAME = "${env.BRANCH_NAME}" 
+          INSTANCE_NAME = "${env.BRANCH_NAME}"
           BRANCH_PATH = "${getBranchPath(true)}"
-          ALLURE_REPORT_DIR_PATH = "${BRANCH_PATH}/allure"      
+          ALLURE_REPORT_DIR_PATH = "${BRANCH_PATH}/allure"
           JIRA_RELEASE_VERSION_NAME = "$VERSION"
           echo "Version: $VERSION, JIRA_RELEASE_VERSION_NAME: $JIRA_RELEASE_VERSION_NAME"
         }
@@ -53,7 +54,7 @@ pipeline {
           INSTANCE_URL = "${INSTANCE_DOMAIN}/${INSTANCE_NAME}/"
           awx.resetWar("$AWX_BOT_CREDENTIALS", "smoke.dhis2.org", "${INSTANCE_NAME}")
           sh "credentials=system:System123 url=${INSTANCE_URL} ./delete-data.sh"
-        } 
+        }
       }
     }
     stage('Prepare reports dir') {
@@ -61,21 +62,21 @@ pipeline {
         script {
           if (!fileExists("$ALLURE_REPORT_DIR_PATH")) {
             sh "mkdir $ALLURE_REPORT_DIR_PATH"
-          } 
+          }
           if (fileExists("$ALLURE_RESULTS_DIR")) {
             dir("$ALLURE_RESULTS_DIR", {
               deleteDir()
             })
-          }   
-    
+          }
+
           sh "mkdir -p ${WORKSPACE}/$ALLURE_RESULTS_DIR"
-              
+
           if (fileExists("$ALLURE_REPORT_DIR_PATH/$ALLURE_REPORT_DIR/history")) {
             sh "cp  -r $ALLURE_REPORT_DIR_PATH/$ALLURE_REPORT_DIR/history ${WORKSPACE}/$ALLURE_RESULTS_DIR/history"
             sh "cp  -r $ALLURE_REPORT_DIR_PATH/$ALLURE_REPORT_DIR/data ${WORKSPACE}/$ALLURE_RESULTS_DIR/data"
-          } 
-        } 
-      }      
+          }
+        }
+      }
     }
 
     stage('Build') {
@@ -89,7 +90,7 @@ pipeline {
       }
     }
   }
-    
+
   post {
     always {
       script {
@@ -105,10 +106,10 @@ pipeline {
           reportBuildPolicy: 'ALWAYS',
           results: [[path: "$ALLURE_RESULTS_DIR"]],
           report: "$ALLURE_REPORT_DIR_PATH/$ALLURE_REPORT_DIR"
-          ])  
-        }     
+          ])
+        }
       }
-      
+
     failure {
       script {
         def prefix = ""
