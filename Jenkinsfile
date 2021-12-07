@@ -24,7 +24,7 @@ pipeline {
   }
 
   triggers {
-    cron(env.BRANCH_NAME.contains('.') ? '' : 'H 1 * * *')
+    cron(env.BRANCH_NAME.contains('-packages') ? '' : 'H 1 * * *')
   }
 
   stages {
