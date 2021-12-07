@@ -17,9 +17,6 @@ pipeline {
     ALLURE_REPORT_DIR = "allure-report-$VERSION"
     APPLITOOLS_API_KEY = "$APPLITOOLS_API_KEY"
     JIRA_ENABLED = false
-    JIRA_USERNAME = "$JIRA_USERNAME"
-    JIRA_PASSWORD = "$JIRA_PASSWORD"
-    JIRA_RELEASE_VERSION_NAME = sh(script: './get_next_version.sh', returnStdout: true)
   }
 
   tools {
@@ -42,20 +39,9 @@ pipeline {
           INSTANCE_NAME = "${env.BRANCH_NAME}"
           BRANCH_PATH = "${getBranchPath(true)}"
           ALLURE_REPORT_DIR_PATH = "${BRANCH_PATH}/allure"
-          JIRA_RELEASE_VERSION_NAME = "$VERSION"
-          echo "Version: $VERSION, JIRA_RELEASE_VERSION_NAME: $JIRA_RELEASE_VERSION_NAME"
         }
       }
 
-    }
-    stage('Update instance') {
-      steps {
-        script {
-          INSTANCE_URL = "${INSTANCE_DOMAIN}/${INSTANCE_NAME}/"
-          awx.resetWar("$AWX_BOT_CREDENTIALS", "smoke.dhis2.org", "${INSTANCE_NAME}")
-          sh "credentials=system:System123 url=${INSTANCE_URL} ./delete-data.sh"
-        }
-      }
     }
     stage('Prepare reports dir') {
       steps {
@@ -80,9 +66,6 @@ pipeline {
     }
 
     stage('Build') {
-      environment {
-        JIRA_RELEASE_VERSION_NAME = "$JIRA_RELEASE_VERSION_NAME"
-      }
 
       steps {
         sh "npm install"
