@@ -20,11 +20,7 @@ pipeline {
     APPLITOOLS_API_KEY = "$APPLITOOLS_API_KEY"
     JIRA_ENABLED = false
   }
-
-  tools {
-    nodejs "node"
-  }
-
+  
   triggers {
     cron(env.BRANCH_NAME.contains('-packages') ? '' : 'H 1 * * *')
   }
