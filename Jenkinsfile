@@ -7,6 +7,8 @@ pipeline {
     INSTANCE_NAME = "dev/${VERSION}"
     INSTANCE_DOMAIN = "https://demos.dhis2.org"
     INSTANCE_URL = ""
+    SUPER_USER = "$PACKAGE_SMOKE_USER"
+    SUPER_USER_PASSWORD = "$PACKAGE_SMOKE_PASSWORD"
     GIT_URL = "https://github.com/dhis2/e2e-tests/"
     USERNAME = "$BROWSERSTACK_USERNAME"
     KEY = "$BROWSERSTACK_KEY"
