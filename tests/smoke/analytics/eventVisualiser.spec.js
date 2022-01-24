@@ -16,7 +16,7 @@ describe('Event visualiser app -> DHIS2-9193', function() {
         eventVisualiser.openFavorite(vis.id);
             
         const dataExist = eventVisualiser.dataExist();
-        const consoleLogs = getFilteredConsoleLog();
+        const consoleLogs = filteredConsolelog();
     
         let reportLog = 'Favorite: \n' + visName + ' has following errors: ';
     
@@ -38,3 +38,10 @@ describe('Event visualiser app -> DHIS2-9193', function() {
     eventVisualiser.open();   
   })
 }) 
+
+
+const filteredConsolelog = () => {
+  return getFilteredConsoleLog().filter((value) => {
+    return !(value['message'].includes('formatDate'))
+  });
+};
