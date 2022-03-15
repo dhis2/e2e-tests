@@ -38,7 +38,16 @@ Repository for DHIS2 E2E testing.
     export BASE_URL=<instance_URL>  # e.g. https://prep.dhis2.org/2.38dev/ 
     ```
 
-4. Run the tests:
+4. Adapt the tests to your environment:
+    Some of the test feature files include references from the Sierra Leone demo DB. These should be replaced to suit your target DB  
+    Check the following feature files and update the parameters in double-quotes (`"`) accordingly:
+    ```sh
+    ./tests/features/authentication.feature
+    ./tests/features/loginPage.feature
+    ./tests/features/apps/capture/events.feature
+    ```
+   
+5. Run the tests:
     ```sh
     $ npm test
     ```
