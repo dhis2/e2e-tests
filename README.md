@@ -43,7 +43,7 @@ Repository for DHIS2 E2E testing.
     $ npm test
     ```
 
-    > Optional Browserstack execution
+    > Optional Browserstack execution (requires a browserstack account and additional environment variables to pass the credentials)
     > ```sh
     > $ npm run-script browserstack
     > ```
