@@ -99,8 +99,8 @@ Then(/^the comment "(.+)" should be displayed correctly/, (comment) => {
 })
 
 When(/^I open the last saved event/, () => {
-  var programId = browser.getUrl().match('(?<=programId=)(.*)(?=&)')[0];
-  var ouId = browser.getUrl().match('(?<=orgUnitId=)(.*)')[0];
+  var programId = browser.getUrl().match('(?<=programId=)(.*)')[0];
+  var ouId = browser.getUrl().match('(?<=orgUnitId=)(.*)(?=&)')[0];
  
   browser.url(`api/events.json?program=${programId}&orgUnit=${ouId}&order=created:desc&pageSize=1`);
   
