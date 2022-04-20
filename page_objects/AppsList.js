@@ -11,7 +11,7 @@ class AppsList extends Page {
   }
 
   get list() {
-    const appList = ['dhis-web-dataentry/index.action', 'dhis-web-approval-classic/index.action'];
+    const appList = ['dhis-web-dataentry/index.action'];
     this.apps.map(app => {
       if (app.getText() === 'log out' || app.getText() === 'dhis-web-core-resource' || app.getText() === 'Apps Bundle JSON') return;
       appList.push(app.getText());

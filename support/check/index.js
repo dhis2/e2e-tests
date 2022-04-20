@@ -8,3 +8,4 @@ export { default as checkTitle } from './checkTitle';
 export { default as isEnabled } from './isEnabled';
 export { default as isExisting } from './isExisting';
 export { default as isVisible } from './isVisible';
+export { default as checkVisualizationHasNoErrors } from './checkVisualizationHasNoErrors';

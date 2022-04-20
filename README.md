@@ -11,18 +11,69 @@ Repository for DHIS2 E2E testing.
 
 ## Local execution
 
-Install the NPM dependencies:
-```sh
-$ npm i
-```
+1. Check out the relevant branch:
+    E.g. if you are testing a 2.32.x version of DHIS2
+    ```sh
+    $ git checkout v32
+    ```
+    or, if you are testing a 2.38.x version of DHIS2
+    ```sh
+    $ git checkout v38
+    ```
 
-Run the tests:
-```sh
-$ npm test
-$ npm test -- --baseUrl=play.dhis2.org/dev/
-```
+2. Install the NPM dependencies:
+    ```sh
+    $ npm i
+    ```
+    Note that for older branches the dependencies may fail and you may have to run it with `--legacy-peer-deps` flag:
+    ```sh
+    $ npm i --legacy-peer-deps
+    ```
 
-## Browserstack execution
-```sh
-$ npm run-script browserstack
-```
+3. Set the environment
+    ```sh
+    export SUPER_USER=<dhis2_superuser>
+    export SUPER_USER_PASSWORD=<dhis2_superuser_password>
+    export JIRA_ENABLED=false
+    export BASE_URL=<instance_URL>  # e.g. https://prep.dhis2.org/2.38dev/ 
+    ```
+
+4. Adapt the tests to your environment:
+    Some of the test feature files include references from the Sierra Leone demo DB. These should be replaced to suit your target DB  
+    Check the following feature files and update the parameters in double-quotes (`"`) accordingly:
+    ```sh
+    ./tests/features/authentication.feature
+    ./tests/features/loginPage.feature
+    ./tests/features/apps/capture/events.feature
+    ```
+   
+5. Run the tests:
+    ```sh
+    $ npm test
+    ```
+
+    > Optional Browserstack execution (requires a browserstack account and additional environment variables to pass the credentials)
+    > ```sh
+    > $ npm run-script browserstack
+    > ```
+
+
+## Viewing the results with Allure
+
+1. Install Allure (first time only)
+
+    See the [Allure installation guide](https://docs.qameta.io/allure/#_installing_a_commandline)
+
+2. By default, the results of the above test run will be placed in the `./reports/allure-results/` directory. To view these as HTML with allure simply run:
+   ```sh
+   $ allure serve reports/allure-results/
+   ```
+
+3. Alternatively, you may want to generate the results for later viewing. You can generate with:
+   ```sh
+   $ allure generate --clean reports/allure-results/ -o <output_dir_for_baseline>
+   ```
+   Later, you can view the results with
+   ```sh
+   $ allure open <output_dir_for_baseline>
+   ```

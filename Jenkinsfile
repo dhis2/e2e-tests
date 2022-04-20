@@ -40,6 +40,7 @@ pipeline {
         script {
           VERSION = "${env.BRANCH_NAME}".split("-")[0]
           INSTANCE_NAME = "${env.BRANCH_NAME}" 
+          INSTANCE_URL = "${INSTANCE_DOMAIN}/${INSTANCE_NAME}/"
           JIRA_RELEASE_VERSION_NAME = "$VERSION"
           echo "Version: $VERSION, JIRA_RELEASE_VERSION_NAME: $JIRA_RELEASE_VERSION_NAME"
         }
@@ -52,6 +53,7 @@ pipeline {
           INSTANCE_URL = "${INSTANCE_DOMAIN}/${INSTANCE_NAME}/"
           awx.resetWar("$AWX_BOT_CREDENTIALS", "smoke.dhis2.org", "${INSTANCE_NAME}")
           sh "credentials=system:System123 url=${INSTANCE_URL} ./delete-data.sh"
+          sh "credentials=system:System123 url=${INSTANCE_URL} ./install_apps.sh"
         } 
       }
     }
