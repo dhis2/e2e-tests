@@ -2,7 +2,7 @@
 
 url=$url
 crendentials=$credentials
-declare -a visualizations=('CurZOghc7Mh' 'jhr1eSnZeMr')
+declare -a visualizations=('CurZOghc7Mh' 'jhr1eSnZeMr' 'jQPC2FMKqij')
 declare -a maps=("AHWtSmx21sx" "gJ1BHisY9Wm", "bX1XOjbCzWP")
 declare -a charts=("ME1zXcf4zvu" "bDhkM10HzKO" "jQPC2FMKqij")
 
