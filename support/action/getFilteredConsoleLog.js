@@ -14,6 +14,7 @@ module.exports = () => {
       !message.includes('Failed to fetch')  &&
       !message.includes('cacheManifest.action') && 
       !message.includes('i18nJavaScript.action') &&
+      !message.includes('useNewDashboard') &&
       !message.includes('files/script') // https://jira.dhis2.org/browse/DHIS2-8864
     });
 }
