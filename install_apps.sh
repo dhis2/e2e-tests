@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 url=$url
 crendentials=$credentials
 declare -a APPS=('line-listing-app')
