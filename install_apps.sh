@@ -1,9 +1,9 @@
 #!/bin/sh
 url=$url
 crendentials=$credentials
-
-APPS=('line-listing-app')
+declare -a APPS=('line-listing-app')
 GITHUB_API="https://api.github.com/repos/dhis2"
+
 installApp() {
   app=$1
   assets_url=$(curl $GITHUB_API/$app/releases/latest | jq -r '.assets_url')
