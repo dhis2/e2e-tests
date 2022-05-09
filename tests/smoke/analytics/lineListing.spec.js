@@ -5,7 +5,6 @@ import { checkVisualizationHasNoErrors } from '#support/check';
 describe('Line listing app -> DHIS2-13221', function() {
   before(() => {
     login(browser.config.superUser, browser.config.superUserPassword);
-    browser.pause(20000);
 
     const visualizations = lineListing.visualizationList;
     

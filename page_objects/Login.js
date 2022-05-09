@@ -1,5 +1,6 @@
 import Page from './Page';
 import { waitForElementToExist, waitForVisible } from '#support/wait';
+import { header } from './Header';
 
 class Login extends Page {
   get loginForm () { return browser.$('#loginForm'); }
@@ -18,6 +19,8 @@ class Login extends Page {
     this.usernameInput.setValue(username);
     this.passwordInput.setValue(password);
     this.submitButton.click();
+
+    waitForElementToExist( header.headerElement);
   }
 }
 

@@ -2,7 +2,7 @@ import Page from '../Page'
 import { waitForWindowToLoad, waitForVisible } from '#support/wait';
 
 class EventReports extends Page {
-  get visualisationList() {
+  get visualizationList() {
     browser.url('api/eventReports.json?fields=id,displayName&paging=false' );
     waitForVisible(browser.$('body pre'));
   
