@@ -17,7 +17,7 @@ class LineListing extends Page {
   }
 
   get visualizationList() {
-    browser.url('api/eventVisualizations.json?fields=id,displayName&paging=false' );
+    browser.url('api/eventVisualizations.json?fields=id,displayName&paging=false&filter=type:eq:LINE_LIST' );
     waitForVisible(browser.$('body pre'));
     return JSON.parse(browser.$('body pre').getHTML(false))['eventVisualizations'];
   }
