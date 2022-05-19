@@ -19,8 +19,8 @@ class Login extends Page {
     this.usernameInput.setValue(username);
     this.passwordInput.setValue(password);
     this.submitButton.click();
-
-    waitForElementToExist( header.headerElement);
+    // todo uncomment when login no longer redirects to /files/external/script
+    //waitForElementToExist( header.headerElement);
   }
 }
 
