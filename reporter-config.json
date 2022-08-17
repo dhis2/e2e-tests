@@ -1,0 +1,26 @@
+{
+  "reporterEnabled": "cypress-parallel/json-stream.reporter.js, cypress-parallel/simple-spec.reporter.js, reporters/jira/reporter.js, @reportportal/agent-js-cypress",
+    "reportersJiraReporterJsReporterOptions": {
+      "jiraUrl": "https://jira.dhis2.org",
+      "projectId": "10000",
+      "testCycle": "automated-tests"
+    },
+    "reportportalAgentJsCypressReporterOptions": {
+      "endpoint": "https://test.tools.dhis2.org/reportportal/api/v1",
+      "launch": "e2e_tests_master",
+      "project": "dhis2_auto",
+      "description": "",
+      "attributes": [
+        {
+           "key": "version",
+           "value": "master"
+        }
+      ],
+      "debug": false,
+      "parallel": true,
+      "autoMerge": true,
+      "restClientConfig": {
+        "timeout": 90000
+      }
+    }
+}

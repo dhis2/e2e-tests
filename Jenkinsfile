@@ -6,6 +6,7 @@ pipeline {
 
   options {
     disableConcurrentBuilds()
+    ansiColor('xterm')
   }
 
   environment {
@@ -14,16 +15,10 @@ pipeline {
     INSTANCE_DOMAIN = "https://smoke.dhis2.org"
     INSTANCE_URL = ""
     GIT_URL = "https://github.com/dhis2/e2e-tests/"
-    USERNAME = "$BROWSERSTACK_USERNAME"
-    KEY = "$BROWSERSTACK_KEY"
     AWX_BOT_CREDENTIALS = credentials('awx-bot-user-credentials')
     ALLURE_REPORT_DIR_PATH = "./allure"
     ALLURE_RESULTS_DIR = "reports/allure-results"
-    ALLURE_REPORT_DIR = "allure-report-$VERSION"
-    APPLITOOLS_API_KEY = "$APPLITOOLS_API_KEY"
-    JIRA_USERNAME = "$JIRA_USERNAME"
-    JIRA_PASSWORD = "$JIRA_PASSWORD"
-    JIRA_RELEASE_VERSION_NAME = sh(script: './get_next_version.sh', returnStdout: true)
+    ALLURE_REPORT_DIR = "allure-report-$VERSION"  
   }
 
   triggers {
@@ -51,7 +46,7 @@ pipeline {
       steps {
         script {
           INSTANCE_URL = "${INSTANCE_DOMAIN}/${INSTANCE_NAME}/"
-          awx.resetWar("$AWX_BOT_CREDENTIALS", "smoke.dhis2.org", "${INSTANCE_NAME}")
+          awx.resetWar("$AWX_BOT_CREDENTIALS", "${INSTANCE_DOMAIN}", "${INSTANCE_NAME}")
           sh "credentials=system:System123 url=${INSTANCE_URL} ./delete-data.sh"
           sh "credentials=system:System123 url=${INSTANCE_URL} ./install_apps.sh"
         } 
@@ -80,14 +75,21 @@ pipeline {
       }      
     }
 
-    stage('Build') {
+    stage('Test') {
       environment {
+        JIRA_ENABLED = true
+        JIRA_USERNAME = "$JIRA_USERNAME"
+        JIRA_PASSWORD = "$JIRA_PASSWORD"
+        JIRA_RELEASE_VERSION_NAME = sh(script: './get_next_version.sh', returnStdout: true)
         JIRA_RELEASE_VERSION_NAME = "$JIRA_RELEASE_VERSION_NAME"
+        BASE_URL = "${INSTANCE_URL}"
+        CI_BUILD_ID="${BUILD_NUMBER}"
       }
 
       steps {
-        sh "npm install"
-        sh "BASE_URL=\"${INSTANCE_URL}\" npm run browserstack"
+        // assign version to the report portal version attribute
+        sh "jq '.reportportalAgentJsCypressReporterOptions.attributes[0].value=\"${VERSION}\"' reporter-config.json > reporter-config.json"
+        sh "docker-compose up --exit-code-from cypress-tests"
       }
     }
   }
