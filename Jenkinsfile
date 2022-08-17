@@ -12,7 +12,7 @@ pipeline {
   environment {
     VERSION = "dev"
     INSTANCE_NAME = "${VERSION}_smoke"
-    INSTANCE_DOMAIN = "https://smoke.dhis2.org"
+    INSTANCE_DOMAIN = "smoke.dhis2.org"
     INSTANCE_URL = ""
     GIT_URL = "https://github.com/dhis2/e2e-tests/"
     AWX_BOT_CREDENTIALS = credentials('awx-bot-user-credentials')
@@ -35,7 +35,7 @@ pipeline {
         script {
           VERSION = "${env.BRANCH_NAME}".split("-")[0]
           INSTANCE_NAME = "${env.BRANCH_NAME}" 
-          INSTANCE_URL = "${INSTANCE_DOMAIN}/${INSTANCE_NAME}/"
+          INSTANCE_URL = "https://${INSTANCE_DOMAIN}/${INSTANCE_NAME}/"
           JIRA_RELEASE_VERSION_NAME = "$VERSION"
           echo "Version: $VERSION, JIRA_RELEASE_VERSION_NAME: $JIRA_RELEASE_VERSION_NAME"
         }
@@ -45,7 +45,6 @@ pipeline {
     stage('Update instance') {
       steps {
         script {
-          INSTANCE_URL = "${INSTANCE_DOMAIN}/${INSTANCE_NAME}/"
           awx.resetWar("$AWX_BOT_CREDENTIALS", "${INSTANCE_DOMAIN}", "${INSTANCE_NAME}")
           sh "credentials=system:System123 url=${INSTANCE_URL} ./delete-data.sh"
           sh "credentials=system:System123 url=${INSTANCE_URL} ./install_apps.sh"
