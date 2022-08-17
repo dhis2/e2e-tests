@@ -10,7 +10,6 @@
     "allure": "allure generate --clean ./reports/allure-results/ && allure open",
     "allure:serve": "allure serve --results ./allure-results"
   },
-  },
   "author": "Gintare Vilkelyte <vilkelyte.gintare@gmail.com>",
   "license": "ISC",
   "dependencies": {
