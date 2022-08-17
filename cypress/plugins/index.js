@@ -22,8 +22,8 @@ const _ = require('lodash')
  * @type {Cypress.PluginConfig}
  */
 // eslint-disable-next-line no-unused-vars
-module.exports = (on, config) => {
-  initData.install(config);
+module.exports = async (on, config) => {
+  await initData.install(config);
   logConsole.install(on);
   reportPortal.install(on, config);
   allureWriter(on, config);

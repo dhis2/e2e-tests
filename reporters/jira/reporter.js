@@ -51,7 +51,10 @@ class Reporter {
 
     try {
       this.jira_issue = suite.split("->")[1].trim();
-    } catch (e) { this._log("Jira issue was undefined. Skipping reporting") }
+    } catch (e) { 
+      this._log("Jira issue was undefined. Skipping reporting") 
+      return;
+    }
 
     this._log(`Running suite ${suite}, JIRA issue number: ${this.jira_issue}`);
     this.jiraService.createExecution(this.jira_issue)
