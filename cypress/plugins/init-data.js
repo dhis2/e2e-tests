@@ -4,7 +4,8 @@ const _ = require('lodash')
 const struts_apps = ['dhis-web-dataentry/index.action']
 const queryParams = '?fields=displayName,id&paging=false';
 
-axios.defaults.timeout = 5000
+axios.defaults.timeout = 20000
+
 async function initData( config ) {
   console.log('Initializing data')
 
