@@ -81,7 +81,6 @@ pipeline {
         JIRA_USERNAME = "$JIRA_USERNAME"
         JIRA_PASSWORD = "$JIRA_PASSWORD"
         JIRA_RELEASE_VERSION_NAME = sh(script: './get_next_version.sh', returnStdout: true)
-        JIRA_RELEASE_VERSION_NAME = "$JIRA_RELEASE_VERSION_NAME"
         BASE_URL = "${INSTANCE_URL}"
         CI_BUILD_ID="${BUILD_NUMBER}"
       }
