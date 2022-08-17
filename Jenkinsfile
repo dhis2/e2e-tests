@@ -45,6 +45,7 @@ pipeline {
     stage('Update instance') {
       steps {
         script {
+          INSTANCE_URL = "https://${INSTANCE_DOMAIN}/${INSTANCE_NAME}/"
           awx.resetWar("$AWX_BOT_CREDENTIALS", "${INSTANCE_DOMAIN}", "${INSTANCE_NAME}")
           sh "credentials=system:System123 url=${INSTANCE_URL} ./delete-data.sh"
           sh "credentials=system:System123 url=${INSTANCE_URL} ./install_apps.sh"
