@@ -15,7 +15,6 @@ services:
       JIRA_PASSWORD: ${JIRA_PASSWORD}
       JIRA_RELEASE_VERSION_NAME: "${JIRA_RELEASE_VERSION_NAME}"
     volumes: 
-      - ./allure-results:/usr/test/allure-results
-      - ./allure-report:/usr/test/allure-report
-      - ./screenshots:/usr/test/cypress/screenshots
-    entrypoint: "npm run cy:parallel-report && python3 merge_rp_launches.py"
+    entrypoint: "npm run cy:parallel-report && python3 merge_rp_launches.py"      - ./allure-results:/e2e/allure-results
+      - ./allure-report:/e2e/allure-report
+      - ./screenshots:/e2e/cypress/screenshots

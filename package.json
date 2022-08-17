@@ -19,7 +19,7 @@
     "chalk": "^4.0.0",
     "chrome-remote-interface": "^0.31.2",
     "colors": "^1.4.0",
-    "cypress": "^10.4.0",
+    "cypress": "^10.6.0",
     "cypress-multi-reporters": "^1.6.1",
     "cypress-network-idle": "^1.10.0",
     "cypress-parallel": "^0.9.1",

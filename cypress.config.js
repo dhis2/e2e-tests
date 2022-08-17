@@ -19,7 +19,7 @@ module.exports = defineConfig({
       return require('./cypress/plugins/index.js')(on, config)
     },
     baseUrl: 'https://smoke.dhis2.org/dev_smoke',
-    specPattern: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}',
+    specPattern: './cypress/e2e/**/*.cy.{js,jsx,ts,tsx}',
     experimentalSessionAndOrigin: true,
   },
 })
