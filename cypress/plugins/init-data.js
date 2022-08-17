@@ -8,6 +8,7 @@ axios.defaults.timeout = 20000
 
 async function initData( config ) {
   console.log('Initializing data')
+  console.log(config)
 
   const login = await axios.get('/api', {
     baseURL: config.baseUrl,
