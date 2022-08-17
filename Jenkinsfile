@@ -10,6 +10,7 @@ pipeline {
   }
 
   environment {
+    HOME = pwd()
     VERSION = "dev"
     INSTANCE_NAME = "${VERSION}_smoke"
     INSTANCE_DOMAIN = "smoke.dhis2.org"
@@ -19,6 +20,7 @@ pipeline {
     ALLURE_REPORT_DIR_PATH = "./allure"
     ALLURE_RESULTS_DIR = "reports/allure-results"
     ALLURE_REPORT_DIR = "allure-report-$VERSION"  
+    JIRA_RELEASE_VERSION_NAME = sh(script: './get_next_version.sh', returnStdout: true)
   }
 
   triggers {
@@ -80,7 +82,6 @@ pipeline {
         JIRA_ENABLED = true
         JIRA_USERNAME = "$JIRA_USERNAME"
         JIRA_PASSWORD = "$JIRA_PASSWORD"
-        JIRA_RELEASE_VERSION_NAME = sh(script: './get_next_version.sh', returnStdout: true)
         BASE_URL = "${INSTANCE_URL}"
         CI_BUILD_ID="${BUILD_NUMBER}"
         RP_TOKEN = credentials('report-portal-access-uuid')
@@ -88,7 +89,7 @@ pipeline {
 
       steps {
         // assign version to the report portal version attribute
-        sh "jq '.reportportalAgentJsCypressReporterOptions.attributes[0].value=\"${VERSION}\"' reporter-config.json > reporter-config.json"
+        sh "jq '.reportportalAgentJsCypressReporterOptions.attributes[0].value=\"${JIRA_RELEASE_VERSION_NAME}\"' reporter-config.json > reporter-config.json"
         sh "docker-compose up --exit-code-from cypress-tests"
       }
     }
