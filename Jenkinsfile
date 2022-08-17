@@ -90,9 +90,12 @@ pipeline {
       steps {
         script {
           // assign version to the report portal version attribute
-          sh "jq '.reportportalAgentJsCypressReporterOptions.attributes[0].value=\"${JIRA_RELEASE_VERSION_NAME}\"' reporter-config.json > reporter-config.json"
+          def json = sh(returnStdout: true, script: "jq '.reportportalAgentJsCypressReporterOptions.attributes[0].value=${JIRA_RELEASE_VERSION_NUMBER}' reporter-config.json")
+          writeFile(text: "$json", file: 'reporter-config.json')
           sh "docker-compose up --exit-code-from cypress-tests"
         }
+        
+       
       }
     }
   }
