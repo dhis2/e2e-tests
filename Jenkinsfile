@@ -83,6 +83,7 @@ pipeline {
         JIRA_RELEASE_VERSION_NAME = sh(script: './get_next_version.sh', returnStdout: true)
         BASE_URL = "${INSTANCE_URL}"
         CI_BUILD_ID="${BUILD_NUMBER}"
+        RP_TOKEN = credentials('report-portal-access-uuid')
       }
 
       steps {
