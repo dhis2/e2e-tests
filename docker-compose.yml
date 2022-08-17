@@ -5,9 +5,9 @@ services:
     image: dhis2/e2e-cy
     shm_size: '2gb'
     environment:
-      CYPRESS_BASE_URL: ${BASE_URL:-'https://smoke.dhis2.org/dev'}
-      CYPRESS_LOGIN_USERNAME: ${LOGIN_USERNAME:-'system'}
-      CYPRESS_LOGIN_PASSWORD: ${LOGIN_PASSWORD:-'System123'}
+      CYPRESS_BASE_URL: https://smoke.dhis2.org/dev_smoke/
+      CYPRESS_LOGIN_USERNAME: ${LOGIN_USERNAME:-admin}
+      CYPRESS_LOGIN_PASSWORD: ${LOGIN_PASSWORD:-district}
       CI_BUILD_ID: ${CI_BUILD_ID}
       RP_TOKEN: ${RP_TOKEN}
       JIRA_ENABLED: ${JIRA_ENABLED:-false}
