@@ -44,7 +44,7 @@ pipeline {
       }
     }
 
-    stage('Update instance') {
+    /*stage('Update instance') {
       steps {
         script {
           INSTANCE_URL = "https://${INSTANCE_DOMAIN}/${INSTANCE_NAME}/"
@@ -53,7 +53,7 @@ pipeline {
           sh "credentials=system:System123 url=${INSTANCE_URL} ./install_apps.sh"
         } 
       }
-    }
+    }*/
 
     stage('Prepare reports dir') {
       steps {
@@ -121,7 +121,7 @@ pipeline {
       }
     }
     
-    failure {
+    /*failure {
       script {
         def prefix = ""
         if (fileExists('./reports/new_failures.json')) {
@@ -134,6 +134,6 @@ pipeline {
             channel: '@Gintare;@Hella Dawit'
         )
       }
-    }
+    }*/
   }
 }
