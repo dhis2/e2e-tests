@@ -3,36 +3,40 @@ set -euo pipefail
 IFS=$'\n\t'
 
 url=$url
-crendentials=$credentials
+credentials=$credentials
 
-APP_KEYS=('capture' 'line-listing')
+APP_IDS=('92b75fd0-34cc-451c-942f-3dd0f283bcbd' 'a4cd3827-e717-4e09-965d-ab05df2591e5')
 
 getLatestAvailableAppVersion() {
   app_hub_id=$1
   core_version=$(curl -u $credentials $url/api/system/info | jq -r '.version' | grep -o -E '2.[0-9]+')
-  latest_compatible_version_response=$(curl -u $credentials $url/api/appHub/v2/apps/$app_hub_id/versions?minDhisVersion=lte:$core_version | jq -r '.result[0]')
+  latest_compatible_version_response=$(curl -u $credentials $url/api/appHub/v2/apps/$app_hub_id/versions?minDhisVersion=lte:$core_version | jq -r '.result[0] // empty')
   echo "$latest_compatible_version_response"
 }
 
 installOrUpdate() {
-  app=$1
-  app_response=$(curl -u $credentials $url/api/apps?key=$app)
-  app_version=$(echo "$app_response" | jq -r .[0].version)
-  app_hub_id=$(echo "$app_response" | jq -r .[0].app_hub_id)
+  app_hub_id=$1
+  app_response=$(curl -u $credentials $url/api/apps | jq --arg app_hub_id $app_hub_id -c '.[] | select(.app_hub_id==$app_hub_id)')
+  app_version=$(echo "$app_response" | jq -r .version)
 
   latest_compatible_version_response="$(getLatestAvailableAppVersion $app_hub_id)"
-  latest_compatible_version=$(echo $latest_compatible_version_response | jq -r .version)
-  
+  latest_compatible_version=$(echo $latest_compatible_version_response | jq -r '.version // empty')
+  app_name=$(echo $latest_compatible_version_response | jq -r .slug)
 
-  if [ -z "$app_version" ] || [ -z "$app_hub_id" ] || [[ $app_version != $latest_compatible_version  ]];then 
-    echo "Installing $app app version $latest_compatible_version"
+  if [[ -z "$latest_compatible_version" ]]; then 
+    echo "App $app_hub_id is not compatible with this instance. Skipping install."
+    return
+  fi 
+
+  if [ -z "$app_version" ] || [[ $app_version != $latest_compatible_version  ]];then 
+    echo "Installing $app_name app version $latest_compatible_version"
     download_url=$(echo $latest_compatible_version_response | jq -r .downloadUrl )
-    download_name=$app.$latest_compatible_version.zip
+    download_name="$app_name.$latest_compatible_version.zip"
     downloadApp $download_url $download_name
     importApp $download_name
 
   else
-    echo "$app app is up-to-date"
+    echo "$app_name app is up-to-date"
   fi  
 }
 
@@ -53,7 +57,7 @@ importApp() {
 }
 
 
-for i in "${APP_KEYS[@]}";
+for i in "${APP_IDS[@]}";
 do
   installOrUpdate $i
 done
