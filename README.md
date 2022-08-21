@@ -45,6 +45,7 @@
     ```sh
     $ npm cy:parallel 
     ```
+
 ## Environment variables
 
 | Environment variable | Description | Required | Default value | 
@@ -52,7 +53,6 @@
 | CYPRESS_BASE_URL | URL of instance under test | true | smoke.dhis2.org/dev_smoke | 
 | CYPRESS_LOGIN_USERNAME  | username of user used in tests   |  true | admin |
 | CYPRESS_LOGIN_PASSWORD | password of user used in tests | true | district | 
-| CYPRESS_REPORT_PORTAL_ENABLED | boolean parameter used to control integration with report portal | false | false | 
 | RP_TOKEN | token of the report portal user. Only used if running cy:parallel-report | false | N/A |
 | CI_BUILD_ID | used as an attribute in RP launches to be able to merge the launches after all tests | false | |
 | JIRA_ENABLED | boolean parameter used to control integration with jira reporter | false | N/A | 
