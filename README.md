@@ -38,7 +38,7 @@
    
 5. Run the tests:
     ```sh
-    $ npm cy:test
+    $ npm run cy:test
     ```
     
     or in parallel (using 3 threads):
