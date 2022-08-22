@@ -43,7 +43,7 @@
     
     or in parallel (using 3 threads):
     ```sh
-    $ npm cy:parallel 
+    $ npm run cy:parallel 
     ```
 
 ## Environment variables
