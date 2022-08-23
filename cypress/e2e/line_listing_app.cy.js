@@ -1,7 +1,7 @@
 import { LINE_LISTING_APP, loadLineList } from '../utils/analytics';
 
 
-describe('Line listing -> DHIS2-13221', () => {
+describe('Line listing -> DHIS2-13221', { tags: ['smoke'] }, () => {
   const lineLists = Cypress.env('eventVisualizations');
 
   beforeEach(() => {

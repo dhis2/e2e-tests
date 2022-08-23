@@ -50,6 +50,12 @@
     $ npm run cy:parallel 
     ```
 
+    or only smoke tests: 
+    ```sh
+    $ export TAGS=smoke
+    $ npm run cy:test (or any other command)
+    ```
+
 ## Environment variables
 
 | Environment variable | Description | Required | Default value | 
@@ -63,6 +69,7 @@
 | JIRA_USERNAME | username of the jira user | if JIRA_ENABLED | N/A |
 | JIRA_PASSWORD | password of the jira user | if JIRA_ENABLED | N/A |
 | JIRA_RELEASE_VERSION_NAME| version of the release cycle in zephyr | if JIRA_ENABLED | N/A |
+| TAGS | filter tests matching specified tags | false | |
 
 
 ## Reporting

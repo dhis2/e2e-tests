@@ -1,6 +1,6 @@
 import { loadEventChart } from '../utils/analytics';
 
-describe('Event visualizer -> DHIS2-9193', () => {
+describe('Event visualizer -> DHIS2-9193', { tags: ['smoke'] }, () => {
   const eventCharts = Cypress.env('eventCharts'); 
   
   beforeEach(() => {

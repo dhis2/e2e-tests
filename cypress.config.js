@@ -9,13 +9,15 @@ module.exports = defineConfig({
   env: {
     LOGIN_USERNAME: 'admin',
     LOGIN_PASSWORD: 'district',
-    allure: 'true'
+    allure: 'true',
+    grepTags: process.env.TAGS
   },
   numTestsKeptInMemory: 0,
   e2e: {
     // We've imported your old cypress plugins here.
     // You may want to clean this up later by importing these.
     setupNodeEvents(on, config) {
+      require('cypress-grep/src/plugin')(config);
       return require('./cypress/plugins/index.js')(on, config)
     },
     baseUrl: 'https://smoke.dhis2.org/dev_smoke',

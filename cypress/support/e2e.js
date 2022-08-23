@@ -18,5 +18,5 @@ import './commands'
 import './hooks'
 import '@shelex/cypress-allure-plugin';
 import 'cypress-network-idle'
-// Alternatively you can use CommonJS syntax:
-// require('./commands')
+import registerCypressGrep from 'cypress-grep'
+registerCypressGrep()

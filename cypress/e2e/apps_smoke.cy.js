@@ -1,4 +1,4 @@
-describe('Apps -> DHIS2-8017', () => {
+describe('Apps -> DHIS2-8017', { tags: ['smoke'] }, () => {
   const apps = Cypress.env('apps')
   
   beforeEach(() => {

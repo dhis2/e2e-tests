@@ -7,7 +7,7 @@
     "cy:test": "cypress run --browser chrome",
     "cy:parallel": "cypress-parallel -t 3 -s cy:test -d cypress/e2e",
     "cy:parallel-report": "cypress-parallel -r cypress-multi-reporters -o configFile=reporter-config.json -t 3 -s cy:test -d cypress/e2e",
-    "allure": "allure generate --clean ./reports/allure-results/ && allure open",
+    "allure": "allure generate --clean ./allure-results/ && allure open",
     "allure:serve": "allure serve --results ./allure-results",
     "lint": "eslint . --fix"
   },
@@ -26,7 +26,8 @@
     "cypress-parallel": "^0.9.1",
     "cypress-plugin-tab": "^1.0.5",
     "cypress-wait-until": "^1.7.2",
-    "moment": "^2.29.4"
+    "moment": "^2.29.4",
+    "cypress-grep": "^3.0.2"
   },
   "devDependencies": {
     "eslint": "^8.22.0",
