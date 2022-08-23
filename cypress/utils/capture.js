@@ -6,12 +6,10 @@ export const CAPTURE_APP_URL = "dhis-web-capture";
 export const Selectors = {
   NEW_EVENT_BUTTON: '[data-test="new-button"]',
   SAVE_BUTTON: '[data-test="main-button"]',
-  NEW_EVENT_BUTTON : '[data-test="new-button"]',
   NEW_EVENT_IN_SELECTED_PROGRAM_BUTTON: '[data-test="new-menuitem-one"] a',
   WORKING_LIST_TABLE: '[data-test="main-page-working-list"]',
   NEW_EVENT_FORM: '[data-test="registration-page-content"]',
-  PROGRAM_SELECTOR: '#program-selector .Select-placeholder',
-  NEW_EVENT_FORM: '[data-test=registration-page-content]'
+  PROGRAM_SELECTOR: '#program-selector .Select-placeholder'
 }
 
 export const ContextActions = {
@@ -43,7 +41,7 @@ export const openApp = () => {
 export const fillEventForm = () => {
   cy.get( Selectors.NEW_EVENT_FORM ).should('be.visible');
   cy.get('[data-test="capture-ui-input"][placeholder="yyyy-mm-dd"]')
-    .each(($el, input, $list) => {
+    .each(($el) => {
       let date = moment().format('YYYY-MM-DD');
       cy.wrap($el)
         .type( date );

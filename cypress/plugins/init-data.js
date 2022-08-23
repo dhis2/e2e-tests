@@ -1,5 +1,4 @@
 const axios = require('axios');
-const _ = require('lodash')
 const struts_apps = ['dhis-web-dataentry/index.action']
 const queryParams = '?fields=displayName,id&paging=false';
 

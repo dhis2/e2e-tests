@@ -27,7 +27,7 @@ class JiraService {
   
           if (!matchingResults || !matchingResults.length) {
             return Promise.resolve(undefined);
-          };
+          }
 
           return Promise.resolve(matchingResults[0]);
         }
@@ -265,7 +265,7 @@ class JiraService {
 
     let promise = this._createPromiseCall(options);
     return promise;
-  };
+  }
 
   _createPromiseCall(params) {
     return new Promise(function (resolve, reject) {

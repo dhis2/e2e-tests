@@ -1,10 +1,10 @@
 import 'cypress-wait-until';
 
 
-Cypress.Commands.add('waitForResources', ( interval=500, timeout=20000, retries = 3 ) => {
+Cypress.Commands.add('waitForResources', ( interval=500, timeout=20000, retry = 3 ) => {
   cy.log('waiting for resources')
 
-  var retries = retries;
+  var retries = retry;
   const getCount = () => {
     const entries = cy.state('window')
       .performance.getEntriesByType('resource');
@@ -27,7 +27,7 @@ Cypress.Commands.add('waitForResources', ( interval=500, timeout=20000, retries 
     }
     
     else {
-      retries = retries;
+      retries = retry;
       count = newCount;
       return false;
     }

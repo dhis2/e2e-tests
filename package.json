@@ -8,7 +8,8 @@
     "cy:parallel": "cypress-parallel -t 3 -s cy:test -d cypress/e2e",
     "cy:parallel-report": "cypress-parallel -r cypress-multi-reporters -o configFile=reporter-config.json -t 3 -s cy:test -d cypress/e2e",
     "allure": "allure generate --clean ./reports/allure-results/ && allure open",
-    "allure:serve": "allure serve --results ./allure-results"
+    "allure:serve": "allure serve --results ./allure-results",
+    "lint": "eslint . --fix"
   },
   "author": "Gintare Vilkelyte <vilkelyte.gintare@gmail.com>",
   "license": "ISC",
@@ -26,5 +27,9 @@
     "cypress-plugin-tab": "^1.0.5",
     "cypress-wait-until": "^1.7.2",
     "moment": "^2.29.4"
+  },
+  "devDependencies": {
+    "eslint": "^8.22.0",
+    "eslint-plugin-cypress": "^2.12.1"
   }
 }

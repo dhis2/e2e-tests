@@ -6,7 +6,6 @@ import { openApp,
   openEvent,
   Selectors,
   ContextActions,
-  openLastSavedEvent,
   getCommentByValue,
 } from '../utils/capture'
 
