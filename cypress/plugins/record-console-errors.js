@@ -3,6 +3,10 @@ const CDP = require('chrome-remote-interface');
 let messages = []
 function install(on, options) {
   on('before:browser:launch', (browser = {}, launchOptions) => {
+      if (browser.family != 'chrome') {
+          log('Incopatible browser. Skipping configuration')
+          return;
+      };
       const port = getRemoteDebuggingPort( launchOptions.args || launchOptions );
 
       const tryConnect = () => {
