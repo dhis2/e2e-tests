@@ -3,7 +3,7 @@ const CDP = require('chrome-remote-interface');
 let messages = []
 function install(on) {
   on('before:browser:launch', (browser = {}, launchOptions) => {
-      if (browser.family != 'chrome') {
+      if (browser.family != 'chromium') {
           log('Incopatible browser. Skipping configuration')
           return;
       }
