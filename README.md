@@ -1,3 +1,7 @@
+## Technology stack 
+* [Cypress] (https://www.cypress.io/)
+* [Allure] (https://docs.qameta.io/): reporting framework
+
 ## Local execution
 
 1. Check out the relevant branch:
