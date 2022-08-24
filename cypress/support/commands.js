@@ -28,5 +28,10 @@ Cypress.Commands.add('login', () => {
     }).then((resp) => {
         cy.log(resp)
       })
+  }, 
+  {
+    validate() {
+      cy.request('/api/me').its('status').should('equal', 200)
+    }
   })
 })
