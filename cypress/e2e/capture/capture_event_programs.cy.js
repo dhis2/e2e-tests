@@ -7,11 +7,12 @@ import { openApp,
   Selectors,
   ContextActions,
   getCommentByValue,
-} from '../utils/capture'
+  openEventList
+} from '../../utils/capture/capture'
 
-import { getCurrentUserDisplayName } from '../utils/api'
+import { getCurrentUserDisplayName, createEventInEventProgram } from '../../utils/api'
 
-describe('Capture', () => {
+describe('Capture: event programs', () => {
   beforeEach(() => {
     openApp();
   })
@@ -58,4 +59,38 @@ describe('Capture', () => {
       .should('have.text', displayName)
     })
   })
+
+  it('should delete event', () => {
+    const orgUnit = "DiszpKrYNg8"
+    const program = "lxAQ7Zs9VYR"
+
+    createEventInEventProgram(orgUnit, program)
+      .then(eventId => {
+        openEventList(orgUnit, program);
+
+        cy.get(Selectors.TABLE_ROWS)
+          .filter('#' + eventId).within((el) => {
+           cy.get(el).find('[data-test="event-content-menu"]')
+             .click()
+        })
+
+        cy.get(Selectors.DELETE_EVENT_BUTTON)
+          .click()
+          .get(Selectors.SPINNER)
+          .should('not.exist')
+
+  
+        cy.get(Selectors.TABLE_ROWS)
+          .filter('#' + eventId)
+          .should('not.exist');
+
+        openEvent(eventId); 
+
+        cy.get(Selectors.EVENT_FORM_ERROR_MESSAGE)
+          .should('contain', 'Event could not be loaded. Are you sure it exists?' )
+            
+      }) 
+    
+  })
+   
 })

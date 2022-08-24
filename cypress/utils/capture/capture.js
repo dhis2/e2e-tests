@@ -9,10 +9,14 @@ export const Selectors = {
   NEW_EVENT_IN_SELECTED_PROGRAM_BUTTON: '[data-test="new-menuitem-one"] a',
   WORKING_LIST_TABLE: '[data-test="main-page-working-list"]',
   NEW_EVENT_FORM: '[data-test="registration-page-content"]',
-  PROGRAM_SELECTOR: '#program-selector .Select-placeholder'
+  PROGRAM_SELECTOR: '#program-selector .Select-placeholder',
+  TABLE_ROWS: 'tbody [data-test="table-row"]',
+  DELETE_EVENT_BUTTON: '[data-test="delete-event-button"]',
+  EVENT_FORM_ERROR_MESSAGE: '[data-test="error-message-handler"]',
+  SPINNER: '[role="progressbar"]' 
 }
 
-export const ContextActions = {
+export const ScopeActions = {
   selectOrgUnitByName: ( name ) => {
     cy.get('[data-test="org-unit-selector-container"] [data-test="capture-ui-input"]')
       .type(name);
@@ -59,7 +63,7 @@ export const fillEventForm = () => {
         .click();
     })
 
-  cy.get('[class*="textFieldCustomForm"] [data-test="capture-ui-input"]')
+  cy.get('[class*="textInput"] [data-test="capture-ui-input"]')
     .each(($el) => {
       cy.wrap($el)
       .type('33');
@@ -80,6 +84,13 @@ export const openEvent = ( eventId ) => {
   return cy.visit(`${CAPTURE_APP_URL}/#viewEvent?viewEventId=${eventId}` );
 }
 
+export const openEventList = ( orgUnit, program ) => {
+  cy.visit(`dhis-web-capture/index.html#/?orgUnitId=${orgUnit}&programId=${program}`);
+  
+  cy.get(Selectors.WORKING_LIST_TABLE)
+      .should('be.visible');
+}
+
 export const openLastSavedEvent = () => {
   cy.url().then((url) => {
     let programId = url.match('(?<=programId=)(.*)')[0];
@@ -95,4 +106,31 @@ export const openLastSavedEvent = () => {
 export const getCommentByValue = ( value ) => {
     return cy.get('[data-test="comments-list"]')
       .contains(value);
+}
+
+export const enterValueByAttribute = (attribute, value) => {
+  cy.get('[data-test*=form-field]')
+    .filter(`:contains("${attribute}")`)
+    .find('[data-test="capture-ui-input"]')
+    .type(value)
+}
+
+export const selectValueByAttribute = ( attribute, value ) => {
+  cy.get('[data-test*=form-field]')
+    .filter(`:contains("${attribute}")`)
+    .click();
+
+  cy.get('.virtualized-select-option')
+    .filter(`:contains("${value}")`)
+    .click()
+}
+
+export const enterEventDate = ( date) => {
+  cy.get('[data-test=dataentry-field-occurredAt]')
+    .find('[data-test="capture-ui-input"]')
+    .type(`${date}`)
+  
+  cy.tab()
+    .get('[data-test="date-calendar-wrapper"]').should('not.be', 'displayed');
+
 }
