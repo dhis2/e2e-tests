@@ -1,37 +1,21 @@
 {
-  "extends": "standard",
-  "env": {
-    "webdriverio/wdio": true
-  },
-  "plugins": [
-    "standard",
-    "promise",
-    "webdriverio"
-
-  ],
-  "parserOptions": {
-    "ecmaVersion": 6,
-    "ecmaFeatures": {
-      "impliedStrict": true
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es2021": true,
+        "cypress/globals": true  
+    },
+    "extends": [
+       "plugin:cypress/recommended","eslint:recommended"
+    ],
+    "overrides": [
+    ],
+    "parserOptions": {
+        "ecmaVersion": "latest"
+    },
+    "globals": {
+      "allure": true,
+      "process": true,
+      "fs": true
     }
-  },
-  "rules": {
-    "global-require": "error",
-    "max-len": ["warn", 120, 2, {
-      "ignoreComments": true,
-      "ignoreUrls": true
-    }],
-    "no-multi-spaces": ["error", {
-      "ignoreEOLComments": true
-    }],
-    "no-var": "error",
-    "prefer-const": "warn",
-    "semi": ["error", "always"],
-    "sort-imports": "off"
-  },
-  "globals": {
-    "expect": true,
-    "assert": true,
-    "allure": true
-  }
 }

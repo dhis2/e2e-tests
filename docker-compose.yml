@@ -1,0 +1,22 @@
+version: '3'
+services: 
+  cypress-tests:
+    build: .
+    image: dhis2/e2e-cy
+    shm_size: '2gb'
+    environment:
+      CYPRESS_BASE_URL: ${BASE_URL:-https://smoke.dhis2.org/dev_smoke}
+      CYPRESS_LOGIN_USERNAME: ${LOGIN_USERNAME:-admin}
+      CYPRESS_LOGIN_PASSWORD: ${LOGIN_PASSWORD:-district}
+      CI_BUILD_ID: ${CI_BUILD_ID}
+      RP_TOKEN: ${RP_TOKEN}
+      JIRA_ENABLED: ${JIRA_ENABLED:-false}
+      JIRA_USERNAME: ${JIRA_USERNAME}
+      JIRA_PASSWORD: ${JIRA_PASSWORD}
+      JIRA_RELEASE_VERSION_NAME: "${JIRA_RELEASE_VERSION_NAME}"
+      TAGS: ${TAGS}
+    volumes: 
+      - ./allure-results:/e2e/allure-results
+      - ./allure-report:/e2e/allure-report
+      - ./screenshots:/e2e/cypress/screenshots
+    entrypoint: "npm run cy:parallel-report && python3 merge_rp_launches.py" 

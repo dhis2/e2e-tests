@@ -1,9 +1,12 @@
 .DS_Store
 node_modules
-errorShots
+screenshots
+results
 allure-report
 allure-results
-logs
+log
 .vscode
 reports
 output
+multi-reporter-config.json
+runner-results

@@ -1,13 +1,6 @@
-# DHIS2 end to end testing
-
-Repository for DHIS2 E2E testing.
-
-## Technology stack
-
-* [Webdriver.io](http://webdriver.io/): testing utility working with Selenium or other standalone WebDriver drivers
-* [Chromedriver](https://sites.google.com/a/chromium.org/chromedriver/): Webdriver driver for Chrome browser
-* [Cucumber](https://cucumber.io/): BDD test automation framework
-* [Chai](https://chaijs.com/): BDD/TDD assertion library
+## Technology stack 
+* [Cypress] (https://www.cypress.io/)
+* [Allure] (https://docs.qameta.io/): reporting framework
 
 ## Local execution
 
@@ -32,48 +25,72 @@ Repository for DHIS2 E2E testing.
 
 3. Set the environment
     ```sh
-    export SUPER_USER=<dhis2_superuser>
-    export SUPER_USER_PASSWORD=<dhis2_superuser_password>
-    export JIRA_ENABLED=false
-    export BASE_URL=<instance_URL>  # e.g. https://prep.dhis2.org/2.38dev/ 
+    export CYPRESS_LOGIN_USERNAME=<dhis2_superuser>
+    export CYPRESS_LOGIN_PASSWORD=<dhis2_superuser_password>
+    export CYPRESS_BASE_URL=<instance_URL>  # e.g. https://prep.dhis2.org/2.38dev/ 
+    ... 
+    
+    see [Environment variables section](#environment-variables) for more configuration options
     ```
 
 4. Adapt the tests to your environment:
     Some of the test feature files include references from the Sierra Leone demo DB. These should be replaced to suit your target DB  
     Check the following feature files and update the parameters in double-quotes (`"`) accordingly:
     ```sh
-    ./tests/features/authentication.feature
-    ./tests/features/loginPage.feature
-    ./tests/features/apps/capture/events.feature
+    ./cypress/e2e/capture.cy.js
     ```
    
 5. Run the tests:
     ```sh
-    $ npm test
+    $ npm run cy:test
+    ```
+    
+    or in parallel (using 3 threads):
+    ```sh
+    $ npm run cy:parallel 
     ```
 
-    > Optional Browserstack execution (requires a browserstack account and additional environment variables to pass the credentials)
-    > ```sh
-    > $ npm run-script browserstack
-    > ```
+    or only smoke tests: 
+    ```sh
+    $ export TAGS=smoke
+    $ npm run cy:test (or any other command)
+    ```
+
+## Environment variables
+
+| Environment variable | Description | Required | Default value | 
+|---|---|---|---|
+| CYPRESS_BASE_URL | URL of instance under test | true | smoke.dhis2.org/dev_smoke | 
+| CYPRESS_LOGIN_USERNAME  | username of user used in tests   |  true | admin |
+| CYPRESS_LOGIN_PASSWORD | password of user used in tests | true | district | 
+| RP_TOKEN | token of the report portal user. Only used if running cy:parallel-report | false | N/A |
+| CI_BUILD_ID | used as an attribute in RP launches to be able to merge the launches after all tests | false | |
+| JIRA_ENABLED | boolean parameter used to control integration with jira reporter | false | N/A | 
+| JIRA_USERNAME | username of the jira user | if JIRA_ENABLED | N/A |
+| JIRA_PASSWORD | password of the jira user | if JIRA_ENABLED | N/A |
+| JIRA_RELEASE_VERSION_NAME| version of the release cycle in zephyr | if JIRA_ENABLED | N/A |
+| TAGS | filter tests matching specified tags | false | |
 
 
-## Viewing the results with Allure
+## Reporting
+### Allure
+[Allure](https://docs.qameta.io/allure/)  is the framework used to generate a test report. To generate and serve the report, run `npm run allure:serve`. The report should open in a browser window. 
 
-1. Install Allure (first time only)
+### Report portal
 
-    See the [Allure installation guide](https://docs.qameta.io/allure/#_installing_a_commandline)
+To enable syncing with report portal, the following environment variables are required:
 
-2. By default, the results of the above test run will be placed in the `./reports/allure-results/` directory. To view these as HTML with allure simply run:
-   ```sh
-   $ allure serve reports/allure-results/
-   ```
+| Environment variable | Description |
+|--|--|
+| RP_TOKEN | Token of report portal user. Can be found in [user profile of report portal](https://test.tools.dhis2.org/reportportal/ui/#user-profile) |
+| CI_BUILD_ID | An attribute to add to every launch started by report portal used to merge the launches after test run. | 
 
-3. Alternatively, you may want to generate the results for later viewing. You can generate with:
-   ```sh
-   $ allure generate --clean reports/allure-results/ -o <output_dir_for_baseline>
-   ```
-   Later, you can view the results with
-   ```sh
-   $ allure open <output_dir_for_baseline>
-   ```
+### JIRA
+The following environment variables are required to sync with jira: 
+
+| Environment variable | Description |
+|--|--|
+| JIRA_ENABLED | boolean parameter used to control integration with jira reporter | 
+| JIRA_USERNAME | username of the jira user |
+| JIRA_PASSWORD | password of the jira user |
+| JIRA_RELEASE_VERSION_NAME| version of the release cycle in zephyr |

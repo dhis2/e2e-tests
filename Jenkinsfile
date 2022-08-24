@@ -6,23 +6,20 @@ pipeline {
 
   options {
     disableConcurrentBuilds()
+    ansiColor('xterm')
   }
 
   environment {
+    HOME = pwd()
     VERSION = "dev"
     INSTANCE_NAME = "${VERSION}_smoke"
-    INSTANCE_DOMAIN = "https://smoke.dhis2.org"
+    INSTANCE_DOMAIN = "smoke.dhis2.org"
     INSTANCE_URL = ""
     GIT_URL = "https://github.com/dhis2/e2e-tests/"
-    USERNAME = "$BROWSERSTACK_USERNAME"
-    KEY = "$BROWSERSTACK_KEY"
     AWX_BOT_CREDENTIALS = credentials('awx-bot-user-credentials')
     ALLURE_REPORT_DIR_PATH = "./allure"
     ALLURE_RESULTS_DIR = "reports/allure-results"
-    ALLURE_REPORT_DIR = "allure-report-$VERSION"
-    APPLITOOLS_API_KEY = "$APPLITOOLS_API_KEY"
-    JIRA_USERNAME = "$JIRA_USERNAME"
-    JIRA_PASSWORD = "$JIRA_PASSWORD"
+    ALLURE_REPORT_DIR = "allure-report-$VERSION"  
     JIRA_RELEASE_VERSION_NAME = sh(script: './get_next_version.sh', returnStdout: true)
   }
 
@@ -40,7 +37,7 @@ pipeline {
         script {
           VERSION = "${env.BRANCH_NAME}".split("-")[0]
           INSTANCE_NAME = "${env.BRANCH_NAME}" 
-          INSTANCE_URL = "${INSTANCE_DOMAIN}/${INSTANCE_NAME}/"
+          INSTANCE_URL = "https://${INSTANCE_DOMAIN}/${INSTANCE_NAME}/"
           JIRA_RELEASE_VERSION_NAME = "$VERSION"
           echo "Version: $VERSION, JIRA_RELEASE_VERSION_NAME: $JIRA_RELEASE_VERSION_NAME"
         }
@@ -50,10 +47,10 @@ pipeline {
     stage('Update instance') {
       steps {
         script {
-          INSTANCE_URL = "${INSTANCE_DOMAIN}/${INSTANCE_NAME}/"
-          awx.resetWar("$AWX_BOT_CREDENTIALS", "smoke.dhis2.org", "${INSTANCE_NAME}")
+          INSTANCE_URL = "https://${INSTANCE_DOMAIN}/${INSTANCE_NAME}/"
+          awx.resetWar("$AWX_BOT_CREDENTIALS", "${INSTANCE_DOMAIN}", "${INSTANCE_NAME}")
           sh "credentials=system:System123 url=${INSTANCE_URL} ./delete-data.sh"
-          sh "credentials=system:System123 url=${INSTANCE_URL} ./install_apps.sh"
+          sh "credentials=system:System123 url=${INSTANCE_URL} ./install_app_hub_apps.sh"
         } 
       }
     }
@@ -80,14 +77,25 @@ pipeline {
       }      
     }
 
-    stage('Build') {
+    stage('Test') {
       environment {
-        JIRA_RELEASE_VERSION_NAME = "$JIRA_RELEASE_VERSION_NAME"
+        JIRA_ENABLED = true
+        JIRA_USERNAME = "$JIRA_USERNAME"
+        JIRA_PASSWORD = "$JIRA_PASSWORD"
+        BASE_URL = "${INSTANCE_URL}"
+        CI_BUILD_ID="${BUILD_NUMBER}"
+        RP_TOKEN = credentials('report-portal-access-uuid')
       }
 
       steps {
-        sh "npm install"
-        sh "BASE_URL=\"${INSTANCE_URL}\" npm run browserstack"
+        script {
+          // assign version to the report portal version attribute
+          def json = sh(returnStdout: true, script: "jq '.reportportalAgentJsCypressReporterOptions.attributes[0].value=\"${JIRA_RELEASE_VERSION_NAME}\"' reporter-config.json")
+          writeFile(text: "$json", file: 'reporter-config.json')
+          sh "docker-compose up --exit-code-from cypress-tests"
+        }
+        
+       
       }
     }
   }

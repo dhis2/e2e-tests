@@ -1,0 +1,3 @@
+beforeEach(() => {
+  cy.login()
+})
