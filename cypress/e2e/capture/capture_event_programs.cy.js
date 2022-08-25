@@ -1,14 +1,13 @@
 /// <reference types="cypress" />
 
-import { openApp, 
-  fillEventForm,
-  addComment,
+import { openApp,
   openEvent,
   Selectors,
-  ContextActions,
-  getCommentByValue,
+  ScopeActions,
   openEventList
 } from '../../utils/capture/capture'
+
+import { getCommentByValue, addComment, fillEventForm, Selectors as NewEventPage } from '../../utils/capture/capture_new_event_page'
 
 import { getCurrentUserDisplayName, createEventInEventProgram } from '../../utils/api'
 
@@ -18,15 +17,15 @@ describe('Capture: event programs', () => {
   })
 
   it('should open new event form', () => {
-    ContextActions.selectOrgUnitByName('Ngelehun CHC')
-    ContextActions.selectProgramByName('Information Campaign')
+    ScopeActions.selectOrgUnitByName('Ngelehun CHC')
+    ScopeActions.selectProgramByName('Information Campaign')
     cy
       .get(Selectors.NEW_EVENT_BUTTON)
       .click()
       .get(Selectors.NEW_EVENT_IN_SELECTED_PROGRAM_BUTTON)
       .click()
   
-    cy.get(Selectors.NEW_EVENT_FORM).should('be.visible')
+    cy.get(NewEventPage.NEW_EVENT_FORM).should('be.visible')
   })
   
   it('should create event', () => {
