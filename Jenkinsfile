@@ -136,7 +136,7 @@ pipeline {
          slackSend(
             color: '#ff0000',
             message: "${prefix}E2E tests initialized from branch $GIT_BRANCH for version - $VERSION failed. Please visit " + env.BUILD_URL + " for more information",
-            channel: '@Gintare;@Hella Dawit'
+            channel: '@Haroon;@Hella'
         )
       }
     }
