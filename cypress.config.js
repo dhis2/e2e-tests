@@ -10,7 +10,8 @@ module.exports = defineConfig({
     LOGIN_USERNAME: 'admin',
     LOGIN_PASSWORD: 'district',
     allure: 'true',
-    grepTags: process.env.TAGS
+    grepTags: process.env.TAGS,
+    allureResultsPath: 'reports/allure-results'
   },
   numTestsKeptInMemory: 0,
   e2e: {
