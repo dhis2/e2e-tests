@@ -74,11 +74,11 @@ async function install( config ) {
     console.table(config.env.maps);
   })
 
-  await fetchData(`/api/eventVisualizations.json${queryParams}&filter=type:eq:LINE_LIST`, ( data ) => {
-    config.env.eventVisualizations = data.eventVisualizations;
-    console.log('EVENT VISUALIZATIONS: ')
-    console.table(config.env.eventVisualizations);
-  })
+  // await fetchData(`/api/eventVisualizations.json${queryParams}&filter=type:eq:LINE_LIST`, ( data ) => {
+  //   config.env.eventVisualizations = data.eventVisualizations;
+  //   console.log('EVENT VISUALIZATIONS: ')
+  //   console.table(config.env.eventVisualizations);
+  // })
 }
 
 module.exports = {install};
