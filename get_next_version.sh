@@ -19,10 +19,15 @@ else
   
   last_patch=$(echo "${patches[*]}" | tr ' ' '\n' | sort -nr | head -n1 )
 
-  next_patch=$(($(echo $last_patch | 
-    sed "s/2.${current_major_version}.//") + 1))
-    
-  next_patch=$(echo $next_patch | sed "s/^/2.${current_major_version}./")
+  if [[ "$last_patch" ]]; then
+    next_patch=$(($(echo $last_patch |
+        sed "s/2.${current_major_version}.//") + 1))
+
+    next_patch=$(echo $next_patch | sed "s/^/2.${current_major_version}./")
+  else
+    next_patch="2.${current_major_version}.0"
+  fi
+
   VERSION=$next_patch
 fi
 
