@@ -85,6 +85,7 @@ pipeline {
         BASE_URL = "${INSTANCE_URL}"
         CI_BUILD_ID="${BUILD_NUMBER}"
         RP_TOKEN = credentials('report-portal-access-uuid')
+        JIRA_RELEASE_VERSION_NAME = "$JIRA_RELEASE_VERSION_NAME"
       }
 
       steps {
