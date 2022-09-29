@@ -1,7 +1,7 @@
 @Library('pipeline-library') _
 pipeline {
   agent {
-    label "ec2-jdk11-node14"
+    label "ec2-jdk11"
   }
 
   options {
