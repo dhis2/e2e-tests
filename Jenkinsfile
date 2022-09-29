@@ -11,7 +11,7 @@ pipeline {
 
   environment {
     HOME = pwd()
-    VERSION = "dev"
+    VERSION = "2.38dev"
     INSTANCE_NAME = "${VERSION}_smoke"
     INSTANCE_DOMAIN = "smoke.dhis2.org"
     INSTANCE_URL = ""
