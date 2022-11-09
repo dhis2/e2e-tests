@@ -13,8 +13,8 @@ pipeline {
   environment {
     GIT_URL = 'https://github.com/dhis2/e2e-tests'
     BRANCH_BASED_VERSION = "${env.TAG_NAME ? env.GIT_BRANCH.split('-')[0] : '2.' + env.GIT_BRANCH.replaceAll('v', '')}"
-    DHIS2_VERSION = "${env.GIT_BRANCH == 'DEVOPS-152' ? 'dev' : env.BRANCH_BASED_VERSION}"
-    IMAGE_TAG = "${env.GIT_BRANCH == 'DEVOPS-152' ? 'latest' : env.BRANCH_BASED_VERSION}"
+    DHIS2_VERSION = "${env.GIT_BRANCH == 'master' ? 'dev' : env.BRANCH_BASED_VERSION}"
+    IMAGE_TAG = "${env.GIT_BRANCH == 'master' ? 'latest' : env.BRANCH_BASED_VERSION}"
     IMAGE_REPOSITORY = "${env.TAG_NAME ? 'core' : 'core-dev'}"
     INSTANCE_NAME = "e2e-cy-${env.GIT_BRANCH.replaceAll("\\P{Alnum}", "").toLowerCase()}-$BUILD_NUMBER"
     INSTANCE_DOMAIN = 'https://whoami.im.dev.test.c.dhis2.org'
@@ -28,9 +28,9 @@ pipeline {
     HTTP = 'https --check-status'
   }
 
-//  triggers {
-//    cron(env.GIT_BRANCH.contains('.') ? '' : 'H 6 * * *')
-//  }
+  triggers {
+    cron(env.GIT_BRANCH.contains('.') ? '' : 'H 6 * * *')
+  }
 
   stages {
     stage('Checkout IM scripts') {
@@ -158,7 +158,7 @@ pipeline {
          slackSend(
            color: '#ff0000',
            message: "${prefix}E2E tests initialized from branch $GIT_BRANCH for version - $DHIS2_VERSION failed. Please visit " + env.BUILD_URL + " for more information",
-           channel: '@U01RSD1LPB3'
+           channel: '@Haroon;@Hella'
         )
       }
     }
