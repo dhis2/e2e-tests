@@ -10,26 +10,33 @@ pipeline {
     ansiColor('xterm')
   }
 
+  parameters {
+    booleanParam(name: 'keep_instance_alive', defaultValue: false, description: 'Keep the instance alive after the build is done.')
+    string(name: 'keep_instance_alive_for', defaultValue: '300', description: 'Duration (in minutes) to keep the intance alive for.')
+  }
+
   environment {
     GIT_URL = 'https://github.com/dhis2/e2e-tests'
+
     BRANCH_BASED_VERSION = "${env.TAG_NAME ? env.GIT_BRANCH.split('-')[0] : '2.' + env.GIT_BRANCH.replaceAll('v', '')}"
     DHIS2_VERSION = "${env.GIT_BRANCH == 'master' ? 'dev' : env.BRANCH_BASED_VERSION}"
     IMAGE_TAG = "${env.GIT_BRANCH == 'master' ? 'latest' : env.BRANCH_BASED_VERSION}"
     IMAGE_REPOSITORY = "${env.TAG_NAME ? 'core' : 'core-dev'}"
+    INSTANCE_ENVIRONMENT = 'prod.test.c.dhis2.org'
+    INSTANCE_GROUP_NAME = 'qa'
     INSTANCE_NAME = "e2e-cy-${env.GIT_BRANCH.replaceAll("\\P{Alnum}", "").toLowerCase()}-$BUILD_NUMBER"
-    INSTANCE_DOMAIN = 'https://whoami.im.dev.test.c.dhis2.org'
-    INSTANCE_HOST = 'https://api.im.dev.test.c.dhis2.org'
+    INSTANCE_DOMAIN = "https://${INSTANCE_GROUP_NAME}.im.$INSTANCE_ENVIRONMENT"
+    INSTANCE_HOST = "https://api.im.$INSTANCE_ENVIRONMENT"
     INSTANCE_URL = "$INSTANCE_DOMAIN/$INSTANCE_NAME"
-    GROUP_NAME = 'whoami'
     ALLURE_REPORT_DIR_PATH = 'allure'
     ALLURE_RESULTS_DIR = 'reports/allure-results'
-    ALLURE_REPORT_DIR = "allure-report-$DHIS2_VERSION"
+    ALLURE_REPORT_DIR = 'allure-report-$DHIS2_VERSION'
     JIRA_RELEASE_VERSION_NAME = "${env.TAG_NAME ? env.DHIS2_VERSION : sh(script: './get_next_version.sh', returnStdout: true)}"
     HTTP = 'https --check-status'
   }
 
   triggers {
-    cron(env.GIT_BRANCH.contains('.') ? '' : 'H 6 * * *')
+    cron(env.BRANCH_NAME.contains('.') ? '' : 'H 6 * * *')
   }
 
   stages {
@@ -64,7 +71,7 @@ pipeline {
             dir('im-db-manager/scripts') {
               env.DATABASE_ID = sh(
                   returnStdout: true,
-                  script: "./list.sh | jq -r '.[] | select(.Name == \"$GROUP_NAME\") .Databases[] | select(.Name|contains(\"Sierra Leone - $DHIS2_VERSION\")) .ID'"
+                  script: "./list.sh | jq -r '.[] | select(.Name == \"$INSTANCE_GROUP_NAME\") .Databases[] | select(.Name|contains(\"Sierra Leone - $DHIS2_VERSION\")) .ID'"
               ).trim()
 
               sh '[ -n "$DATABASE_ID" ]'
@@ -74,10 +81,11 @@ pipeline {
             dir('im-manager/scripts') {
               echo 'Creating DHIS2 instance ...'
 
-              // 1 day
-              env.INSTANCE_TTL = sh(returnStdout: true, script: '#!/usr/bin/env bash\necho \$(($EPOCHSECONDS + 86400))').trim()
+              if (params.keep_instance_alive) {
+                env.INSTANCE_TTL = sh(returnStdout: true, script: "#!/usr/bin/env bash\necho \$((\$EPOCHSECONDS + 60 * ${params.keep_instance_alive_for}))").trim()
+              }
 
-              sh "./deploy-dhis2.sh $GROUP_NAME $INSTANCE_NAME"
+              sh "./deploy-dhis2.sh $INSTANCE_GROUP_NAME $INSTANCE_NAME"
 
               sh "$WORKSPACE/scripts/generate-analytics.sh admin:district $INSTANCE_URL"
 
@@ -133,16 +141,14 @@ pipeline {
           results: [[path: "$ALLURE_RESULTS_DIR"]],
           report: "$ALLURE_REPORT_DIR_PATH/$ALLURE_REPORT_DIR"
           ])
-        }
-      }
 
-    success {
-      script {
-        dir('im-manager/scripts') {
-          withCredentials([usernamePassword(credentialsId: 'e2e-im-user', passwordVariable: 'PASSWORD', usernameVariable: 'USER_EMAIL')]) {
-            echo 'Deleting DHIS2 instance ...'
+        if (!params.keep_instance_alive) {
+          dir('im-manager/scripts') {
+            withCredentials([usernamePassword(credentialsId: 'e2e-im-user', passwordVariable: 'PASSWORD', usernameVariable: 'USER_EMAIL')]) {
+              echo 'Deleting DHIS2 instance ...'
 
-            sh "./destroy.sh $GROUP_NAME $INSTANCE_NAME"
+              sh "./destroy.sh $INSTANCE_GROUP_NAME $INSTANCE_NAME"
+            }
           }
         }
       }
