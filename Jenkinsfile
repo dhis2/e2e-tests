@@ -79,7 +79,7 @@ pipeline {
 
               sh "./deploy-dhis2.sh $GROUP_NAME $INSTANCE_NAME"
 
-              sh "$WORKSPACE/scripts/generate-analytics.sh $INSTANCE_URL"
+              sh "$WORKSPACE/scripts/generate-analytics.sh admin:district $INSTANCE_URL"
 
               sh "credentials=system:System123 url=$INSTANCE_URL $WORKSPACE/install_app_hub_apps.sh"
             }
