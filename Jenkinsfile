@@ -17,7 +17,6 @@ pipeline {
 
   environment {
     GIT_URL = 'https://github.com/dhis2/e2e-tests'
-
     BRANCH_BASED_VERSION = "${env.TAG_NAME ? env.GIT_BRANCH.split('-')[0] : '2.' + env.GIT_BRANCH.replaceAll('v', '')}"
     DHIS2_VERSION = "${env.GIT_BRANCH == 'master' ? 'dev' : env.BRANCH_BASED_VERSION}"
     IMAGE_TAG = "${env.GIT_BRANCH == 'master' ? 'latest' : env.BRANCH_BASED_VERSION}"
@@ -28,9 +27,10 @@ pipeline {
     INSTANCE_DOMAIN = "https://${INSTANCE_GROUP_NAME}.im.$INSTANCE_ENVIRONMENT"
     INSTANCE_HOST = "https://api.im.$INSTANCE_ENVIRONMENT"
     INSTANCE_URL = "$INSTANCE_DOMAIN/$INSTANCE_NAME"
+    DHIS2_CREDENTIALS = credentials('dhis2-default')
     ALLURE_REPORT_DIR_PATH = 'allure'
     ALLURE_RESULTS_DIR = 'reports/allure-results'
-    ALLURE_REPORT_DIR = 'allure-report-$DHIS2_VERSION'
+    ALLURE_REPORT_DIR = "allure-report-$DHIS2_VERSION"
     JIRA_RELEASE_VERSION_NAME = "${env.TAG_NAME ? env.DHIS2_VERSION : sh(script: './get_next_version.sh', returnStdout: true)}"
     HTTP = 'https --check-status'
   }
@@ -87,9 +87,9 @@ pipeline {
 
               sh "./deploy-dhis2.sh $INSTANCE_GROUP_NAME $INSTANCE_NAME"
 
-              sh "$WORKSPACE/scripts/generate-analytics.sh admin:district $INSTANCE_URL"
+              sh "$WORKSPACE/scripts/generate-analytics.sh \$DHIS2_CREDENTIALS $INSTANCE_URL"
 
-              sh "credentials=system:System123 url=$INSTANCE_URL $WORKSPACE/install_app_hub_apps.sh"
+              sh "credentials=\$DHIS2_CREDENTIALS url=$INSTANCE_URL $WORKSPACE/install_app_hub_apps.sh"
             }
           }
         }
