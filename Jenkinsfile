@@ -79,7 +79,7 @@ pipeline {
 
     stage('Test') {
       environment {
-        JIRA_ENABLED = true
+        JIRA_ENABLED = false
         JIRA_USERNAME = "$JIRA_USERNAME"
         JIRA_PASSWORD = "$JIRA_PASSWORD"
         BASE_URL = "${INSTANCE_URL}"
