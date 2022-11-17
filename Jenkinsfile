@@ -17,9 +17,9 @@ pipeline {
 
   environment {
     GIT_URL = 'https://github.com/dhis2/e2e-tests'
-    BRANCH_BASED_VERSION = "${env.TAG_NAME ? env.GIT_BRANCH.split('-')[0] : '2.' + env.GIT_BRANCH.replaceAll('v', '')}"
-    DHIS2_VERSION = "${env.GIT_BRANCH == 'master' ? 'dev' : env.BRANCH_BASED_VERSION}"
-    IMAGE_TAG = "${env.GIT_BRANCH == 'master' ? 'latest' : env.BRANCH_BASED_VERSION}"
+    REF_BASED_VERSION = "${env.TAG_NAME ? env.TAG_NAME : '2.' + env.GIT_BRANCH.replaceAll('v', '')}"
+    DHIS2_VERSION = "${env.GIT_BRANCH == 'master' ? 'dev' : env.REF_BASED_VERSION.replaceAll('-rc', '')}"
+    IMAGE_TAG = "${env.GIT_BRANCH == 'master' ? 'latest' : env.REF_BASED_VERSION}"
     IMAGE_REPOSITORY = "${env.TAG_NAME ? 'core' : 'core-dev'}"
     INSTANCE_ENVIRONMENT = 'prod.test.c.dhis2.org'
     INSTANCE_GROUP_NAME = 'qa'
