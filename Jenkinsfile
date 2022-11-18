@@ -89,7 +89,7 @@ pipeline {
 
               sh "$WORKSPACE/scripts/generate-analytics.sh \$DHIS2_CREDENTIALS $INSTANCE_URL"
 
-              sh "credentials=\$DHIS2_CREDENTIALS url=$INSTANCE_URL $WORKSPACE/install_app_hub_apps.sh"
+              sh "credentials=\$DHIS2_CREDENTIALS url=$INSTANCE_URL $WORKSPACE/scripts/install_app_hub_apps.sh"
             }
           }
         }
