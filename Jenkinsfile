@@ -70,7 +70,7 @@ pipeline {
             dir('im-db-manager/scripts') {
               env.DATABASE_ID = sh(
                   returnStdout: true,
-                  script: "./list.sh | jq -r '.[] | select(.Name == \"$INSTANCE_GROUP_NAME\") .Databases[] | select(.Name|contains(\"Sierra Leone - $DHIS2_VERSION\")) .ID'"
+                  script: "./list.sh | jq -r '.[] | select(.Name == \"$INSTANCE_GROUP_NAME\") .Databases[] | select(.Name == \"Sierra Leone - ${DHIS2_VERSION}.sql.gz\")) .ID'"
               ).trim()
 
               sh '[ -n "$DATABASE_ID" ]'
