@@ -13,6 +13,7 @@ pipeline {
   parameters {
     booleanParam(name: 'keep_instance_alive', defaultValue: false, description: 'Keep the instance alive after the build is done.')
     string(name: 'keep_instance_alive_for', defaultValue: '300', description: 'Duration (in minutes) to keep the intance alive for.')
+    string(name: 'instance_readiness_threshold', defaultValue: '10', description: 'Duration (in minutes) to wait for the instance to get ready.')
   }
 
   environment {
@@ -26,6 +27,7 @@ pipeline {
     INSTANCE_DOMAIN = "https://${INSTANCE_GROUP_NAME}.im.$INSTANCE_ENVIRONMENT"
     INSTANCE_HOST = "https://api.im.$INSTANCE_ENVIRONMENT"
     INSTANCE_URL = "$INSTANCE_DOMAIN/$INSTANCE_NAME"
+    INSTANCE_READINESS_THRESHOLD = "${param.instance_readiness_threshold}"
     DHIS2_CREDENTIALS = credentials('dhis2-default')
     ALLURE_REPORT_DIR_PATH = 'allure'
     ALLURE_RESULTS_DIR = 'reports/allure-results'
