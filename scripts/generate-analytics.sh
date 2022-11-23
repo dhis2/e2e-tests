@@ -5,25 +5,31 @@ set -euo pipefail
 dhis2_credentials="$1"
 instance_url="$2"
 
+analytics_success_message='Analytics tables updated'
+readiness_threshold_seconds=$((${INSTANCE_READINESS_THRESHOLD:-10} * 60))
+
 function instance_response() {
   $HTTP --follow --headers get "$instance_url" | head -1 | cut -d ' ' -f 2
 }
 
-function analytics_status() {
+function analytics_completed_status() {
   $HTTP --auth "$dhis2_credentials" get "${instance_url}${analytics_status_endpoint}" |
-  jq -r '.[] .completed'
+  jq -r ".[] | select(.message == \"$analytics_success_message\") .completed"
 }
 
-instance_readiness_threshold=300
+function readiness_threshold() {
+  elapsed_seconds=$(($SECONDS - $1))
+
+  if [[ $elapsed_seconds -gt $readiness_threshold_seconds ]]; then
+    echo "Readiness threshold of ${readiness_threshold_seconds}s reached. Exiting ..."
+    exit 1
+  fi
+}
+
 instance_readiness_start_time=$SECONDS
 until [[ "$(instance_response)" == "200" ]]
 do
-  elapsed_seconds=$(($SECONDS-$instance_readiness_start_time))
-
-  if [[ $elapsed_seconds -gt $instance_readiness_threshold ]]; then
-    echo "Instance didn't get ready in the ${instance_readiness_threshold}s threshold."
-    exit 1
-  fi
+  readiness_threshold $instance_readiness_start_time
 
   echo "Instance not ready yet, ${elapsed_seconds}s elapsed ..."
   sleep 10
@@ -37,9 +43,11 @@ analytics_status_endpoint=$(
 echo "Analytics notifier: $analytics_status_endpoint"
 
 analytics_tasks_readiness_start_time=$SECONDS
-until [[ "$(analytics_status)" =~ "true" ]]
+until [[ "$(analytics_completed_status)" == "true" ]]
 do
-  echo "Analytics tasks haven't completed yet, $(($SECONDS-$analytics_tasks_readiness_start_time))s elapsed ..."
+  readiness_threshold $analytics_tasks_readiness_start_time
+
+  echo "Analytics generation task hasn't completed yet, $(($SECONDS-$analytics_tasks_readiness_start_time))s elapsed ..."
   sleep 10
 done
-echo "Analytics tasks have completed!"
+echo "Analytics generation task has completed!"
