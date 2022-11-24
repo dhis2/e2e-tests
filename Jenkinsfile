@@ -26,7 +26,7 @@ pipeline {
     INSTANCE_DOMAIN = "https://${INSTANCE_GROUP_NAME}.im.$INSTANCE_ENVIRONMENT"
     INSTANCE_HOST = "https://api.im.$INSTANCE_ENVIRONMENT"
     INSTANCE_URL = "$INSTANCE_DOMAIN/$INSTANCE_NAME"
-    INSTANCE_READINESS_THRESHOLD = "${params.instance_readiness_threshold}"
+    INSTANCE_READINESS_THRESHOLD_ENV = "${params.instance_readiness_threshold}"
     STARTUP_PROBE_FAILURE_THRESHOLD = 40
     LIVENESS_PROBE_TIMEOUT_SECONDS = 3
     DHIS2_CREDENTIALS = credentials('dhis2-default')
