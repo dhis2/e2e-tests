@@ -28,6 +28,7 @@ pipeline {
     INSTANCE_URL = "$INSTANCE_DOMAIN/$INSTANCE_NAME"
     INSTANCE_READINESS_THRESHOLD = "${params.instance_readiness_threshold}"
     STARTUP_PROBE_FAILURE_THRESHOLD = 40
+    LIVENESS_PROBE_TIMEOUT_SECONDS = 3
     DHIS2_CREDENTIALS = credentials('dhis2-default')
     ALLURE_REPORT_DIR_PATH = 'allure'
     ALLURE_RESULTS_DIR = 'reports/allure-results'
