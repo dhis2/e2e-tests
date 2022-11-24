@@ -12,7 +12,7 @@ pipeline {
   parameters {
     booleanParam(name: 'keep_instance_alive', defaultValue: false, description: 'Keep the instance alive after the build is done.')
     string(name: 'keep_instance_alive_for', defaultValue: '300', description: 'Duration (in minutes) to keep the intance alive for.')
-    string(name: 'instance_readiness_threshold', defaultValue: '10', description: 'Duration (in minutes) to wait for the instance to get ready.')
+    string(name: 'instance_readiness_threshold', defaultValue: '15', description: 'Duration (in minutes) to wait for the instance to get ready.')
   }
 
   environment {
