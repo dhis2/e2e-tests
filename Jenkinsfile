@@ -111,8 +111,8 @@ pipeline {
         JIRA_USERNAME = "$JIRA_USERNAME"
         JIRA_PASSWORD = "$JIRA_PASSWORD"
         BASE_URL = "$INSTANCE_URL"
-        CI_BUILD_ID = "$BUILD_NUMBER"
-        RP_TOKEN = credentials('report-portal-access-uuid')
+        //CI_BUILD_ID = "$BUILD_NUMBER"
+        //RP_TOKEN = credentials('report-portal-access-uuid')
       }
 
       steps {
@@ -121,7 +121,6 @@ pipeline {
           def json = sh(returnStdout: true, script: "jq '.reportportalAgentJsCypressReporterOptions.attributes[0].value=\"${JIRA_RELEASE_VERSION_NAME}\"' reporter-config.json")
           writeFile(text: "$json", file: 'reporter-config.json')
           sh 'docker-compose up --exit-code-from cypress-tests'
-          sh 'python3 merge_rp_launches.py'
         }
       }
     }
