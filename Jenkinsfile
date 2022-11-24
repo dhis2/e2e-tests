@@ -6,7 +6,6 @@ pipeline {
   }
 
   options {
-    disableConcurrentBuilds()
     ansiColor('xterm')
   }
 
@@ -28,6 +27,7 @@ pipeline {
     INSTANCE_HOST = "https://api.im.$INSTANCE_ENVIRONMENT"
     INSTANCE_URL = "$INSTANCE_DOMAIN/$INSTANCE_NAME"
     INSTANCE_READINESS_THRESHOLD = "${params.instance_readiness_threshold}"
+    STARTUP_PROBE_FAILURE_THRESHOLD = 40
     DHIS2_CREDENTIALS = credentials('dhis2-default')
     ALLURE_REPORT_DIR_PATH = 'allure'
     ALLURE_RESULTS_DIR = 'reports/allure-results'
