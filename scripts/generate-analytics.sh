@@ -6,7 +6,7 @@ dhis2_credentials="$1"
 instance_url="$2"
 
 analytics_success_message='Analytics tables updated'
-readiness_threshold_seconds=$((${INSTANCE_READINESS_THRESHOLD:-10} * 60))
+readiness_threshold_seconds=$((${INSTANCE_READINESS_THRESHOLD_ENV:-10} * 60))
 
 function instance_response() {
   $HTTP --follow --headers get "$instance_url" | head -1 | cut -d ' ' -f 2
