@@ -19,4 +19,4 @@ services:
       - ./reports/allure-results:/e2e/reports/allure-results
       - ./allure-report:/e2e/allure-report
       - ./screenshots:/e2e/cypress/screenshots
-    entrypoint: "npm run cy:parallel-report && python3 merge_rp_launches.py" 
+    entrypoint: "npm run cy:parallel"
