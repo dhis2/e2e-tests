@@ -6,14 +6,13 @@ pipeline {
   }
 
   options {
-    disableConcurrentBuilds()
     ansiColor('xterm')
   }
 
   parameters {
     booleanParam(name: 'keep_instance_alive', defaultValue: false, description: 'Keep the instance alive after the build is done.')
     string(name: 'keep_instance_alive_for', defaultValue: '300', description: 'Duration (in minutes) to keep the intance alive for.')
-    string(name: 'instance_readiness_threshold', defaultValue: '10', description: 'Duration (in minutes) to wait for the instance to get ready.')
+    string(name: 'instance_readiness_threshold', defaultValue: '15', description: 'Duration (in minutes) to wait for the instance to get ready.')
   }
 
   environment {
@@ -27,7 +26,9 @@ pipeline {
     INSTANCE_DOMAIN = "https://${INSTANCE_GROUP_NAME}.im.$INSTANCE_ENVIRONMENT"
     INSTANCE_HOST = "https://api.im.$INSTANCE_ENVIRONMENT"
     INSTANCE_URL = "$INSTANCE_DOMAIN/$INSTANCE_NAME"
-    INSTANCE_READINESS_THRESHOLD = "${params.instance_readiness_threshold}"
+    INSTANCE_READINESS_THRESHOLD_ENV = "${params.instance_readiness_threshold}"
+    STARTUP_PROBE_FAILURE_THRESHOLD = 40
+    LIVENESS_PROBE_TIMEOUT_SECONDS = 3
     DHIS2_CREDENTIALS = credentials('dhis2-default')
     ALLURE_REPORT_DIR_PATH = 'allure'
     ALLURE_RESULTS_DIR = 'reports/allure-results'
@@ -110,8 +111,8 @@ pipeline {
         JIRA_USERNAME = "$JIRA_USERNAME"
         JIRA_PASSWORD = "$JIRA_PASSWORD"
         BASE_URL = "$INSTANCE_URL"
-        CI_BUILD_ID = "$BUILD_NUMBER"
-        RP_TOKEN = credentials('report-portal-access-uuid')
+        //CI_BUILD_ID = "$BUILD_NUMBER"
+        //RP_TOKEN = credentials('report-portal-access-uuid')
       }
 
       steps {
@@ -120,7 +121,6 @@ pipeline {
           def json = sh(returnStdout: true, script: "jq '.reportportalAgentJsCypressReporterOptions.attributes[0].value=\"${JIRA_RELEASE_VERSION_NAME}\"' reporter-config.json")
           writeFile(text: "$json", file: 'reporter-config.json')
           sh 'docker-compose up --exit-code-from cypress-tests'
-          sh 'python3 merge_rp_launches.py'
         }
       }
     }
