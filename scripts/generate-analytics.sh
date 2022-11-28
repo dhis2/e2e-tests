@@ -14,7 +14,7 @@ function instance_response() {
 
 function analytics_completed_status() {
   $HTTP --auth "$dhis2_credentials" get "${instance_url}${analytics_status_endpoint}" |
-  jq -r ".[] | select(.message == \"$analytics_success_message\") .completed"
+  jq -r ".[] | select(.message | contains(\"$analytics_success_message\")) .completed"
 }
 
 function readiness_threshold() {
