@@ -155,7 +155,7 @@ pipeline {
       }
     }
 
-    failure {
+    /*failure {
       script {
         def prefix = ""
         if (fileExists('./reports/new_failures.json')) {
@@ -168,6 +168,6 @@ pipeline {
            channel: '@Haroon;@Hella'
         )
       }
-    }
+    }*/
   }
 }
