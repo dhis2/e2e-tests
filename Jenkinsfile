@@ -20,14 +20,15 @@ pipeline {
     DHIS2_VERSION = "${env.GIT_BRANCH == 'master' ? 'dev' : env.REF_BASED_VERSION.replaceAll('-rc', '')}"
     IMAGE_TAG = "${env.GIT_BRANCH == 'master' ? 'latest' : env.REF_BASED_VERSION}"
     IMAGE_REPOSITORY = "${env.TAG_NAME ? 'core' : 'core-dev'}"
-    INSTANCE_ENVIRONMENT = 'prod.test.c.dhis2.org'
-    INSTANCE_GROUP_NAME = 'qa'
+    INSTANCE_ENVIRONMENT = 'radnov.test.c.dhis2.org'
+    INSTANCE_GROUP_NAME = 'whoami'
     INSTANCE_NAME = "e2e-cy-${env.GIT_BRANCH.replaceAll("\\P{Alnum}", "").toLowerCase()}-$BUILD_NUMBER"
     INSTANCE_DOMAIN = "https://${INSTANCE_GROUP_NAME}.im.$INSTANCE_ENVIRONMENT"
     INSTANCE_HOST = "https://api.im.$INSTANCE_ENVIRONMENT"
     INSTANCE_URL = "$INSTANCE_DOMAIN/$INSTANCE_NAME"
     INSTANCE_READINESS_THRESHOLD_ENV = "${params.instance_readiness_threshold}"
     STARTUP_PROBE_FAILURE_THRESHOLD = 50
+    LIVENESS_PROBE_INITIAL_DELAY_SECONDS = 600
     LIVENESS_PROBE_TIMEOUT_SECONDS = 5
     DHIS2_CREDENTIALS = credentials('dhis2-default')
     ALLURE_REPORT_DIR_PATH = 'allure'
