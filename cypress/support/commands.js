@@ -21,6 +21,7 @@ Cypress.Commands.add('login', () => {
       url: '/dhis-web-commons-security/login.action',
       form: true,
       followRedirect: true,
+      retryOnStatusCodeFailure: true,
       body: {
         j_username: username,
         j_password: password
