@@ -120,6 +120,7 @@ pipeline {
           def json = sh(returnStdout: true, script: "jq '.reportportalAgentJsCypressReporterOptions.attributes[0].value=\"${JIRA_RELEASE_VERSION_NAME}\"' reporter-config.json")
           writeFile(text: "$json", file: 'reporter-config.json')
           sh 'docker-compose up --exit-code-from cypress-tests'
+          sh 'python3 merge_rp_launches.py'
         }
       }
     }
