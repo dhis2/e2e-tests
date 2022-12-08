@@ -116,10 +116,17 @@ pipeline {
 
       steps {
         script {
-          // assign version to the report portal version attribute
-          def json = sh(returnStdout: true, script: "jq '.reportportalAgentJsCypressReporterOptions.attributes[0].value=\"${JIRA_RELEASE_VERSION_NAME}\"' reporter-config.json")
+          // assign version to the report portal version attribute and name the launch based on the branch
+          def json = sh(
+            returnStdout: true,
+            script: "jq '.reportportalAgentJsCypressReporterOptions.attributes[0].value=\"${JIRA_RELEASE_VERSION_NAME}\" | .reportportalAgentJsCypressReporterOptions.launch=\"e2e_tests_${env.GIT_BRANCH}\"' reporter-config.json"
+          )
           writeFile(text: "$json", file: 'reporter-config.json')
-          sh 'docker-compose up --exit-code-from cypress-tests'
+
+          catchError(message: 'Tests failed', stageResult: 'FAILURE', catchInterruptions: false) {
+            sh 'docker-compose up --exit-code-from cypress-tests'
+          }
+
           sh 'python3 merge_rp_launches.py'
         }
       }
