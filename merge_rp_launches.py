@@ -68,9 +68,11 @@ wait_start_time = time.time()
 while len(get_in_progress(get_launches())) != 0 and time.time() - wait_start_time < 60:
   print('Launches still in progress ...')
   time.sleep(5)
-else:
+
+launches_in_progress = get_in_progress(get_launches())
+if len(launches_in_progress) != 0:
   print('Closing in progress items')
-  close([x['id'] for x in get_in_progress(get_launches())])
+  close([x['id'] for x in launches_in_progress])
 
 launches = get_launches()
 launch_star_time = min([launch['startTime'] for launch in launches])
