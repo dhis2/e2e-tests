@@ -1,23 +1,24 @@
 import requests, os, time
 from datetime import datetime
 URL = "https://test.tools.dhis2.org/reportportal/api/v1/dhis2_auto"
-REPORT_PORTAL_TOKEN = os.getenv('RP_TOKEN')
+RP_TOKEN = os.getenv('RP_TOKEN')
 CI_BUILD_ID = os.getenv('CI_BUILD_ID')
+LAUNCH_BRANCH_VERSION = os.getenv('LAUNCH_BRANCH_VERSION')
 
-if not CI_BUILD_ID or not REPORT_PORTAL_TOKEN:
-  print('Missing CI_BUILD_ID or RP_TOKEN environment variables. Skipping merge.')
+if not RP_TOKEN or not CI_BUILD_ID or not LAUNCH_BRANCH_VERSION:
+  print('Missing RP_TOKEN, CI_BUILD_ID or LAUNCH_BRANCH_VERSION environment variables. Skipping merge.')
   exit(0)
 
 headers = {
   'Content-Type': 'application/json',
-  'Authorization': 'Bearer {}'.format(REPORT_PORTAL_TOKEN)
+  'Authorization': 'Bearer {}'.format(RP_TOKEN)
 }
 
 def get_launches():
   return requests.get(
     url="{}/launch".format(URL),
     headers=headers,
-    params={'filter.has.attributeValue': CI_BUILD_ID}
+    params={'filter.has.attributeValue': CI_BUILD_ID, 'filter.eq.name': f"e2e_tests_{LAUNCH_BRANCH_VERSION}"}
   ).json()['content']
 
 
