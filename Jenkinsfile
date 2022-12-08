@@ -110,6 +110,7 @@ pipeline {
         JIRA_USERNAME = "$JIRA_USERNAME"
         JIRA_PASSWORD = "$JIRA_PASSWORD"
         BASE_URL = "$INSTANCE_URL"
+        LAUNCH_BRANCH_VERSION = "${env.GIT_BRANCH}"
         CI_BUILD_ID = "$BUILD_NUMBER"
         RP_TOKEN = credentials('report-portal-access-uuid')
       }
