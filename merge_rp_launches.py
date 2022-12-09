@@ -64,11 +64,6 @@ if len(launches) < 2:
   print('There were {} launches found. No need for merging.'.format(len(launches)))
   exit(0)
 
-wait_start_time = time.time()
-while len(get_in_progress(get_launches())) != 0 and time.time() - wait_start_time < 60:
-  print('Launches still in progress ...')
-  time.sleep(5)
-
 launches_in_progress = get_in_progress(get_launches())
 if len(launches_in_progress) != 0:
   print('Closing in progress items')
