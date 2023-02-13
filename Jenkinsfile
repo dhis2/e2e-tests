@@ -27,6 +27,7 @@ pipeline {
     INSTANCE_DOMAIN = "https://${INSTANCE_GROUP_NAME}.im.$IM_ENVIRONMENT"
     INSTANCE_URL = "$INSTANCE_DOMAIN/$INSTANCE_NAME"
     INSTANCE_READINESS_THRESHOLD_ENV = "${params.instance_readiness_threshold}"
+    INSTANCE_TTL = "${params.keep_instance_alive ? params.keep_instance_alive_for.toInteger() * 60 : ''}"
     STARTUP_PROBE_FAILURE_THRESHOLD = 50
     DHIS2_CREDENTIALS = credentials('dhis2-default')
     ALLURE_REPORT_DIR_PATH = 'allure'
@@ -82,8 +83,8 @@ pipeline {
             dir('im-manager/scripts') {
               echo 'Creating DHIS2 instance ...'
 
-              if (params.keep_instance_alive) {
-                env.INSTANCE_TTL = sh(returnStdout: true, script: "#!/usr/bin/env bash\necho \$((\$EPOCHSECONDS + 60 * ${params.keep_instance_alive_for}))").trim()
+                sh '[ -n "$DATABASE_ID" ]'
+                echo "DATABASE_ID is $DATABASE_ID for version $DHIS2_VERSION"
               }
 
               sh "./deploy-dhis2.sh $INSTANCE_GROUP_NAME $INSTANCE_NAME"
