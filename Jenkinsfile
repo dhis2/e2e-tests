@@ -42,56 +42,36 @@ pipeline {
   }
 
   stages {
-    stage('Checkout IM scripts') {
-      steps {
-        script {
-          dir('im-manager') {
-            checkout([
-              $class: 'GitSCM',
-              branches: [[name: '*/master']],
-              extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: '/scripts']]]],
-              userRemoteConfigs: [[url: 'https://github.com/dhis2-sre/im-manager']]
-            ])
-          }
-
-          dir('im-db-manager') {
-            checkout([
-                $class: 'GitSCM',
-                branches: [[name: '*/master']],
-                extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: '/scripts']]]],
-                userRemoteConfigs: [[url: 'https://github.com/dhis2-sre/im-database-manager']]
-            ])
-          }
-        }
-      }
-    }
-
     stage('Create DHIS2 instance') {
       steps {
         script {
           withCredentials([usernamePassword(credentialsId: 'e2e-im-user', passwordVariable: 'PASSWORD', usernameVariable: 'USER_EMAIL')]) {
-            dir('im-db-manager/scripts') {
-              env.DATABASE_ID = sh(
-                  returnStdout: true,
-                  script: "./list.sh | jq -r '.[] | select(.Name == \"$INSTANCE_GROUP_NAME\") .Databases[] | select(.Name == \"Sierra Leone - ${DHIS2_VERSION}.sql.gz\") .ID'"
-              ).trim()
+            dir('im-db-manager') {
+              sparseCheckout('https://github.com/dhis2-sre/im-database-manager', 'master', '/scripts')
 
-              sh '[ -n "$DATABASE_ID" ]'
-              echo "DATABASE_ID is $DATABASE_ID for version $DHIS2_VERSION"
-            }
-
-            dir('im-manager/scripts') {
-              echo 'Creating DHIS2 instance ...'
+              dir('scripts') {
+                env.DATABASE_ID = sh(
+                    returnStdout: true,
+                    script: "./list.sh | jq -r '.[] | select(.Name == \"$INSTANCE_GROUP_NAME\") .Databases[] | select(.Name == \"Sierra Leone - ${DHIS2_VERSION}.sql.gz\") .ID'"
+                ).trim()
 
                 sh '[ -n "$DATABASE_ID" ]'
                 echo "DATABASE_ID is $DATABASE_ID for version $DHIS2_VERSION"
               }
+            }
 
-              sh "./deploy-dhis2.sh $INSTANCE_GROUP_NAME $INSTANCE_NAME"
+            dir('im-manager') {
+              sparseCheckout('https://github.com/dhis2-sre/im-manager', 'master', '/scripts')
 
-              sh "$WORKSPACE/scripts/generate-analytics.sh \$DHIS2_CREDENTIALS $INSTANCE_URL"
+              dir('scripts') {
+                echo 'Creating DHIS2 instance ...'
 
-              sh "credentials=\$DHIS2_CREDENTIALS url=$INSTANCE_URL $WORKSPACE/scripts/install_app_hub_apps.sh"
+                sh "./deploy-dhis2.sh $INSTANCE_GROUP_NAME $INSTANCE_NAME"
+
+                sh "$WORKSPACE/scripts/generate-analytics.sh \$DHIS2_CREDENTIALS $INSTANCE_URL"
+
+                sh "credentials=\$DHIS2_CREDENTIALS url=$INSTANCE_URL $WORKSPACE/scripts/install_app_hub_apps.sh"
+              }
             }
           }
         }
