@@ -68,7 +68,14 @@ pipeline {
 
                 sh "./deploy-dhis2.sh $INSTANCE_GROUP_NAME $INSTANCE_NAME"
 
-                sh "$WORKSPACE/scripts/generate-analytics.sh \$DHIS2_CREDENTIALS $INSTANCE_URL"
+                timeout(params.instance_readiness_threshold) {
+                  waitFor.statusOk("$INSTANCE_URL")
+                }
+
+                NOTIFIER_ENDPOINT = dhis2.generateAnalytics("$INSTANCE_URL", '$DHIS2_CREDENTIALS')
+                timeout(params.instance_readiness_threshold) {
+                  waitFor.analyticsCompleted("${INSTANCE_URL}${NOTIFIER_ENDPOINT}", '$DHIS2_CREDENTIALS')
+                }
 
                 sh "credentials=\$DHIS2_CREDENTIALS url=$INSTANCE_URL $WORKSPACE/scripts/install_app_hub_apps.sh"
               }
