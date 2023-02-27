@@ -2,7 +2,7 @@
 
 pipeline {
   agent {
-    label 'ec2-jdk11'
+    label 'ec2-jdk8'
   }
 
   options {
