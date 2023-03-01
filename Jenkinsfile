@@ -42,12 +42,13 @@ pipeline {
   }
 
   stages {
+
     stage('Create DHIS2 instance') {
       steps {
         script {
           withCredentials([usernamePassword(credentialsId: 'e2e-im-user', passwordVariable: 'PASSWORD', usernameVariable: 'USER_EMAIL')]) {
             dir('im-db-manager') {
-              sparseCheckout('https://github.com/dhis2-sre/im-database-manager', 'master', '/scripts')
+              git.sparseCheckout('https://github.com/dhis2-sre/im-database-manager', 'master', '/scripts')
 
               dir('scripts') {
                 env.DATABASE_ID = sh(
@@ -61,7 +62,7 @@ pipeline {
             }
 
             dir('im-manager') {
-              sparseCheckout('https://github.com/dhis2-sre/im-manager', 'master', '/scripts')
+              git.sparseCheckout('https://github.com/dhis2-sre/im-manager', 'master', '/scripts')
 
               dir('scripts') {
                 echo 'Creating DHIS2 instance ...'
