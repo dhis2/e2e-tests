@@ -17,8 +17,10 @@ pipeline {
 
   environment {
     REF_BASED_VERSION = "${env.TAG_NAME ? env.TAG_NAME : '2.' + env.GIT_BRANCH.replaceAll('v', '')}"
-    DHIS2_VERSION = "${env.GIT_BRANCH == 'master' ? 'dev' : env.REF_BASED_VERSION.replaceAll('-rc', '')}"
-    IMAGE_TAG = "${env.GIT_BRANCH == 'master' ? 'latest' : env.REF_BASED_VERSION}"
+    DEFAULT_DHIS2_VERSION = "${env.GIT_BRANCH == 'master' ? 'dev' : env.REF_BASED_VERSION.replaceAll('-rc', '')}"
+    DEFAULT_IMAGE_TAG = "${env.GIT_BRANCH == 'master' ? 'latest' : env.REF_BASED_VERSION}"
+    DHIS2_VERSION = "${changeRequest() ? 'dev' : env.DEFAULT_DHIS2_VERSION}"
+    IMAGE_TAG = "${changeRequest() ? 'latest' : env.DEFAULT_IMAGE_TAG}"
     IMAGE_REPOSITORY = "${env.TAG_NAME ? 'core' : 'core-dev'}"
     IM_ENVIRONMENT = 'radnov.test.c.dhis2.org'
     IM_HOST = "https://api.im.$IM_ENVIRONMENT"
@@ -47,7 +49,7 @@ pipeline {
         script {
           withCredentials([usernamePassword(credentialsId: 'e2e-im-user', passwordVariable: 'PASSWORD', usernameVariable: 'USER_EMAIL')]) {
             dir('im-db-manager') {
-              sparseCheckout('https://github.com/dhis2-sre/im-database-manager', 'master', '/scripts')
+              git.sparseCheckout('https://github.com/dhis2-sre/im-database-manager', 'master', '/scripts')
 
               dir('scripts') {
                 env.DATABASE_ID = sh(
@@ -61,7 +63,7 @@ pipeline {
             }
 
             dir('im-manager') {
-              sparseCheckout('https://github.com/dhis2-sre/im-manager', 'master', '/scripts')
+              git.sparseCheckout('https://github.com/dhis2-sre/im-manager', 'master', '/scripts')
 
               dir('scripts') {
                 echo 'Creating DHIS2 instance ...'
