@@ -14,13 +14,9 @@
     $ git checkout v38
     ```
 
-2. Install the NPM dependencies:
+2. Install dependencies:
     ```sh
-    $ npm i
-    ```
-    Note that for older branches the dependencies may fail and you may have to run it with `--legacy-peer-deps` flag:
-    ```sh
-    $ npm i --legacy-peer-deps
+    $ yarn install
     ```
 
 3. Set the environment
@@ -42,18 +38,18 @@
    
 5. Run the tests:
     ```sh
-    $ npm run cy:test
+    $ yarn run cy:test
     ```
     
     or in parallel (using 3 threads):
     ```sh
-    $ npm run cy:parallel 
+    $ yarn run cy:parallel 
     ```
 
     or only smoke tests: 
     ```sh
     $ export TAGS=smoke
-    $ npm run cy:test (or any other command)
+    $ yarn run cy:test (or any other command)
     ```
 
 ## Environment variables
@@ -74,7 +70,7 @@
 
 ## Reporting
 ### Allure
-[Allure](https://docs.qameta.io/allure/)  is the framework used to generate a test report. To generate and serve the report, run `npm run allure:serve`. The report should open in a browser window. 
+[Allure](https://docs.qameta.io/allure/)  is the framework used to generate a test report. To generate and serve the report, run `yarn run allure:serve`. The report should open in a browser window. 
 
 ### Report portal
 
