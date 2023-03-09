@@ -20,14 +20,14 @@
     "chalk": "^4.0.0",
     "chrome-remote-interface": "^0.31.2",
     "colors": "^1.4.0",
-    "cypress": "^10.6.0",
+    "cypress": "^12.7.0",
+    "cypress-grep": "^3.0.2",
     "cypress-multi-reporters": "^1.6.1",
     "cypress-network-idle": "^1.10.0",
     "cypress-parallel": "^0.9.1",
     "cypress-plugin-tab": "^1.0.5",
     "cypress-wait-until": "^1.7.2",
-    "moment": "^2.29.4",
-    "cypress-grep": "^3.0.2"
+    "moment": "^2.29.4"
   },
   "devDependencies": {
     "eslint": "^8.22.0",

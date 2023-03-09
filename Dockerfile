@@ -1,4 +1,4 @@
-FROM 'cypress/included:10.6.0'
+FROM 'cypress/included:12.7.0'
 RUN apt-get update && apt-get install -y python3-pip && \
   pip3 install requests
 
