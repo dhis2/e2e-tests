@@ -9,16 +9,19 @@ export const Selectors = {
   NEW_EVENT_IN_SELECTED_PROGRAM_BUTTON: '[data-test="new-menuitem-one"] a',
   WORKING_LIST_TABLE: '[data-test="main-page-working-list"]',
   NEW_EVENT_FORM: '[data-test="registration-page-content"]',
-  PROGRAM_SELECTOR: '#program-selector .Select-placeholder'
+  PROGRAM_SELECTOR: '[data-test="program-selector-container"]',
+  PROGRAM_MENULIST_SELECTOR: '[data-test="dhis2-uicore-menulist"]',
+  ORG_UNIT_CONTAINER_SELECTOR: '[data-test="org-unit-selector-container"]',
+  ORG_UNIT_INPUT_SELECTOR: '[data-test="capture-ui-input"]',
 }
 
 export const ContextActions = {
   selectOrgUnitByName: ( name ) => {
-    cy.get('[data-test="org-unit-selector-container"] [data-test="capture-ui-input"]')
+    cy.get(Selectors.ORG_UNIT_CONTAINER_SELECTOR)
+      .click();
+    cy.get(Selectors.ORG_UNIT_INPUT_SELECTOR)
       .type(name);
-  
-    cy.contains( '[data-test="dhis2-uiwidgets-orgunittree-node-content"]', name )
-      .click(); 
+    cy.contains(name).click(); 
   
     return cy;
   },
@@ -26,9 +29,7 @@ export const ContextActions = {
   selectProgramByName: ( name ) => {
     cy.get(Selectors.PROGRAM_SELECTOR)
       .click()
-    
-    cy
-      .get('.Select-menu-outer')
+    cy.get(Selectors.PROGRAM_MENULIST_SELECTOR)
       .contains(name)
       .click();
   }
@@ -74,6 +75,7 @@ export const addComment = ( comment ) => {
     .type(comment);
 
   cy.get('[data-test="comment-buttons-container"] button').first().click();
+  cy.get('[data-test="comment-text"]').contains(comment);
 }
 
 export const openEvent = ( eventId ) => {
@@ -93,6 +95,5 @@ export const openLastSavedEvent = () => {
 }
 
 export const getCommentByValue = ( value ) => {
-    return cy.get('[data-test="comments-list"]')
-      .contains(value);
+    return cy.contains(value);
 }
