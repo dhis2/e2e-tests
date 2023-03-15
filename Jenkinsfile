@@ -1,5 +1,7 @@
 @Library('pipeline-library') _
 
+boolean isOnMasterOrMaintenanceVersionBranch = env.BRANCH_NAME == "master" || env.BRANCH_NAME.startsWith("v")
+
 pipeline {
   agent {
     label 'ec2-jdk11'
@@ -40,7 +42,7 @@ pipeline {
   }
 
   triggers {
-    cron(env.BRANCH_NAME.contains('.') ? '' : 'H 6 * * 1-5')
+    cron(isOnMasterOrMaintenanceVersionBranch ? 'H 6 * * 1-5' : '')
   }
 
   stages {
