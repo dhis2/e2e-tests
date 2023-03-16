@@ -17,8 +17,8 @@ describe('Capture', () => {
   })
 
   it('should open new event form', () => {
-    ContextActions.selectOrgUnitByName('Ngelehun CHC')
     ContextActions.selectProgramByName('Information Campaign')
+    ContextActions.selectOrgUnitByName('Ngelehun CHC')
     cy
       .get(Selectors.NEW_EVENT_BUTTON)
       .click()
