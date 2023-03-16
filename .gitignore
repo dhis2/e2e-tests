@@ -11,3 +11,4 @@ output
 multi-reporter-config.json
 runner-results
 .env.local
+cypress/videos/
