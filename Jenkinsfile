@@ -50,10 +50,10 @@ pipeline {
       steps {
         script {
           withCredentials([usernamePassword(credentialsId: 'e2e-im-user', passwordVariable: 'PASSWORD', usernameVariable: 'USER_EMAIL')]) {
-            dir('im-db-manager') {
-              gitHelper.sparseCheckout('https://github.com/dhis2-sre/im-database-manager', 'master', '/scripts')
+            dir('im-manager') {
+              gitHelper.sparseCheckout('https://github.com/dhis2-sre/im-manager', 'master', '/scripts')
 
-              dir('scripts') {
+              dir('scripts/databases') {
                 env.DATABASE_ID = sh(
                     returnStdout: true,
                     script: "./list.sh | jq -r '.[] | select(.Name == \"$INSTANCE_GROUP_NAME\") .Databases[] | select(.Name == \"Sierra Leone - ${DHIS2_VERSION}.sql.gz\") .ID'"
@@ -62,12 +62,8 @@ pipeline {
                 sh '[ -n "$DATABASE_ID" ]'
                 echo "DATABASE_ID is $DATABASE_ID for version $DHIS2_VERSION"
               }
-            }
 
-            dir('im-manager') {
-              gitHelper.sparseCheckout('https://github.com/dhis2-sre/im-manager', 'master', '/scripts')
-
-              dir('scripts') {
+              dir('scripts/instances') {
                 echo 'Creating DHIS2 instance ...'
 
                 sh "./deploy-dhis2.sh $INSTANCE_GROUP_NAME $INSTANCE_NAME"
@@ -144,7 +140,7 @@ pipeline {
           ])
 
         if (!params.keep_instance_alive) {
-          dir('im-manager/scripts') {
+          dir('im-manager/scripts/instances') {
             withCredentials([usernamePassword(credentialsId: 'e2e-im-user', passwordVariable: 'PASSWORD', usernameVariable: 'USER_EMAIL')]) {
               echo 'Deleting DHIS2 instance ...'
 
