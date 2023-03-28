@@ -18,11 +18,10 @@ pipeline {
   }
 
   environment {
-    REF_BASED_VERSION = "${env.TAG_NAME ? env.TAG_NAME : '2.' + env.GIT_BRANCH.replaceAll('v', '')}"
-    DEFAULT_DHIS2_VERSION = "${env.GIT_BRANCH == 'master' ? 'dev' : env.REF_BASED_VERSION.replaceAll('-rc', '')}"
-    DEFAULT_IMAGE_TAG = "${env.GIT_BRANCH == 'master' ? 'latest' : env.REF_BASED_VERSION}"
-    DHIS2_VERSION = "${changeRequest() ? 'dev' : env.DEFAULT_DHIS2_VERSION}"
-    IMAGE_TAG = "${changeRequest() ? 'latest' : env.DEFAULT_IMAGE_TAG}"
+    TARGET_BRANCH = "${env.CHANGE_ID ? env.CHANGE_TARGET : env.GIT_BRANCH}"
+    REF_BASED_VERSION = "${env.TAG_NAME ? env.TAG_NAME : '2.' + env.TARGET_BRANCH.replaceAll('v', '')}"
+    DHIS2_VERSION = "${env.TARGET_BRANCH == 'master' ? 'dev' : env.REF_BASED_VERSION.replaceAll('-rc', '')}"
+    IMAGE_TAG = "${env.TARGET_BRANCH == 'master' ? 'latest' : env.REF_BASED_VERSION}"
     IMAGE_REPOSITORY = "${env.TAG_NAME ? 'core' : 'core-dev'}"
     IM_ENVIRONMENT = 'radnov.test.c.dhis2.org'
     IM_HOST = "https://api.im.$IM_ENVIRONMENT"
@@ -98,7 +97,7 @@ pipeline {
         JIRA_USERNAME = "$JIRA_USERNAME"
         JIRA_PASSWORD = "$JIRA_PASSWORD"
         BASE_URL = "$INSTANCE_URL"
-        LAUNCH_BRANCH_VERSION = "${env.GIT_BRANCH}"
+        LAUNCH_BRANCH_VERSION = "${env.TARGET_BRANCH}"
         CI_BUILD_ID = "$BUILD_NUMBER"
         RP_TOKEN = credentials('report-portal-access-uuid')
       }
