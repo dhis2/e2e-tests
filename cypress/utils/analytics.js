@@ -4,15 +4,16 @@ export const EVENT_VISUALIZER_APP_URL = "dhis-web-event-visualizer";
 export const MAPS_APP_URL = "dhis-web-maps"; 
 export const LINE_LISTING_APP = "api/apps/line-listing/index.html";
 export const Selectors = {
-  VISUALIZATION_TITLE: '[data-test="AO-title"]',
-  LOADER: '[data-test="dhis2-uicore-circularloader"]'
+  AO_TITLE: '[data-test="AO-title"]',
+  LOADER: '[data-test="dhis2-uicore-circularloader"]',
+  VISUALIZATION_TITLE: '[data-test="visualization-title"]'
 }
 
 export const MAP_CONTAINER = "#dhis2-map-container .dhis2-map";
 
 export const loadVisualisation = ( uid ) => {
   cy.visit(`${DATA_VISUALIZER_APP_URL}/#/${uid}`);
-  waitForVisualization();
+  waitForVisualization(Selectors.AO_TITLE);
 }
 export const loadEventReport = ( uid ) => {
   return cy.visit(`${EVENT_REPORTS_APP_URL}/?id=${uid}`).waitForResources();
@@ -29,11 +30,11 @@ export const loadMap = ( uid ) => {
 
 export const loadLineList = ( uid ) =>  {
   cy.visit(`${LINE_LISTING_APP}#/${uid}`);
-  waitForVisualization();
+  waitForVisualization(Selectors.VISUALIZATION_TITLE);
 }
 
-export const waitForVisualization = () => {
-  cy.get(Selectors.VISUALIZATION_TITLE, {timeout: 10000}).should('be.visible')
+export const waitForVisualization = ( title ) => {   // workaround while waiting for consistent data-test for VISUALIZATION_TITLE
+  cy.get(title, {timeout: 10000}).should('be.visible')
 
   cy.get(Selectors.LOADER).should('not.exist');
 }
