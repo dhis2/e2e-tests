@@ -21,15 +21,17 @@ pipeline {
     DHIS2_VERSION = "${env.TARGET_BRANCH == 'master' ? 'dev' : env.REF_BASED_VERSION.replaceAll('-rc', '')}"
     IMAGE_TAG = "${env.TARGET_BRANCH == 'master' ? 'latest' : env.REF_BASED_VERSION}"
     IMAGE_REPOSITORY = "${env.TAG_NAME ? 'core' : 'core-dev'}"
-    IM_ENVIRONMENT = 'radnov.test.c.dhis2.org'
+    IM_ENVIRONMENT = 'prod.test.c.dhis2.org'
     IM_HOST = "https://api.im.$IM_ENVIRONMENT"
-    INSTANCE_GROUP_NAME = 'whoami'
+    INSTANCE_GROUP_NAME = 'qa'
     INSTANCE_NAME = "e2e-cy-${env.GIT_BRANCH.replaceAll("\\P{Alnum}", "").toLowerCase()}-$BUILD_NUMBER"
     INSTANCE_DOMAIN = "https://${INSTANCE_GROUP_NAME}.im.$IM_ENVIRONMENT"
     INSTANCE_URL = "$INSTANCE_DOMAIN/$INSTANCE_NAME"
     INSTANCE_READINESS_THRESHOLD_ENV = "${params.instance_readiness_threshold}"
     INSTANCE_TTL = "${params.keep_instance_alive ? params.keep_instance_alive_for.toInteger() * 60 : ''}"
     STARTUP_PROBE_FAILURE_THRESHOLD = 50
+    CORE_RESOURCES_REQUESTS_CPU = '450m'
+    DB_RESOURCES_REQUESTS_CPU = '450m'
     DHIS2_CREDENTIALS = credentials('dhis2-default')
     ALLURE_REPORT_DIR_PATH = 'allure'
     ALLURE_RESULTS_DIR = 'reports/allure-results'
