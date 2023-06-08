@@ -4,16 +4,15 @@ export const EVENT_VISUALIZER_APP_URL = "dhis-web-event-visualizer";
 export const MAPS_APP_URL = "dhis-web-maps"; 
 export const LINE_LISTING_APP = "api/apps/line-listing/index.html";
 export const Selectors = {
-  AO_TITLE: '[data-test="AO-title"]',
+  TITLEBAR: '[data-test="titlebar"]',
   LOADER: '[data-test="dhis2-uicore-circularloader"]',
-  VISUALIZATION_TITLE: '[data-test="visualization-title"]'
 }
 
 export const MAP_CONTAINER = "#dhis2-map-container .dhis2-map";
 
 export const loadVisualisation = ( uid ) => {
   cy.visit(`${DATA_VISUALIZER_APP_URL}/#/${uid}`);
-  waitForVisualization(Selectors.AO_TITLE);
+  waitForVisualization(Selectors.TITLEBAR);
 }
 export const loadEventReport = ( uid ) => {
   return cy.visit(`${EVENT_REPORTS_APP_URL}/?id=${uid}`).waitForResources();
@@ -30,7 +29,7 @@ export const loadMap = ( uid ) => {
 
 export const loadLineList = ( uid ) =>  {
   cy.visit(`${LINE_LISTING_APP}#/${uid}`);
-  waitForVisualization(Selectors.VISUALIZATION_TITLE);
+  waitForVisualization(Selectors.TITLEBAR);
 }
 
 export const waitForVisualization = ( title ) => {   // workaround while waiting for consistent data-test for VISUALIZATION_TITLE
