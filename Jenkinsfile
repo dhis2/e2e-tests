@@ -2,6 +2,25 @@
 
 boolean isOnMasterOrMaintenanceVersionBranch = env.BRANCH_NAME == "master" || env.BRANCH_NAME.startsWith("v")
 
+def uploadNewDatabase(String groupName, String version) {
+  def databaseName = "Sierra Leone - ${version}.sql.gz"
+
+  echo "Downloading database for $version"
+  sh "curl -f https://databases.dhis2.org/sierra-leone/$version/dhis2-db-sierra-leone.sql.gz -o \"$databaseName\""
+
+  return sh(
+      returnStdout: true,
+      script: "./upload.sh $groupName \"$databaseName\" | jq -r '.ID'"
+  ).trim()
+}
+
+def findDatabaseId(String groupName, String version) {
+  return sh(
+      returnStdout: true,
+      script: "./list.sh | jq -r '.[] | select(.Name == \"$groupName\") .Databases[] | select(.Name == \"Sierra Leone - ${version}.sql.gz\") .ID'"
+  ).trim()
+}
+
 pipeline {
   agent {
     label 'ec2-jdk11'
@@ -55,13 +74,29 @@ pipeline {
               gitHelper.sparseCheckout('https://github.com/dhis2-sre/im-manager', 'master', '/scripts')
 
               dir('scripts/databases') {
-                env.DATABASE_ID = sh(
-                    returnStdout: true,
-                    script: "./list.sh | jq -r '.[] | select(.Name == \"$INSTANCE_GROUP_NAME\") .Databases[] | select(.Name == \"Sierra Leone - ${DHIS2_VERSION}.sql.gz\") .ID'"
-                ).trim()
+                env.DATABASE_ID = findDatabaseId(INSTANCE_GROUP_NAME, DHIS2_VERSION)
+
+                if (!env.DATABASE_ID) {
+                  echo "Couldn't find database for $DHIS2_VERSION"
+
+                  try {
+                    env.DATABASE_ID = uploadNewDatabase(INSTANCE_GROUP_NAME, DHIS2_VERSION)
+                  } catch (err) {
+                    echo "Couldn't download database for ${DHIS2_VERSION}: ${err}"
+
+                    DHIS2_SHORT_VERSION = DHIS2_VERSION.split('\\.').take(2).join('.')
+                    env.DATABASE_ID = findDatabaseId(INSTANCE_GROUP_NAME, DHIS2_SHORT_VERSION)
+
+                    if (!env.DATABASE_ID) {
+                      echo "Couldn't find database for $DHIS2_SHORT_VERSION"
+
+                      env.DATABASE_ID = uploadNewDatabase(INSTANCE_GROUP_NAME, DHIS2_SHORT_VERSION)
+                    }
+                  }
+                }
 
                 sh '[ -n "$DATABASE_ID" ]'
-                echo "DATABASE_ID is $DATABASE_ID for version $DHIS2_VERSION"
+                echo "DATABASE_ID is $DATABASE_ID"
               }
 
               dir('scripts/instances') {
