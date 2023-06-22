@@ -10,14 +10,14 @@ def uploadNewDatabase(String groupName, String version) {
 
   return sh(
       returnStdout: true,
-      script: "./upload.sh $groupName \"$databaseName\" | jq -r '.ID'"
+      script: "./upload.sh $groupName \"$databaseName\" | jq -r '.id'"
   ).trim()
 }
 
 def findDatabaseId(String groupName, String version) {
   return sh(
       returnStdout: true,
-      script: "./list.sh | jq -r '.[] | select(.Name == \"$groupName\") .Databases[] | select(.Name == \"Sierra Leone - ${version}.sql.gz\") .ID'"
+      script: "./list.sh | jq -r '.[] | select(.name == \"$groupName\") .databases[] | select(.name == \"Sierra Leone - ${version}.sql.gz\") .id'"
   ).trim()
 }
 
