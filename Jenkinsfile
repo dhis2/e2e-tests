@@ -71,7 +71,7 @@ pipeline {
         script {
           withCredentials([usernamePassword(credentialsId: 'e2e-im-user', passwordVariable: 'PASSWORD', usernameVariable: 'USER_EMAIL')]) {
             dir('im-manager') {
-              gitHelper.sparseCheckout('https://github.com/dhis2-sre/im-manager', 'master', '/scripts')
+              gitHelper.sparseCheckout('https://github.com/dhis2-sre/im-manager', 'refs/tags/v0.23.0', '/scripts')
 
               dir('scripts/databases') {
                 env.DATABASE_ID = findDatabaseId(INSTANCE_GROUP_NAME, DHIS2_VERSION)
