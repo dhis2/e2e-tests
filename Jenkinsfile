@@ -42,6 +42,7 @@ pipeline {
     DHIS2_VERSION = "${env.TARGET_BRANCH == 'master' ? 'dev' : env.REF_BASED_VERSION.replaceAll('-rc', '')}"
     IMAGE_TAG = "${env.TARGET_BRANCH == 'master' ? 'latest' : env.REF_BASED_VERSION}"
     IMAGE_REPOSITORY = "${env.TAG_NAME ? 'core' : 'core-dev'}"
+    IM_REPO_URL = 'https://github.com/dhis2-sre/im-manager'
     IM_ENVIRONMENT = 'prod.test.c.dhis2.org'
     IM_HOST = "https://api.im.$IM_ENVIRONMENT"
     INSTANCE_GROUP_NAME = 'qa'
@@ -71,7 +72,7 @@ pipeline {
         script {
           withCredentials([usernamePassword(credentialsId: 'e2e-im-user', passwordVariable: 'PASSWORD', usernameVariable: 'USER_EMAIL')]) {
             dir('im-manager') {
-              gitHelper.sparseCheckout('https://github.com/dhis2-sre/im-manager', 'master', '/scripts')
+              gitHelper.sparseCheckout(IM_REPO_URL, "${gitHelper.getLatestTag(IM_REPO_URL)}", '/scripts')
 
               dir('scripts/databases') {
                 env.DATABASE_ID = findDatabaseId(INSTANCE_GROUP_NAME, DHIS2_VERSION)
