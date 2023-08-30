@@ -1,6 +1,6 @@
 import requests, os, time
 from datetime import datetime
-URL = "https://test.tools.dhis2.org/reportportal/api/v1/dhis2_auto"
+URL = "https://test.reports.dhis2.org/api/v1/dhis2_auto"
 RP_TOKEN = os.getenv('RP_TOKEN')
 CI_BUILD_ID = os.getenv('CI_BUILD_ID')
 LAUNCH_BRANCH_VERSION = os.getenv('LAUNCH_BRANCH_VERSION')

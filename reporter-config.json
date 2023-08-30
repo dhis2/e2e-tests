@@ -6,14 +6,14 @@
     "testCycle": "automated-tests"
   },
   "reportportalAgentJsCypressReporterOptions": {
-    "endpoint": "https://test.tools.dhis2.org/reportportal/api/v1",
+    "endpoint": "https://test.reports.dhis2.org/api/v1",
     "launch": "e2e_tests_master",
     "project": "dhis2_auto",
     "description": "",
     "attributes": [
       {
-          "key": "version",
-          "value": "master"
+        "key": "version",
+        "value": "master"
       }
     ],
     "debug": false,
