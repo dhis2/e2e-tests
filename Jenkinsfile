@@ -153,7 +153,7 @@ pipeline {
             sh 'docker-compose up --exit-code-from cypress-tests'
           }
 
-          // sh 'python3 merge_rp_launches.py'
+          sh 'python3 merge_rp_launches.py'
         }
       }
     }
