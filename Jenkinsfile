@@ -46,6 +46,7 @@ pipeline {
     IM_ENVIRONMENT = 'im.dhis2.org'
     IM_HOST = "https://api.$IM_ENVIRONMENT"
     INSTANCE_GROUP_NAME = 'qa'
+    DATABASE_GROUP_NAME = 'sl'
     INSTANCE_NAME = "e2e-cy-${env.GIT_BRANCH.replaceAll("\\P{Alnum}", "").toLowerCase()}-$BUILD_NUMBER"
     INSTANCE_DOMAIN = "https://${INSTANCE_GROUP_NAME}.$IM_ENVIRONMENT"
     INSTANCE_URL = "$INSTANCE_DOMAIN/$INSTANCE_NAME"
@@ -75,23 +76,23 @@ pipeline {
               gitHelper.sparseCheckout(IM_REPO_URL, "${gitHelper.getLatestTag(IM_REPO_URL)}", '/scripts')
 
               dir('scripts/databases') {
-                env.DATABASE_ID = findDatabaseId(INSTANCE_GROUP_NAME, DHIS2_VERSION)
+                env.DATABASE_ID = findDatabaseId(DATABASE_GROUP_NAME, DHIS2_VERSION)
 
                 if (!env.DATABASE_ID) {
                   echo "Couldn't find database for $DHIS2_VERSION"
 
                   try {
-                    env.DATABASE_ID = uploadNewDatabase(INSTANCE_GROUP_NAME, DHIS2_VERSION)
+                    env.DATABASE_ID = uploadNewDatabase(DATABASE_GROUP_NAME, DHIS2_VERSION)
                   } catch (err) {
                     echo "Couldn't download database for ${DHIS2_VERSION}: ${err}"
 
                     DHIS2_SHORT_VERSION = DHIS2_VERSION.split('\\.').take(2).join('.')
-                    env.DATABASE_ID = findDatabaseId(INSTANCE_GROUP_NAME, DHIS2_SHORT_VERSION)
+                    env.DATABASE_ID = findDatabaseId(DATABASE_GROUP_NAME, DHIS2_SHORT_VERSION)
 
                     if (!env.DATABASE_ID) {
                       echo "Couldn't find database for $DHIS2_SHORT_VERSION"
 
-                      env.DATABASE_ID = uploadNewDatabase(INSTANCE_GROUP_NAME, DHIS2_SHORT_VERSION)
+                      env.DATABASE_ID = uploadNewDatabase(DATABASE_GROUP_NAME, DHIS2_SHORT_VERSION)
                     }
                   }
                 }
