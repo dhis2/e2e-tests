@@ -3,21 +3,21 @@
 boolean isOnMasterOrMaintenanceVersionBranch = env.BRANCH_NAME == "master" || env.BRANCH_NAME.startsWith("v")
 
 def uploadNewDatabase(String groupName, String version) {
-  def databaseName = "Sierra Leone - ${version}.sql.gz"
+  def databaseName = "${version}.sql.gz"
 
   echo "Downloading database for $version"
   sh "curl -f https://databases.dhis2.org/sierra-leone/$version/dhis2-db-sierra-leone.sql.gz -o \"$databaseName\""
 
   return sh(
       returnStdout: true,
-      script: "./upload.sh $groupName \"$databaseName\" | jq -r '.id'"
+      script: "./upload.sh $groupName \"sierra-leone/$databaseName\" | jq -r '.id'"
   ).trim()
 }
 
 def findDatabaseId(String groupName, String version) {
   return sh(
       returnStdout: true,
-      script: "./list.sh | jq -r '.[] | select(.name == \"$groupName\") .databases[] | select(.name == \"Sierra Leone - ${version}.sql.gz\") .id'"
+      script: "./list.sh | jq -r '.[] | select(.name == \"$groupName\") .databases[] | select(.name == \"sierra-leone/${version}.sql.gz\") .id'"
   ).trim()
 }
 
@@ -46,7 +46,7 @@ pipeline {
     IM_ENVIRONMENT = 'im.dhis2.org'
     IM_HOST = "https://api.$IM_ENVIRONMENT"
     INSTANCE_GROUP_NAME = 'qa'
-    DATABASE_GROUP_NAME = 'sl'
+    DATABASE_GROUP_NAME = 'test-dbs'
     INSTANCE_NAME = "e2e-cy-${env.GIT_BRANCH.replaceAll("\\P{Alnum}", "").toLowerCase()}-$BUILD_NUMBER"
     INSTANCE_DOMAIN = "https://${INSTANCE_GROUP_NAME}.$IM_ENVIRONMENT"
     INSTANCE_URL = "$INSTANCE_DOMAIN/$INSTANCE_NAME"
