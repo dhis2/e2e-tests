@@ -10,7 +10,7 @@ def uploadNewDatabase(String groupName, String version) {
 
   return sh(
       returnStdout: true,
-      script: "./upload.sh $groupName \"sierra-leone/$databaseName\" | jq -r '.id'"
+      script: "./upload.sh $groupName \"sierra-leone/$databaseName\" $databaseName | jq -r '.id'"
   ).trim()
 }
 
