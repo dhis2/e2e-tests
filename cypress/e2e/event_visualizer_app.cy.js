@@ -8,6 +8,11 @@ describe('Event visualizer -> DHIS2-9193', { tags: ['smoke'] }, () => {
   })
   eventCharts.forEach( chart  => {
     it(chart.displayName, () => {
+      cy.setTestDescription('TEST DESCRIPTION...')
+      cy.addTestAttributes([
+        { key: 'feature', value: 'TESTFEATURE' },
+        { key: 'type', value: 'TESTFEATURETYPE' },
+      ])
       loadEventChart(chart.id); 
 
       cy.getConsoleLogs().should((logs) => {
