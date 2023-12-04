@@ -1,6 +1,6 @@
 import './commands/wait.js'
 import './commands/logs.js'
-//require('@reportportal/agent-js-cypress/lib/commands/reportPortalCommands');
+require('@reportportal/agent-js-cypress/lib/commands/reportPortalCommands');
 
 // Cypress throws an exception in dashboard tests when scrolling/using the viewport.
 // This disables that exception.
