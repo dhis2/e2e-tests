@@ -16,6 +16,7 @@ describe('Event visualizer -> DHIS2-9193', { tags: ['smoke'] }, () => {
         { key: 'type', value: 'TESTFEATURETYPE' },
       ])
       cy.setTestCaseId('REQ-123');
+      cy.setTestCaseId('EVENT_VISUALIZER_SUITE_TestCaseId', 'EVENT_VISUALIZER_SUITE_ID');
       loadEventChart(chart.id); 
 
       cy.getConsoleLogs().should((logs) => {
