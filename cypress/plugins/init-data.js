@@ -99,6 +99,10 @@ async function install(config) {
   //   console.log('EVENT VISUALIZATIONS: ')
   //   console.table(config.env.eventVisualizations);
   // })
+
+  } catch (error) {
+    console.error('Error in install function:', error);
+  }
 }
 
 module.exports = { install };
