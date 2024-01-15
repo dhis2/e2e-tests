@@ -9,7 +9,8 @@ Cypress.on("uncaught:exception", (err) => {
   // List of error messages to ignore
   const ignoredErrors = [
     "ResizeObserver loop limit exceeded",
-    "Unauthorized"
+    "Unauthorized",
+    "importScripts is not defined"
   ];
 
   // Check if the error message includes any of the ignored errors

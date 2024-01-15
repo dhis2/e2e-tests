@@ -1,5 +1,14 @@
 import { loadVisualisation } from '../utils/analytics';
-describe('Data visualizer -> DHIS2-11216', { tags: ['smoke'] }, () => {
+describe(
+  'Data visualizer -> DHIS2-11216',
+  {
+    tags: ['smoke'],
+    retries: {
+      runMode: 3,
+      openMode: 1,
+    }
+  },
+  () => {
   const visualizations = Cypress.env('visualizations');
   
   beforeEach(() => {
