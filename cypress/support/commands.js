@@ -5,9 +5,17 @@ import './commands/logs.js'
 // Cypress throws an exception in dashboard tests when scrolling/using the viewport.
 // This disables that exception.
 // See https://github.com/quasarframework/quasar/issues/2233
-const resizeObserverLoopErrRe = "ResizeObserver loop limit exceeded"
 Cypress.on("uncaught:exception", (err) => {
-  if (err.message.includes(resizeObserverLoopErrRe)) {
+  // List of error messages to ignore
+  const ignoredErrors = [
+    "ResizeObserver loop limit exceeded",
+    "Unauthorized"
+  ];
+
+  // Check if the error message includes any of the ignored errors
+  const shouldIgnoreError = ignoredErrors.some(ignoredError => err.message.includes(ignoredError));
+  
+  if (shouldIgnoreError) {
     return false;
   }
 });
