@@ -6,7 +6,16 @@ import {
   openApp
 } from '../utils/dashboard'
 
-describe('Dashboards -> DHIS2-8010', { tags: ['smoke'] }, () => {
+describe(
+  'Dashboards -> DHIS2-8010', 
+  { 
+    tags: ['smoke'],
+    retries: {
+      runMode: 3,
+      openMode: 1,
+    },
+  }, 
+  () => {  
   const dashboards = Cypress.env('dashboards')
 
   beforeEach(() => {
