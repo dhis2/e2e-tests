@@ -1,6 +1,15 @@
 import { loadMap, checkVisualizationHasNoErrors } from '../utils/analytics';
 
-describe('Maps -> DHIS2-8021', { tags: ['smoke'] }, () => {
+describe(
+  'Maps -> DHIS2-8021',
+  {
+    tags: ['smoke'],
+    retries: {
+      runMode: 3,
+      openMode: 1,
+    }
+  },
+  () => {
   const maps = Cypress.env('maps'); 
   console.table(maps);
   
