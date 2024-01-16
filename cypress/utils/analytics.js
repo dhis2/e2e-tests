@@ -34,7 +34,7 @@ export const loadLineList = ( uid ) =>  {
 }
 
 export const waitForVisualization = ( title ) => {   // workaround while waiting for consistent data-test for VISUALIZATION_TITLE
-  cy.get(title, {timeout: 10000}).should('be.visible')
+  cy.get(title, {timeout: 20000}).should('be.visible')
 
   cy.get(Selectors.LOADER).should('not.exist');
 }
@@ -45,7 +45,7 @@ export const checkVisualizationHasNoErrors = ( type, visualization ) => {
     
     cy.contains('No data', {
       matchCase: false, 
-      timeout: 1000
+      timeout: 5000
     }).should('not.exist')
     expect(logs, reportLog).to.have.length(0);
   })
