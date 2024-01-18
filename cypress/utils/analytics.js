@@ -6,7 +6,7 @@ export const LINE_LISTING_APP = "api/apps/line-listing/index.html";
 export const Selectors = {
   AO_TITLE: '[data-test="AO-title"]',
   LOADER: '[data-test="dhis2-uicore-circularloader"]',
-  VISUALIZATION_TITLE: '[data-test="visualization-title"]'
+  VISUALIZATION_TITLE: '[data-test="titlebar"]'
 }
 
 export const MAP_CONTAINER = "#dhis2-map-container .dhis2-map";
