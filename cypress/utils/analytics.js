@@ -4,6 +4,7 @@ export const EVENT_VISUALIZER_APP_URL = "dhis-web-event-visualizer";
 export const MAPS_APP_URL = "dhis-web-maps"; 
 export const LINE_LISTING_APP = "api/apps/line-listing/index.html";
 export const Selectors = {
+  AO_TITLE: '[data-test="AO-title"]',
   LOADER: '[data-test="dhis2-uicore-circularloader"]',
   VISUALIZATION_TITLE: '[data-test="titlebar"]'
 }
@@ -12,7 +13,7 @@ export const MAP_CONTAINER = "#dhis2-map-container .dhis2-map";
 
 export const loadVisualisation = ( uid ) => {
   cy.visit(`${DATA_VISUALIZER_APP_URL}/#/${uid}`);
-  waitForVisualization(Selectors.VISUALIZATION_TITLE);
+  waitForVisualization(Selectors.AO_TITLE);
 }
 export const loadEventReport = ( uid ) => {
   return cy.visit(`${EVENT_REPORTS_APP_URL}/?id=${uid}`).waitForResources();
