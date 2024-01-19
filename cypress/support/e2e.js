@@ -14,9 +14,9 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands'
-import './hooks'
-import '@shelex/cypress-allure-plugin';
-import 'cypress-network-idle'
-import registerCypressGrep from 'cypress-grep'
-registerCypressGrep()
+import "./commands";
+import "./hooks";
+import "@shelex/cypress-allure-plugin";
+import "cypress-network-idle";
+import registerCypressGrep from "cypress-grep";
+registerCypressGrep();
