@@ -1,3 +1,3 @@
 beforeEach(() => {
-  cy.login()
-})
+  cy.login();
+});
