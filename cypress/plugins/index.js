@@ -1,7 +1,7 @@
-const allureWriter = require('@shelex/cypress-allure-plugin/writer');
-const initData = require('./init-data');
-const reportPortal = require('./report-portal');
-const logConsole = require('./record-console-errors');
+const allureWriter = require("@shelex/cypress-allure-plugin/writer");
+const initData = require("./init-data");
+const reportPortal = require("./report-portal");
+const logConsole = require("./record-console-errors");
 
 /// <reference types="cypress" />
 // ***********************************************************
@@ -27,6 +27,4 @@ module.exports = async (on, config) => {
   reportPortal.install(on, config);
   allureWriter(on, config);
   return config;
-}
-
-
+};

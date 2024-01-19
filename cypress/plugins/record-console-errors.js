@@ -1,83 +1,81 @@
-const CDP = require('chrome-remote-interface'); 
+const CDP = require("chrome-remote-interface");
 
-let messages = []
+let messages = [];
 function install(on) {
-  on('before:browser:launch', (browser = {}, launchOptions) => {
-      if (browser.family != 'chromium') {
-          log('Incopatible browser. Skipping configuration')
-          return;
-      }
-      const port = getRemoteDebuggingPort( launchOptions.args || launchOptions );
+  on("before:browser:launch", (browser = {}, launchOptions) => {
+    if (browser.family != "chromium") {
+      log("Incopatible browser. Skipping configuration");
+      return;
+    }
+    const port = getRemoteDebuggingPort(launchOptions.args || launchOptions);
 
-      const tryConnect = () => {
-        new CDP({
-          port: port
-        })
+    const tryConnect = () => {
+      new CDP({
+        port: port,
+      })
         .then((cdp) => {
-          log('Connected to Chrome Debugging Protocol')
-    
+          log("Connected to Chrome Debugging Protocol");
+
           /** captures logs from the browser */
           cdp.Console.enable();
-          cdp.Console.messageAdded(recordMessage );
+          cdp.Console.messageAdded(recordMessage);
           // Captures network logs
-          cdp.Log.enable()
-          cdp.Log.entryAdded(recordMessage)
-          cdp.on('disconnect', () => {
-            log('Chrome Debugging Protocol disconnected')
-          })
+          cdp.Log.enable();
+          cdp.Log.entryAdded(recordMessage);
+          cdp.on("disconnect", () => {
+            log("Chrome Debugging Protocol disconnected");
+          });
         })
         .catch(() => {
-          setTimeout(tryConnect, 100)
-        })
-       
-      }
+          setTimeout(tryConnect, 100);
+        });
+    };
 
-      tryConnect();
-  })
-  on('task', {
-    'console:logs'() {
+    tryConnect();
+  });
+  on("task", {
+    "console:logs"() {
       return messages;
     },
 
-    'console:clear'() {
-      messages = []
-      return null
-    }
-  })
+    "console:clear"() {
+      messages = [];
+      return null;
+    },
+  });
 }
 
-
-function recordMessage( params) {
+function recordMessage(params) {
   let message;
   if (params.entry) {
     message = params.entry;
-  }
-
-  else {
+  } else {
     message = params.message;
   }
 
   let level = message.level;
-  if ( level == 'error' ) {
-    messages.push(message)
-  }  
+  if (level == "error") {
+    messages.push(message);
+  }
 }
 
 function log(message) {
-  console.log('[record-console-errors] ' + message)
+  console.log("[record-console-errors] " + message);
 }
 
 function getRemoteDebuggingPort(args) {
-  const existing = args.find(arg => arg.slice(0, 23) === '--remote-debugging-port')
+  const existing = args.find(
+    (arg) => arg.slice(0, 23) === "--remote-debugging-port"
+  );
 
   if (existing) {
-    return Number(existing.split('=')[1])
+    return Number(existing.split("=")[1]);
   }
-  const port = 40000 + Math.round(Math.random() * 25000)
-  args.push(`--remote-debugging-port=${port}`)
-  return port
+  const port = 40000 + Math.round(Math.random() * 25000);
+  args.push(`--remote-debugging-port=${port}`);
+  return port;
 }
 
 module.exports = {
-  install
-}
+  install,
+};
