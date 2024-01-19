@@ -1,9 +1,9 @@
-const registerReportPortalPlugin = require('@reportportal/agent-js-cypress/lib/plugin');
+const registerReportPortalPlugin = require("@reportportal/agent-js-cypress/lib/plugin");
 
-const install = ( on, config) => {
+const install = (on, config) => {
   registerReportPortalPlugin(on, config);
-}
+};
 
 module.exports = {
-  install
-}
+  install,
+};
