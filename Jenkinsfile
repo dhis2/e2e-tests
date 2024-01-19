@@ -130,6 +130,17 @@ pipeline {
       }
     }
 
+    stage('Initialize Data') {
+      steps {
+        script {
+          sh 'export CYPRESS_BASE_URL="$INSTANCE_URL"'
+          sh 'export CYPRESS_LOGIN_USERNAME="admin"'
+          sh 'export CYPRESS_LOGIN_PASSWORD="district"'
+          sh 'node ./scripts/initDataScript.js'  
+        }
+      }
+    }
+
     stage('Test') {
       environment {
         JIRA_ENABLED = false

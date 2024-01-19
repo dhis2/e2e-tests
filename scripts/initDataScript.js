@@ -2,22 +2,26 @@ const axios = require("axios");
 const struts_apps = ["dhis-web-dataentry/index.action"];
 const queryParams = "?fields=displayName,id&paging=false";
 
-async function install(config) {
+async function install() {
   try {
     console.log("Initializing data");
 
+    const baseUrl = process.env.CYPRESS_BASE_URL;
+    const loginUsername = process.env.CYPRESS_LOGIN_USERNAME;
+    const loginPassword = process.env.CYPRESS_LOGIN_PASSWORD;
+
     const login = await axios.get("/api", {
-      baseURL: config.baseUrl,
+      baseURL: baseUrl,
       auth: {
-        username: config.env.LOGIN_USERNAME,
-        password: config.env.LOGIN_PASSWORD,
+        username: loginUsername,
+        password: loginPassword,
       },
     });
 
     const client = axios.create({
       withCredentials: false,
       timeout: 20000,
-      baseURL: config.baseUrl,
+      baseURL: baseUrl,
       headers: {
         Cookie: login.headers["set-cookie"][0],
       },
@@ -26,10 +30,9 @@ async function install(config) {
     const fetchData = async (url, callback) => {
       try {
         const { data } = await client.get(url, {
-          baseURL: config.baseUrl,
           auth: {
-            username: config.env.LOGIN_USERNAME,
-            password: config.env.LOGIN_PASSWORD,
+            username: loginUsername,
+            password: loginPassword,
           },
         });
         return callback(data);
@@ -43,54 +46,48 @@ async function install(config) {
       if (data) {
         const appList = struts_apps;
         appList.push(...data.flatMap((i) => i.webName));
-        config.env.apps = appList;
         console.log("APPS: ");
-        console.table(config.env.apps);
+        console.table(appList);
       }
     });
 
     // Fetch dashboards
     await fetchData("/api/dashboards" + queryParams, (data) => {
       if (data) {
-        config.env.dashboards = data.dashboards;
         console.log("DASHBOARDS:");
-        console.table(config.env.dashboards);
+        console.table(data.dashboards);
       }
     });
 
     // Fetch visualizations
     await fetchData("/api/visualizations" + queryParams, (data) => {
       if (data) {
-        config.env.visualizations = data.visualizations;
         console.log("VISUALIZATIONS:");
-        console.table(config.env.visualizations);
+        console.table(data.visualizations);
       }
     });
 
     // Fetch event reports
     await fetchData("/api/eventReports.json" + queryParams, (data) => {
       if (data) {
-        config.env.eventReports = data.eventReports;
         console.log("EVENT REPORTS:");
-        console.table(config.env.eventReports);
+        console.table(data.eventReports);
       }
     });
 
     // Fetch event charts
     await fetchData("/api/eventCharts.json" + queryParams, (data) => {
       if (data) {
-        config.env.eventCharts = data.eventCharts;
         console.log("EVENT CHARTS:");
-        console.table(config.env.eventCharts);
+        console.table(data.eventCharts);
       }
     });
 
     // Fetch maps
     await fetchData("/api/maps.json" + queryParams, (data) => {
       if (data) {
-        config.env.maps = data.maps;
         console.log("MAPS:");
-        console.table(config.env.maps);
+        console.table(data.maps);
       }
     });
 
@@ -99,15 +96,16 @@ async function install(config) {
       `/api/eventVisualizations.json${queryParams}&filter=type:eq:LINE_LIST`,
       (data) => {
         if (data) {
-          config.env.eventVisualizations = data.eventVisualizations;
           console.log("EVENT VISUALIZATIONS:");
-          console.table(config.env.eventVisualizations);
+          console.table(data.eventVisualizations);
         }
       }
     );
   } catch (error) {
     console.error("Error in install function:", error);
+    process.exit(1); // Exit with an error code on failure
   }
 }
 
-module.exports = { install };
+// Execute the install function when this script is run
+install().then(() => console.log("Initialization complete."));
