@@ -136,6 +136,7 @@ stage('Initialize Data') {
       sh 'npm install axios'
       
       sh 'export CYPRESS_BASE_URL="$INSTANCE_URL"'
+      sh 'echo "Base URL: $CYPRESS_BASE_URL"'
       sh 'export CYPRESS_LOGIN_USERNAME="admin"'
       sh 'export CYPRESS_LOGIN_PASSWORD="district"'
       sh 'node ./scripts/initDataScript.js'
