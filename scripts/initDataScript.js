@@ -7,8 +7,8 @@ async function install() {
     console.log("Initializing data");
 
     const baseUrl = process.env.CYPRESS_BASE_URL;
-    const loginUsername = process.env.CYPRESS_LOGIN_USERNAME;
-    const loginPassword = process.env.CYPRESS_LOGIN_PASSWORD;
+    const loginUsername = "admin";
+    const loginPassword = "district";
 
     console.log("Attempting to connect to: ", baseUrl + "/api");
     const login = await axios.get("/api", {
