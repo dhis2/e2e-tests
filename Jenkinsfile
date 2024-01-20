@@ -130,19 +130,21 @@ pipeline {
       }
     }
 
-stage('Initialize Data') {
-  steps {
-    script {
-      sh 'npm install axios'
-      
-      sh 'export CYPRESS_BASE_URL="$INSTANCE_URL"'
-      sh 'echo "Base URL: $CYPRESS_BASE_URL"'
-      sh 'export CYPRESS_LOGIN_USERNAME="admin"'
-      sh 'export CYPRESS_LOGIN_PASSWORD="district"'
-      sh 'node ./scripts/initDataScript.js'
+    stage('Initialize Data') {
+      environment {
+        CYPRESS_BASE_URL = "$INSTANCE_URL"
+      }
+      steps {
+        script {
+          sh 'npm install axios'
+          
+          sh 'echo "Base URL: $CYPRESS_BASE_URL"'
+          sh 'export CYPRESS_LOGIN_USERNAME="admin"'
+          sh 'export CYPRESS_LOGIN_PASSWORD="district"'
+          sh 'node ./scripts/initDataScript.js'
+        }
+      }
     }
-  }
-}
 
     stage('Test') {
       environment {
