@@ -32,6 +32,13 @@ async function install() {
 
     let envData = {};
 
+    const formatDataForTable = (data) => {
+      return data.map((item) => ({
+        DisplayName: item.displayName,
+        ID: item.id,
+      }));
+    };
+
     const fetchData = async (url, envKey) => {
       try {
         const { data } = await client.get(url, {
@@ -42,7 +49,7 @@ async function install() {
         });
         envData[envKey] = data;
         console.log(`${envKey.toUpperCase()}:`);
-        console.table(data);
+        console.table(formatDataForTable(data));
       } catch (error) {
         console.error(`Error fetching data from ${url}:`, error);
       }
@@ -69,8 +76,12 @@ async function install() {
     }
 
     // Write to Cypress environment file
+    console.log("Fetched data:", envData);
+    console.log(
+      `Attempting to write environment variables to ${cypressEnvFilePath}`
+    );
     fs.writeFileSync(cypressEnvFilePath, JSON.stringify(envData, null, 2));
-    console.log(`Environment variables written to ${cypressEnvFilePath}`);
+    console.log(`Successfully written to ${cypressEnvFilePath}`);
   } catch (error) {
     console.error("Error in install function:", error);
     process.exit(1); // Exit with an error code on failure
