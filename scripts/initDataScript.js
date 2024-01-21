@@ -32,8 +32,9 @@ async function install() {
 
     let envData = {};
 
-    const formatDataForTable = (data) => {
-      return data.map((item) => ({
+    const formatDataForTable = (data, envKey) => {
+      const items = data[envKey] || [];
+      return items.map((item) => ({
         DisplayName: item.displayName,
         ID: item.id,
       }));
@@ -47,9 +48,11 @@ async function install() {
             password: loginPassword,
           },
         });
-        envData[envKey] = data;
+        console.log(`Raw data for ${envKey}:`, data);
+
+        envData[envKey] = data[envKey] || [];
         console.log(`${envKey.toUpperCase()}:`);
-        console.table(formatDataForTable(data));
+        console.table(formatDataForTable(data, envKey));
       } catch (error) {
         console.error(`Error fetching data from ${url}:`, error);
       }
