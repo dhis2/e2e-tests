@@ -58,7 +58,6 @@ async function install() {
             password: loginPassword,
           },
         });
-        console.log(`Raw data for ${envKey}:`, data);
 
         envData[envKey] = envKey === "apps" ? data : data[envKey] || [];
         console.log(`${envKey.toUpperCase()}:`);
@@ -89,12 +88,16 @@ async function install() {
     }
 
     // Write to Cypress environment file
-    console.log("Fetched data:", envData);
     console.log(
       `Attempting to write environment variables to ${cypressEnvFilePath}`
     );
-    fs.writeFileSync(cypressEnvFilePath, JSON.stringify(envData, null, 2));
-    console.log(`Successfully written to ${cypressEnvFilePath}`);
+
+    try {
+      fs.writeFileSync(cypressEnvFilePath, JSON.stringify(envData, null, 2));
+      console.log(`Successfully written to ${cypressEnvFilePath}`);
+    } catch (fileWriteError) {
+      console.error("Error writing to file:", fileWriteError);
+    }
   } catch (error) {
     console.error("Error in install function:", error);
     process.exit(1); // Exit with an error code on failure
