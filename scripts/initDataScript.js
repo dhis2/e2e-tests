@@ -33,6 +33,16 @@ async function install() {
     let envData = {};
 
     const formatDataForTable = (data, envKey) => {
+      // Special handling for "apps" as it's a direct array
+      if (envKey === "apps") {
+        return data.map((item) => ({
+          Name: item.name,
+          WebName: item.webName,
+          Version: item.version,
+        }));
+      }
+
+      // For other data, expecting an object containing an array
       const items = data[envKey] || [];
       return items.map((item) => ({
         DisplayName: item.displayName,
@@ -50,7 +60,7 @@ async function install() {
         });
         console.log(`Raw data for ${envKey}:`, data);
 
-        envData[envKey] = data[envKey] || [];
+        envData[envKey] = envKey === "apps" ? data : data[envKey] || [];
         console.log(`${envKey.toUpperCase()}:`);
         console.table(formatDataForTable(data, envKey));
       } catch (error) {
