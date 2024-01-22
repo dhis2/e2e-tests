@@ -1,5 +1,6 @@
 const axios = require("axios");
 const fs = require("fs");
+const path = require("path");
 const struts_apps = ["dhis-web-dataentry/index.action"];
 const queryParams = "?fields=displayName,id&paging=false";
 
@@ -91,6 +92,8 @@ async function install() {
     console.log(
       `Attempting to write environment variables to ${cypressEnvFilePath}`
     );
+    const fullPath = path.resolve(cypressEnvFilePath);
+    console.log(`Full path: ${fullPath}`);
 
     try {
       fs.writeFileSync(cypressEnvFilePath, JSON.stringify(envData, null, 2));
