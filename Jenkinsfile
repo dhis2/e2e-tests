@@ -142,8 +142,11 @@ pipeline {
           sh 'export CYPRESS_LOGIN_USERNAME="admin"'
           sh 'export CYPRESS_LOGIN_PASSWORD="district"'
           sh 'node ./scripts/initDataScript.js'
+          // Additional Debugging
+          sh 'pwd'
+          sh 'ls -l'
           sh 'ls -l ../cypress.env.json'
-          archiveArtifacts artifacts: '../cypress.env.json', onlyIfSuccessful: true
+          archiveArtifacts artifacts: 'cypress.env.json', onlyIfSuccessful: true
         }
       }
     }
@@ -161,8 +164,10 @@ pipeline {
 
       steps {
         script {
-          unarchive mapping: ['../cypress.env.json': 'cypress.env.json']
-          sh 'ls -l cypress.env.json'
+          unarchive mapping: ['cypress.env.json': 'cypress.env.json']
+          // Additional Debugging
+          sh 'pwd'
+          sh 'ls -l'
           sh 'cat cypress.env.json'
           // assign version to the report portal version attribute and name the launch based on the branch
           def json = sh(
