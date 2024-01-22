@@ -146,7 +146,7 @@ pipeline {
           sh 'pwd'
           sh 'ls -l'
           sh 'ls -l ../cypress.env.json'
-          archiveArtifacts artifacts: 'cypress.env.json', onlyIfSuccessful: true
+          archiveArtifacts artifacts: '/home/ubuntu/jenkins-tmp/workspace/cypress.env.json', onlyIfSuccessful: true
         }
       }
     }
@@ -164,7 +164,7 @@ pipeline {
 
       steps {
         script {
-          unarchive mapping: ['cypress.env.json': 'cypress.env.json']
+          unarchive mapping: ['/home/ubuntu/jenkins-tmp/workspace/cypress.env.json': 'cypress.env.json']
           // Additional Debugging
           sh 'pwd'
           sh 'ls -l'
