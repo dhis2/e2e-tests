@@ -142,6 +142,7 @@ pipeline {
           sh 'export CYPRESS_LOGIN_USERNAME="admin"'
           sh 'export CYPRESS_LOGIN_PASSWORD="district"'
           sh 'node ./scripts/initDataScript.js'
+          sh 'ls -l ../cypress.env.json'
           archiveArtifacts artifacts: 'cypress.env.json', onlyIfSuccessful: true
         }
       }
