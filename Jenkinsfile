@@ -142,11 +142,10 @@ pipeline {
           sh 'export CYPRESS_LOGIN_USERNAME="admin"'
           sh 'export CYPRESS_LOGIN_PASSWORD="district"'
           sh 'node ./scripts/initDataScript.js'
-          // Additional Debugging
+          sh 'ls -l ../cypress.env.json'
           sh 'pwd'
           sh 'ls -l'
-          sh 'ls -l ../cypress.env.json'
-          archiveArtifacts artifacts: '/home/ubuntu/jenkins-tmp/workspace/cypress.env.json', onlyIfSuccessful: true
+          archiveArtifacts artifacts: 'cypress.env.json', onlyIfSuccessful: true       
         }
       }
     }
