@@ -137,7 +137,6 @@ pipeline {
       steps {
         script {
           sh 'npm install axios'
-          
           sh 'echo "Base URL: $CYPRESS_BASE_URL"'
           sh 'export CYPRESS_LOGIN_USERNAME="admin"'
           sh 'export CYPRESS_LOGIN_PASSWORD="district"'
@@ -145,7 +144,7 @@ pipeline {
           sh 'ls -l ../cypress.env.json'
           sh 'pwd'
           sh 'ls -l'
-          archiveArtifacts artifacts: 'cypress.env.json', onlyIfSuccessful: true       
+          stash includes: '../cypress.env.json', name: 'cypressEnv'
         }
       }
     }
@@ -163,7 +162,7 @@ pipeline {
 
       steps {
         script {
-          unarchive mapping: ['/home/ubuntu/jenkins-tmp/workspace/cypress.env.json': 'cypress.env.json']
+          unstash 'cypressEnv'
           // Additional Debugging
           sh 'pwd'
           sh 'ls -l'
