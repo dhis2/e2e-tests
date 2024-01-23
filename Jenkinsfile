@@ -141,10 +141,9 @@ pipeline {
           sh 'export CYPRESS_LOGIN_USERNAME="admin"'
           sh 'export CYPRESS_LOGIN_PASSWORD="district"'
           sh 'node ./scripts/initDataScript.js'
-          sh 'ls -l ./scripts'
           sh 'pwd'
           sh 'ls -l'
-          stash includes: './scripts/cypress.env.json', name: 'cypressEnv'
+          stash includes: './cypress.env.json', name: 'cypressEnv'
         }
       }
     }
