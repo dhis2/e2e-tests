@@ -144,7 +144,7 @@ pipeline {
           sh 'pwd'
           sh 'ls -l'
           // stash includes: './cypress.env.json', name: 'cypressEnv'
-          archiveArtifacts artifacts: './cypress.env.json', onlyIfSuccessful: true
+          archiveArtifacts artifacts: 'cypress.env.json', onlyIfSuccessful: true
         }
       }
     }
@@ -163,7 +163,7 @@ pipeline {
       steps {
         script {
           // unstash 'cypressEnv'
-          unarchive mapping: ['./cypress.env.json': 'cypress.env.json']
+          unarchive mapping: ['cypress.env.json': 'cypress.env.json']
           // Additional Debugging
           sh 'pwd'
           sh 'ls -l'
