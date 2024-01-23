@@ -143,7 +143,8 @@ pipeline {
           sh 'node ./scripts/initDataScript.js'
           sh 'pwd'
           sh 'ls -l'
-          stash includes: './cypress.env.json', name: 'cypressEnv'
+          // stash includes: './cypress.env.json', name: 'cypressEnv'
+          archiveArtifacts artifacts: './cypress.env.json', onlyIfSuccessful: true
         }
       }
     }
@@ -161,7 +162,8 @@ pipeline {
 
       steps {
         script {
-          unstash 'cypressEnv'
+          // unstash 'cypressEnv'
+          unarchive mapping: ['./cypress.env.json': 'cypress.env.json']
           // Additional Debugging
           sh 'pwd'
           sh 'ls -l'
