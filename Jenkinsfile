@@ -145,6 +145,8 @@ pipeline {
           sh 'ls -l'
           // stash includes: './cypress.env.json', name: 'cypressEnv'
           archiveArtifacts artifacts: 'cypress.env.json', onlyIfSuccessful: true
+          sh 'mkdir -p env_files'
+          sh 'mv cypress.env.json env_files/'
         }
       }
     }
