@@ -133,11 +133,11 @@ pipeline {
     stage('Initialize Data') {
       environment {
         CYPRESS_BASE_URL = "$INSTANCE_URL"
+        CYPRESS_LOGIN_USERNAME = "admin"
+        CYPRESS_LOGIN_PASSWORD = "district"
       }
       steps {
         script {
-          sh 'export CYPRESS_LOGIN_USERNAME="admin"'
-          sh 'export CYPRESS_LOGIN_PASSWORD="district"'
           sh 'npm install axios'
           sh 'node ./scripts/initDataScript.js'
           archiveArtifacts artifacts: 'cypress.env.json', onlyIfSuccessful: true
