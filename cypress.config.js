@@ -18,22 +18,15 @@ module.exports = defineConfig({
   numTestsKeptInMemory: 0,
   e2e: {
     setupNodeEvents(on, config) {
-      console.log(`Current Working Directory: ${process.cwd()}`);
-
       // Read dynamic environment variables
       const envPath = path.resolve("/e2e/env_files", "cypress.env.json");
-      console.log(`Resolved Path for cypress.env.json: ${envPath}`);
 
       if (fs.existsSync(envPath)) {
         const dynamicEnv = JSON.parse(fs.readFileSync(envPath, "utf8"));
-        console.log(`Read environment variables:`, dynamicEnv);
         config.env = { ...config.env, ...dynamicEnv };
-      } else {
-        console.log(`cypress.env.json not found at ${envPath}`);
       }
 
       require("cypress-grep/src/plugin")(config);
-      console.log(`Final Cypress Config:`, config);
       return require("./cypress/plugins/index.js")(on, config);
     },
     baseUrl: "https://smoke.dhis2.org/dev_smoke",

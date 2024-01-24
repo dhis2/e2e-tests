@@ -136,14 +136,10 @@ pipeline {
       }
       steps {
         script {
-          sh 'npm install axios'
-          sh 'echo "Base URL: $CYPRESS_BASE_URL"'
           sh 'export CYPRESS_LOGIN_USERNAME="admin"'
           sh 'export CYPRESS_LOGIN_PASSWORD="district"'
+          sh 'npm install axios'
           sh 'node ./scripts/initDataScript.js'
-          sh 'pwd'
-          sh 'ls -l'
-          // stash includes: './cypress.env.json', name: 'cypressEnv'
           archiveArtifacts artifacts: 'cypress.env.json', onlyIfSuccessful: true
           sh 'mkdir -p env_files'
           sh 'mv cypress.env.json env_files/'
@@ -164,12 +160,7 @@ pipeline {
 
       steps {
         script {
-          // unstash 'cypressEnv'
           unarchive mapping: ['cypress.env.json': 'cypress.env.json']
-          // Additional Debugging
-          sh 'pwd'
-          sh 'ls -l'
-          sh 'cat cypress.env.json'
           // assign version to the report portal version attribute and name the launch based on the branch
           def json = sh(
             returnStdout: true,

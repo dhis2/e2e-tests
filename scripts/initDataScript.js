@@ -6,29 +6,21 @@ const queryParams = "?fields=displayName,id&paging=false";
 
 async function install() {
   try {
-    console.log("Initializing data");
-
     const baseUrl = process.env.CYPRESS_BASE_URL;
     const loginUsername = "admin";
     const loginPassword = "district";
     const cypressEnvFilePath = "./cypress.env.json";
 
-    console.log("Attempting to connect to: ", baseUrl + "/api");
     const login = await axios.get("/api", {
       baseURL: baseUrl,
-      auth: {
-        username: loginUsername,
-        password: loginPassword,
-      },
+      auth: { username: loginUsername, password: loginPassword },
     });
 
     const client = axios.create({
       withCredentials: false,
       timeout: 20000,
       baseURL: baseUrl,
-      headers: {
-        Cookie: login.headers["set-cookie"][0],
-      },
+      headers: { Cookie: login.headers["set-cookie"][0] },
     });
 
     let envData = {};
@@ -87,25 +79,13 @@ async function install() {
         ...envData.apps.flatMap((i) => i.webName),
       ];
     }
-
-    // Write to Cypress environment file
-    console.log(
-      `Attempting to write environment variables to ${cypressEnvFilePath}`
-    );
-    const fullPath = path.resolve(cypressEnvFilePath);
-    console.log(`Full path: ${fullPath}`);
-
-    try {
-      fs.writeFileSync(cypressEnvFilePath, JSON.stringify(envData, null, 2));
-      console.log(`Successfully written to ${cypressEnvFilePath}`);
-    } catch (fileWriteError) {
-      console.error("Error writing to file:", fileWriteError);
-    }
+    // Write envData to Cypress environment file
+    fs.writeFileSync(cypressEnvFilePath, JSON.stringify(envData, null, 2));
+    console.log(`Environment variables written to ${cypressEnvFilePath}`);
   } catch (error) {
-    console.error("Error in install function:", error);
-    process.exit(1); // Exit with an error code on failure
+    console.error("Initialization error:", error);
+    process.exit(1);
   }
 }
 
-// Execute the install function when this script is run
-install().then(() => console.log("Initialization complete."));
+install();
