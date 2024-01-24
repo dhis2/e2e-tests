@@ -21,8 +21,10 @@ module.exports = defineConfig({
       console.log(`Current Working Directory: ${process.cwd()}`);
 
       // Read dynamic environment variables
-      const envPath = path.resolve(__dirname, "cypress.env.json");
-      //const envPath = path.resolve(process.cwd(), "cypress.env.json");
+      const envPath = path.resolve(
+        `../../${process.cwd()}`,
+        "cypress.env.json"
+      );
       console.log(`Resolved Path for cypress.env.json: ${envPath}`);
 
       if (fs.existsSync(envPath)) {
