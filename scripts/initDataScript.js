@@ -7,8 +7,8 @@ const queryParams = "?fields=displayName,id&paging=false";
 async function install() {
   try {
     const baseUrl = process.env.CYPRESS_BASE_URL;
-    const loginUsername = "admin";
-    const loginPassword = "district";
+    const loginUsername = process.env.CYPRESS_LOGIN_USERNAME;
+    const loginPassword = process.env.CYPRESS_LOGIN_PASSWORD;
     const cypressEnvFilePath = "./cypress.env.json";
 
     const login = await axios.get("/api", {
