@@ -130,6 +130,26 @@ pipeline {
       }
     }
 
+    stage('Initialize Data') {
+      environment {
+        CYPRESS_BASE_URL = "$INSTANCE_URL"
+        CYPRESS_LOGIN_CREDENTIALS = credentials('admin_login_credentials')
+      }
+      steps {
+        script {
+          sh 'npm install axios'
+          sh '''
+            export CYPRESS_LOGIN_USERNAME=$(echo $CYPRESS_LOGIN_CREDENTIALS | cut -d: -f1)
+            export CYPRESS_LOGIN_PASSWORD=$(echo $CYPRESS_LOGIN_CREDENTIALS | cut -d: -f2)
+            node ./scripts/initDataScript.js
+          '''
+          archiveArtifacts artifacts: 'cypress.env.json', onlyIfSuccessful: true
+          sh 'mkdir -p env_files'
+          sh 'mv cypress.env.json env_files/'
+        }
+      }
+    }
+
     stage('Test') {
       environment {
         JIRA_ENABLED = false
@@ -143,6 +163,7 @@ pipeline {
 
       steps {
         script {
+          unarchive mapping: ['cypress.env.json': 'cypress.env.json']
           // assign version to the report portal version attribute and name the launch based on the branch
           def json = sh(
             returnStdout: true,
