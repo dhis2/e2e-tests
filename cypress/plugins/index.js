@@ -1,5 +1,4 @@
 const allureWriter = require("@shelex/cypress-allure-plugin/writer");
-const initData = require("./init-data");
 const reportPortal = require("./report-portal");
 const logConsole = require("./record-console-errors");
 
@@ -20,11 +19,11 @@ const logConsole = require("./record-console-errors");
 /**
  * @type {Cypress.PluginConfig}
  */
-// eslint-disable-next-line no-unused-vars
-module.exports = async (on, config) => {
-  await initData.install(config);
+module.exports = (on, config) => {
+  // Install additional plugins
   logConsole.install(on);
   reportPortal.install(on, config);
   allureWriter(on, config);
+
   return config;
 };
