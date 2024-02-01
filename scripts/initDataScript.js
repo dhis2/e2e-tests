@@ -67,10 +67,16 @@ async function install() {
     await fetchData("/api/eventReports.json" + queryParams, "eventReports");
     await fetchData("/api/eventCharts.json" + queryParams, "eventCharts");
     await fetchData("/api/maps.json" + queryParams, "maps");
-    await fetchData(
-      `/api/eventVisualizations.json${queryParams}&filter=type:eq:LINE_LIST`,
-      "eventVisualizations"
-    );
+
+    // Conditional fetching for eventVisualizations based on DHIS2 version
+    if (baseUrl.includes("v37")) {
+      console.log("Skipping eventVisualizations for DHIS2 v37");
+    } else {
+      await fetchData(
+        `/api/eventVisualizations.json${queryParams}&filter=type:eq:LINE_LIST`,
+        "eventVisualizations"
+      );
+    }
 
     // Include struts_apps in apps data
     if (envData.apps) {
@@ -79,6 +85,7 @@ async function install() {
         ...envData.apps.flatMap((i) => i.webName),
       ];
     }
+
     // Write envData to Cypress environment file
     fs.writeFileSync(cypressEnvFilePath, JSON.stringify(envData, null, 2));
     console.log(`Environment variables written to ${cypressEnvFilePath}`);
