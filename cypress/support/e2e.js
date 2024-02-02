@@ -18,5 +18,5 @@ import "./commands";
 import "./hooks";
 import "@shelex/cypress-allure-plugin";
 import "cypress-network-idle";
-import registerCypressGrep from "@cypress/grep";
+import registerCypressGrep from "@cypress/grep/src/support";
 registerCypressGrep();
