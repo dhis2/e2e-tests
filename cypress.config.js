@@ -31,6 +31,5 @@ module.exports = defineConfig({
     },
     baseUrl: "https://smoke.dhis2.org/dev_smoke",
     specPattern: "./cypress/e2e/**/*.cy.{js,jsx,ts,tsx}",
-    experimentalSessionAndOrigin: true,
   },
 });
