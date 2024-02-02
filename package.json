@@ -21,7 +21,7 @@
     "chalk": "^4.0.0",
     "chrome-remote-interface": "^0.31.2",
     "colors": "^1.4.0",
-    "cypress": "^13.6.4",
+    "cypress": "13.2.0",
     "cypress-multi-reporters": "^1.6.1",
     "cypress-network-idle": "^1.10.0",
     "cypress-parallel": "^0.9.1",
