@@ -17,6 +17,8 @@ module.exports = defineConfig({
   },
   numTestsKeptInMemory: 0,
   e2e: {
+    experimentalMemoryManagement: true,
+    numTestsKeptInMemory: 0,
     setupNodeEvents(on, config) {
       // Read dynamic environment variables
       const envPath = path.resolve("/e2e/env_files", "cypress.env.json");
