@@ -628,7 +628,7 @@ css.escape@^1.5.0:
   resolved "https://registry.yarnpkg.com/css.escape/-/css.escape-1.5.1.tgz#42e27d4fa04ae32f931a4b4d4191fa9cddee97cb"
   integrity sha512-YUifsXXuknHlUsmlgyY0PKzgPOr7/FjCePfHNt0jxm83wHZi44VDMQ7/fGNkjY3/jV1MC+1CmZbaHzugyeRtpg==
 
-cypress-grep@^3.0.2:
+cypress-grep@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/cypress-grep/-/cypress-grep-3.0.4.tgz#0a6779a3c7faec6d26e5c02495a815a2aa4b6933"
   integrity sha512-m2iYy7L7Klh1cz5WQhCKcNXGkOzeT6Y8DD8/PaxOQbsUaz7JqOUBs/W1DfY01YBVu9vhxY+5YUpaiD5LydSKkw==
