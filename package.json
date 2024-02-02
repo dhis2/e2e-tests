@@ -14,6 +14,7 @@
   "author": "Gintare Vilkelyte <vilkelyte.gintare@gmail.com>",
   "license": "ISC",
   "dependencies": {
+    "@cypress/grep": "^4.0.1",
     "@reportportal/agent-js-cypress": "^5.0.4",
     "@shelex/cypress-allure-plugin": "^2.26.5",
     "axios": "^0.27.2",
@@ -21,7 +22,6 @@
     "chrome-remote-interface": "^0.31.2",
     "colors": "^1.4.0",
     "cypress": "^13.6.4",
-    "cypress-grep": "^3.0.4",
     "cypress-multi-reporters": "^1.6.1",
     "cypress-network-idle": "^1.10.0",
     "cypress-parallel": "^0.9.1",
