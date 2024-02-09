@@ -10,7 +10,7 @@ export const Selectors = {
   WORKING_LIST_TABLE: '[data-test="main-page-working-list"]',
   NEW_EVENT_FORM: '[data-test="registration-page-content"]',
   PROGRAM_SELECTOR: '[data-test="program-selector-container"]',
-  PROGRAM_MENULIST_SELECTOR: '[data-test="dhis2-uicore-menulist"]',
+  PROGRAM_MENULIST_SELECTOR: '[data-test="virtualized-select"]',
   ORG_UNIT_CONTAINER_SELECTOR: '[data-test="org-unit-selector-container"]',
   ORG_UNIT_INPUT_SELECTOR: '[data-test="capture-ui-input"]',
 };
