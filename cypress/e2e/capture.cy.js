@@ -10,7 +10,7 @@ import {
   getCommentByValue,
 } from "../utils/capture";
 
-import { getCurrentUserDisplayName } from "../utils/api";
+import { getCurrentUserUsername } from "../utils/api";
 
 describe("Capture", () => {
   beforeEach(() => {
@@ -33,19 +33,31 @@ describe("Capture", () => {
     cy.visit(
       "dhis-web-capture/index.html#/new?orgUnitId=DiszpKrYNg8&programId=q04UBOqq3rp"
     );
-    cy.intercept("POST", "**/tracker*").as("post");
 
+    let interceptRoute = "";
+    if (Cypress.config("baseUrl").includes("v37")) {
+      interceptRoute = "**/events*";
+    } else {
+      interceptRoute = "**/tracker*";
+    }
+
+    cy.intercept("POST", interceptRoute).as("post");
     fillEventForm();
     addComment(comment);
 
     cy.get(Selectors.SAVE_BUTTON).click();
 
     cy.wait("@post").then((interception) => {
-      cy.log(interception.response.body.bundleReport.typeReportMap["EVENT"]);
-      cy.wrap(
-        interception.response.body.bundleReport.typeReportMap["EVENT"]
-          .objectReports[0].uid
-      ).as("eventId");
+      let eventId;
+      if (Cypress.config("baseUrl").includes("v37")) {
+        eventId =
+          interception.response.body.response.importSummaries[0].reference;
+      } else {
+        eventId =
+          interception.response.body.bundleReport.typeReportMap["EVENT"]
+            .objectReports[0].uid;
+      }
+      cy.wrap(eventId).as("eventId");
     });
 
     cy.location("href").should("not.contain", "new");
@@ -54,10 +66,10 @@ describe("Capture", () => {
       openEvent(eventId);
     });
 
-    getCurrentUserDisplayName().then((displayName) => {
+    getCurrentUserUsername().then((userName) => {
       getCommentByValue(comment)
         .get("[data-test=comment-user]")
-        .should("have.text", displayName);
+        .should("have.text", userName);
     });
   });
 });
