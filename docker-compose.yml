@@ -3,7 +3,7 @@ services:
   cypress-tests:
     build: .
     image: dhis2/e2e-cy
-    shm_size: '2gb'
+    shm_size: '4gb'
     environment:
       CYPRESS_BASE_URL: ${BASE_URL:-https://smoke.dhis2.org/dev_smoke}
       CYPRESS_LOGIN_USERNAME: ${LOGIN_USERNAME:-admin}

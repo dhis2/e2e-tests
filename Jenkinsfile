@@ -53,8 +53,10 @@ pipeline {
     INSTANCE_READINESS_THRESHOLD_ENV = "${params.instance_readiness_threshold}"
     INSTANCE_TTL = "${params.keep_instance_alive ? params.keep_instance_alive_for.toInteger() * 60 : ''}"
     STARTUP_PROBE_FAILURE_THRESHOLD = 50
-    CORE_RESOURCES_REQUESTS_CPU = '450m'
-    DB_RESOURCES_REQUESTS_CPU = '450m'
+    CORE_RESOURCES_REQUESTS_CPU = '1'
+    CORE_RESOURCES_REQUESTS_MEMORY = '4Gi'
+    DB_RESOURCES_REQUESTS_CPU = '1'
+    DB_RESOURCES_REQUESTS_MEMORY = '4Gi'
     DHIS2_CREDENTIALS = credentials('dhis2-default')
     ALLURE_REPORT_DIR_PATH = 'allure'
     ALLURE_RESULTS_DIR = 'reports/allure-results'
