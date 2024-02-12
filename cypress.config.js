@@ -27,6 +27,15 @@ module.exports = defineConfig({
       }
 
       require("cypress-grep/src/plugin")(config);
+
+      // Modify browser launch options to disable GPU
+      on("before:browser:launch", (browser = {}, launchOptions) => {
+        if (browser.family === "chromium" && browser.name !== "electron") {
+          launchOptions.args.push("--disable-gpu"); // Disable GPU
+        }
+        return launchOptions;
+      });
+
       return require("./cypress/plugins/index.js")(on, config);
     },
     baseUrl: "https://smoke.dhis2.org/dev_smoke",
