@@ -52,6 +52,8 @@ pipeline {
     INSTANCE_URL = "$INSTANCE_DOMAIN/$INSTANCE_NAME"
     INSTANCE_READINESS_THRESHOLD_ENV = "${params.instance_readiness_threshold}"
     INSTANCE_TTL = "${params.keep_instance_alive ? params.keep_instance_alive_for.toInteger() * 60 : ''}"
+    LIVENESS_PROBE_TIMEOUT_SECONDS = 3
+    READINESS_PROBE_TIMEOUT_SECONDS = 3
     STARTUP_PROBE_FAILURE_THRESHOLD = 50
     CORE_RESOURCES_REQUESTS_CPU = '450m'
     DB_RESOURCES_REQUESTS_CPU = '450m'
