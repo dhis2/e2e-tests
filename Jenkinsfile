@@ -205,7 +205,7 @@ pipeline {
             withCredentials([usernamePassword(credentialsId: 'e2e-im-user', passwordVariable: 'PASSWORD', usernameVariable: 'USER_EMAIL')]) {
               echo 'Deleting DHIS2 instance ...'
 
-              sh "./destroy.sh $INSTANCE_GROUP_NAME $INSTANCE_NAME"
+              sh "./destroy-deployment.sh \$(./findByName.sh $INSTANCE_GROUP_NAME $INSTANCE_NAME | jq -r '.id')"
             }
           }
         }
