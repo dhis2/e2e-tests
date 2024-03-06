@@ -21,14 +21,37 @@ def findDatabaseId(String groupName, String version) {
   ).trim()
 }
 
+def getLowestSupportedVersion() {
+    try {
+        def lowestSupportedVersion = sh(
+            script: 'curl -fsSL "https://releases.dhis2.org/v1/versions/stable.json" | jq -r \'[.versions[] | select(.supported == true) .version] | min\'',
+            returnStdout: true
+        ).trim()
+        
+        if (lowestSupportedVersion.isInteger()) {
+            return lowestSupportedVersion
+        } else {
+            echo "Warning: Failed to parse the lowest supported version as an integer. Using default version."
+            return '40'
+        }
+    } catch (Exception e) {
+        echo "Error fetching the lowest supported version: ${e.getMessage()}"
+        echo "Using default version due to error."
+        return '40'
+    }
+}
+
 def getCronForBranch(String branchName) {
-    int baseVersion = params.min_version_for_scheduling.toInteger()
+    def lowestSupportedVersion = getLowestSupportedVersion().toInteger()
     if (branchName == "master") {
         return '0 0 * * *' // 0 AM (midnight) for master
     } else if (branchName.matches("v\\d+")) {
         int versionNumber = branchName.replaceAll("[^\\d]", "").toInteger()
-        int hourOffset = (versionNumber - baseVersion) * 2
+        int hourOffset = (versionNumber - lowestSupportedVersion) * 2
         int scheduledHour = 2 + hourOffset
+        if (scheduledHour >= 24) {
+            scheduledHour -= 24
+        }
         return "0 ${scheduledHour} * * *"
     }
     return '0 22 * * *' // 10 PM for any other branch not matching the pattern
@@ -47,7 +70,6 @@ pipeline {
     booleanParam(name: 'keep_instance_alive', defaultValue: false, description: 'Keep the instance alive after the build is done.')
     string(name: 'keep_instance_alive_for', defaultValue: '300', description: 'Duration (in minutes) to keep the intance alive for.')
     string(name: 'instance_readiness_threshold', defaultValue: '15', description: 'Duration (in minutes) to wait for the instance to get ready.')
-    string(name: 'min_version_for_scheduling', defaultValue: '37', description: 'Lowest dhis2 core version supported.')
   }
 
   environment {
