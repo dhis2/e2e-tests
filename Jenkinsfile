@@ -21,6 +21,18 @@ def findDatabaseId(String groupName, String version) {
   ).trim()
 }
 
+def getCronForBranch(String branchName) {
+    if (branchName == "master") {
+        return '0 0 * * *' // 0 AM (midnight) for master
+    } else if (branchName.matches("v\\d+")) {
+        int versionNumber = branchName.replaceAll("[^\\d]", "").toInteger()
+        int hourOffset = (versionNumber - 37) * 2
+        int scheduledHour = 2 + hourOffset
+        return "0 ${scheduledHour} * * *"
+    }
+    return '0 22 * * *' // 10 PM for any other branch not matching the pattern
+}
+
 pipeline {
   agent {
     label 'ec2-jdk11'
@@ -66,7 +78,7 @@ pipeline {
   }
 
   triggers {
-    cron(isOnMasterOrMaintenanceVersionBranch ? 'H 6 * * 1-5' : '')
+    cron(isOnMasterOrMaintenanceVersionBranch ? getCronForBranch(env.BRANCH_NAME) : '')
   }
 
   stages {
