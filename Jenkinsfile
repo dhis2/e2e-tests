@@ -22,11 +22,12 @@ def findDatabaseId(String groupName, String version) {
 }
 
 def getCronForBranch(String branchName) {
+    int baseVersion = params.min_version_for_scheduling.toInteger()
     if (branchName == "master") {
         return '0 0 * * *' // 0 AM (midnight) for master
     } else if (branchName.matches("v\\d+")) {
         int versionNumber = branchName.replaceAll("[^\\d]", "").toInteger()
-        int hourOffset = (versionNumber - 37) * 2
+        int hourOffset = (versionNumber - baseVersion) * 2
         int scheduledHour = 2 + hourOffset
         return "0 ${scheduledHour} * * *"
     }
@@ -46,6 +47,7 @@ pipeline {
     booleanParam(name: 'keep_instance_alive', defaultValue: false, description: 'Keep the instance alive after the build is done.')
     string(name: 'keep_instance_alive_for', defaultValue: '300', description: 'Duration (in minutes) to keep the intance alive for.')
     string(name: 'instance_readiness_threshold', defaultValue: '15', description: 'Duration (in minutes) to wait for the instance to get ready.')
+    string(name: 'min_version_for_scheduling', defaultValue: '37', description: 'Lowest dhis2 core version supported.')
   }
 
   environment {
