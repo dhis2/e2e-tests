@@ -22,23 +22,16 @@ def findDatabaseId(String groupName, String version) {
 }
 
 def getLowestSupportedVersion() {
-    try {
-        def lowestSupportedVersion = sh(
-            script: 'curl -fsSL "https://releases.dhis2.org/v1/versions/stable.json" | jq -r \'[.versions[] | select(.supported == true) .version] | min\'',
-            returnStdout: true
-        ).trim()
-        
-        if (lowestSupportedVersion.isInteger()) {
-            return lowestSupportedVersion
-        } else {
-            echo "Warning: Failed to parse the lowest supported version as an integer. Using default version."
-            return '40'
-        }
-    } catch (Exception e) {
-        echo "Error fetching the lowest supported version: ${e.getMessage()}"
-        echo "Using default version due to error."
-        return '40'
+    def lowestSupportedVersion = sh(
+        script: 'curl -fsSL "https://releases.dhis2.org/v1/versions/stable.json" | jq -r \'[.versions[] | select(.supported == true) .version] | min\'',
+        returnStdout: true
+    ).trim()
+    
+    if (!lowestSupportedVersion.isInteger()) {
+        echo "Notice: Fetched lowest supported version is not an integer. Verify fetched data."
     }
+    
+    return lowestSupportedVersion
 }
 
 def getCronForBranch(String branchName) {
@@ -49,9 +42,6 @@ def getCronForBranch(String branchName) {
         int versionNumber = branchName.replaceAll("[^\\d]", "").toInteger()
         int hourOffset = (versionNumber - lowestSupportedVersion) * 2
         int scheduledHour = 2 + hourOffset
-        if (scheduledHour >= 24) {
-            scheduledHour -= 24
-        }
         return "0 ${scheduledHour} * * *"
     }
     return '0 22 * * *' // 10 PM for any other branch not matching the pattern
