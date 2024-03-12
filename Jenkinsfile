@@ -21,21 +21,21 @@ def findDatabaseId(String groupName, String version) {
   ).trim()
 }
 
-String getCronForBranch(String branchName) {
-    switch (branchName) {
-        case "master":
-            return '0 0 * * *' // Midnight for master
-        case "v37":
-            return '0 2 * * *' // 2 AM for v37
-        case "v38":
-            return '0 4 * * *' // 4 AM for v38
-        case "v39":
-            return '0 6 * * *' // 6 AM for v39
-        case "v40":
-            return '0 8 * * *' // 8 AM for v40
-        default:
-            return '0 22 * * *' // 10 PM for any other branch
+def getCronForBranch(String branchName) {
+    // Define the base hour for the oldest supported version
+    int baseHour = 2 // Starting at 2 AM for v37
+    int baseVersion = 37
+
+    if (branchName == "master") {
+        return '0 0 * * *' // Midnight for master
+    } else if (branchName.matches("v\\d+")) {
+        int versionNumber = branchName.replaceAll("[^\\d]", "").toInteger()
+        // Calculate the hour offset from the base version
+        int hourOffset = (versionNumber - baseVersion) * 2
+        int scheduledHour = baseHour + hourOffset
+        return "0 ${scheduledHour} * * *"
     }
+    return '0 22 * * *' // Default to 10 PM for any other branch
 }
 
 pipeline {
