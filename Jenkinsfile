@@ -21,30 +21,21 @@ def findDatabaseId(String groupName, String version) {
   ).trim()
 }
 
-def getLowestSupportedVersion() {
-    def lowestSupportedVersion = sh(
-        script: 'curl -fsSL "https://releases.dhis2.org/v1/versions/stable.json" | jq -r \'[.versions[] | select(.supported == true) .version] | min\'',
-        returnStdout: true
-    ).trim()
-    
-    if (!lowestSupportedVersion.isInteger()) {
-        echo "Notice: Fetched lowest supported version is not an integer. Verify fetched data."
+String getCronForBranch(String branchName) {
+    switch (branchName) {
+        case "master":
+            return '0 0 * * *' // Midnight for master
+        case "v37":
+            return '0 2 * * *' // 2 AM for v37
+        case "v38":
+            return '0 4 * * *' // 4 AM for v38
+        case "v39":
+            return '0 6 * * *' // 6 AM for v39
+        case "v40":
+            return '0 8 * * *' // 8 AM for v40
+        default:
+            return '0 22 * * *' // 10 PM for any other branch
     }
-    
-    return lowestSupportedVersion
-}
-
-def getCronForBranch(String branchName) {
-    def lowestSupportedVersion = getLowestSupportedVersion().toInteger()
-    if (branchName == "master") {
-        return '0 0 * * *' // 0 AM (midnight) for master
-    } else if (branchName.matches("v\\d+")) {
-        int versionNumber = branchName.replaceAll("[^\\d]", "").toInteger()
-        int hourOffset = (versionNumber - lowestSupportedVersion) * 2
-        int scheduledHour = 2 + hourOffset
-        return "0 ${scheduledHour} * * *"
-    }
-    return '0 22 * * *' // 10 PM for any other branch not matching the pattern
 }
 
 pipeline {
@@ -92,7 +83,7 @@ pipeline {
   }
 
   triggers {
-    cron(isOnMasterOrMaintenanceVersionBranch ? getCronForBranch(env.BRANCH_NAME) : '')
+    cron(getCronForBranch(env.BRANCH_NAME))
   }
 
   stages {
