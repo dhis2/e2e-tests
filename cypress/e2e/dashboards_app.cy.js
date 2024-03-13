@@ -55,22 +55,29 @@ describe(
 );
 
 function scrollDown(i = 1) {
+  const maxScrolls = 5; // Max number of scrolls to prevent potential infinite recursion
   const resolution = Cypress.config("viewportHeight");
-  if (i > 20) {
+  cy.log(`Scroll Attempt: ${i}`);
+
+  if (i > maxScrolls) {
+    cy.log("Max scrolls reached, stopping");
     return;
   }
 
   cy.get(LOADED_DASHBOARD_ITEMS).then((visibleItems) => {
     cy.get(ALL_DASHBOARD_ITEMS).then((allItems) => {
-      if (Cypress.$(allItems).length != Cypress.$(visibleItems).length) {
+      if (Cypress.$(allItems).length > Cypress.$(visibleItems).length) {
         cy.get(DASHBOARD_SCROLL_BAR)
           .scrollTo(0, resolution * i)
-          .waitForResources();
-
-        scrollDown(i + 1);
+          .then(() => {
+            cy.log(`Scrolled to position: ${resolution * i}`);
+            cy.waitForResources().then(() => {
+              scrollDown(i + 1); // Proceed to the next recursion after waitForResources completes
+            });
+          });
+      } else {
+        cy.log("All items loaded, no further scrolling required");
       }
-
-      return cy.wrap(allItems);
     });
   });
 }
