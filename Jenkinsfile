@@ -158,8 +158,8 @@ pipeline {
         script {
           sh 'npm install axios'
           sh '''
-            export CYPRESS_LOGIN_USERNAME=$(echo $CYPRESS_LOGIN_CREDENTIALS | cut -d: -f1)
-            export CYPRESS_LOGIN_PASSWORD=$(echo $CYPRESS_LOGIN_CREDENTIALS | cut -d: -f2)
+            export CYPRESS_LOGIN_USERNAME="englishB"
+            export CYPRESS_LOGIN_PASSWORD="!English123B"
             node ./scripts/initDataScript.js
           '''
           archiveArtifacts artifacts: 'cypress.env.json', onlyIfSuccessful: true
