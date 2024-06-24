@@ -11,7 +11,7 @@ describe(
   {
     tags: ["smoke"],
     retries: {
-      runMode: 3,
+      runMode: 2,
       openMode: 1,
     },
   },

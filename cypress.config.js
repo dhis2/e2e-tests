@@ -17,6 +17,8 @@ module.exports = defineConfig({
   },
   numTestsKeptInMemory: 0,
   e2e: {
+    experimentalMemoryManagement: true,
+    numTestsKeptInMemory: 0,
     setupNodeEvents(on, config) {
       // Read dynamic environment variables
       const envPath = path.resolve("/e2e/env_files", "cypress.env.json");
@@ -26,11 +28,10 @@ module.exports = defineConfig({
         config.env = { ...config.env, ...dynamicEnv };
       }
 
-      require("cypress-grep/src/plugin")(config);
+      require("@cypress/grep/src/plugin")(config);
       return require("./cypress/plugins/index.js")(on, config);
     },
     baseUrl: "https://smoke.dhis2.org/dev_smoke",
     specPattern: "./cypress/e2e/**/*.cy.{js,jsx,ts,tsx}",
-    experimentalSessionAndOrigin: true,
   },
 });
