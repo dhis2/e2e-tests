@@ -4,7 +4,7 @@ require("cypress-plugin-tab");
 export const CAPTURE_APP_URL = "dhis-web-capture";
 
 export const Selectors = {
-  NEW_EVENT_BUTTON: '[data-test="new-button"]',
+  NEW_EVENT_BUTTON: '[data-test="new-button-toggle"]',
   SAVE_BUTTON: '[data-test="main-button"]',
   NEW_EVENT_IN_SELECTED_PROGRAM_BUTTON: '[data-test="new-menuitem-one"]',
   WORKING_LIST_TABLE: '[data-test="main-page-working-list"]',
