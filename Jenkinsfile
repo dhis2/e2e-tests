@@ -59,7 +59,7 @@ pipeline {
   parameters {
     booleanParam(name: 'keep_instance_alive', defaultValue: false, description: 'Keep the instance alive after the build is done.')
     string(name: 'keep_instance_alive_for', defaultValue: '300', description: 'Duration (in minutes) to keep the intance alive for.')
-    string(name: 'instance_readiness_threshold', defaultValue: '15', description: 'Duration (in minutes) to wait for the instance to get ready.')
+    string(name: 'instance_readiness_threshold', defaultValue: '45', description: 'Duration (in minutes) to wait for the instance to get ready.')
   }
 
   environment {
@@ -81,8 +81,10 @@ pipeline {
     LIVENESS_PROBE_TIMEOUT_SECONDS = 3
     READINESS_PROBE_TIMEOUT_SECONDS = 3
     STARTUP_PROBE_FAILURE_THRESHOLD = 50
-    CORE_RESOURCES_REQUESTS_CPU = '450m'
-    DB_RESOURCES_REQUESTS_CPU = '450m'
+    CORE_RESOURCES_REQUESTS_CPU = '900m'
+    DB_RESOURCES_REQUESTS_CPU = '900m'
+    DB_RESOURCES_REQUESTS_CPU = '2500Mi'
+    DB_RESOURCES_REQUESTS_MEMORY = '500Mi'
     DHIS2_CREDENTIALS = credentials('dhis2-default')
     ALLURE_REPORT_DIR_PATH = 'allure'
     ALLURE_RESULTS_DIR = 'reports/allure-results'
