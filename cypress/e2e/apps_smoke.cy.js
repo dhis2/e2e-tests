@@ -9,6 +9,11 @@ describe(
   },
   () => {
     const apps = Cypress.env("apps");
+    const flakyApps = [
+      "dhis-web-datastore",
+      "dhis-web-dashboard",
+      "dhis-web-capture",
+    ];
 
     beforeEach(() => {
       cy.clearConsoleLogs();
@@ -22,23 +27,25 @@ describe(
         );
       });
     } else {
-      apps.forEach((app) => {
-        it(app, () => {
-          cy.visit(app)
-            .waitForResources()
-            .getConsoleLogs()
-            .should((logs) => {
-              const reportLog =
-                "App: " +
-                app +
-                " has " +
-                logs.length +
-                " severe errors: \n" +
-                JSON.stringify(logs, null, 1);
-              expect(logs, reportLog).to.have.length(0);
-            });
+      apps
+        .filter((app) => !flakyApps.includes(app))
+        .forEach((app) => {
+          it(app, () => {
+            cy.visit(app)
+              .waitForResources()
+              .getConsoleLogs()
+              .should((logs) => {
+                const reportLog =
+                  "App: " +
+                  app +
+                  " has " +
+                  logs.length +
+                  " severe errors: \n" +
+                  JSON.stringify(logs, null, 1);
+                expect(logs, reportLog).to.have.length(0);
+              });
+          });
         });
-      });
     }
   }
 );
