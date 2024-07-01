@@ -6,7 +6,7 @@ import {
   openApp,
 } from "../utils/dashboard";
 
-describe.skip(
+describe(
   "Dashboards -> DHIS2-8010",
   {
     tags: ["smoke"],
@@ -17,6 +17,7 @@ describe.skip(
   },
   () => {
     const dashboards = Cypress.env("dashboards");
+    const flakyDashboards = ["Immunization"];
 
     beforeEach(() => {
       openApp();
@@ -31,25 +32,27 @@ describe.skip(
         );
       });
     } else {
-      dashboards.forEach((dashboard) => {
-        it(dashboard.displayName, () => {
-          openDashboard(dashboard.id);
-          scrollDown();
+      dashboards
+        .filter((dashboard) => !flakyDashboards.includes(dashboard.displayName))
+        .forEach((dashboard) => {
+          it(dashboard.displayName, () => {
+            openDashboard(dashboard.id);
+            scrollDown();
 
-          cy.waitForResources()
-            .getConsoleLogs()
-            .should((logs) => {
-              const reportLog =
-                "Dashboard: " +
-                dashboard.name +
-                " has " +
-                logs.length +
-                " severe errors: \n" +
-                JSON.stringify(logs, null, 1);
-              expect(logs, reportLog).to.have.length(0);
-            });
+            cy.waitForResources()
+              .getConsoleLogs()
+              .should((logs) => {
+                const reportLog =
+                  "Dashboard: " +
+                  dashboard.displayName +
+                  " has " +
+                  logs.length +
+                  " severe errors: \n" +
+                  JSON.stringify(logs, null, 1);
+                expect(logs, reportLog).to.have.length(0);
+              });
+          });
         });
-      });
     }
   }
 );

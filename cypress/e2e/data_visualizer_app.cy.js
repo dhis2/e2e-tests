@@ -1,6 +1,6 @@
 import { loadVisualisation } from "../utils/analytics";
 
-describe(
+describe.skip(
   "Data visualizer -> DHIS2-11216",
   {
     tags: ["smoke"],

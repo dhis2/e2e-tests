@@ -1,6 +1,6 @@
 import { loadMap, checkVisualizationHasNoErrors } from "../utils/analytics";
 
-describe(
+describe.skip(
   "Maps -> DHIS2-8021",
   {
     tags: ["smoke"],

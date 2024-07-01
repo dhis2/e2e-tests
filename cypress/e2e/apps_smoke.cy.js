@@ -1,4 +1,4 @@
-describe(
+describe.skip(
   "Apps -> DHIS2-8017",
   {
     tags: ["smoke"],

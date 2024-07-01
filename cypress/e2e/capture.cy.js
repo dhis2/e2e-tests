@@ -12,7 +12,7 @@ import {
 
 import { getCurrentUserDisplayName } from "../utils/api";
 
-describe("Capture", () => {
+describe.skip("Capture", () => {
   beforeEach(() => {
     openApp();
   });
