@@ -11,7 +11,7 @@ describe(
   {
     tags: ["smoke"],
     retries: {
-      runMode: 3,
+      runMode: 2,
       openMode: 1,
     },
   },
@@ -21,6 +21,9 @@ describe(
       "Immunization",
       "Immunization data",
       "Inpatient Morbidity Mortality",
+      "Malnutrition",
+      "Measles (user org unit)",
+      "Mother and Child Health",
     ];
 
     beforeEach(() => {
