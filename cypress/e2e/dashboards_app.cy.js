@@ -24,6 +24,7 @@ describe(
       "Malnutrition",
       "Measles (user org unit)",
       "Mother and Child Health",
+      "Reporting Rates",
     ];
 
     beforeEach(() => {
