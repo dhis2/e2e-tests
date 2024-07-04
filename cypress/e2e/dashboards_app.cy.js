@@ -17,7 +17,7 @@ describe(
   },
   () => {
     const dashboards = Cypress.env("dashboards");
-    const flakyDashboards = ["Immunization"];
+    const flakyDashboards = ["Immunization", "Immunization data"];
 
     beforeEach(() => {
       openApp();
