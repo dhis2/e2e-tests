@@ -17,7 +17,7 @@ describe(
   },
   () => {
     const dashboards = Cypress.env("dashboards");
-    const flakyDashboards = ["Immunization"];
+    const flakyDashboards = [];
 
     beforeEach(() => {
       openApp();
@@ -33,7 +33,7 @@ describe(
       });
     } else {
       dashboards
-        .filter((dashboard) => flakyDashboards.includes(dashboard.displayName))
+        .filter((dashboard) => !flakyDashboards.includes(dashboard.displayName))
         .forEach((dashboard) => {
           it(dashboard.displayName, () => {
             openDashboard(dashboard.id);

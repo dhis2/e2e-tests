@@ -7,7 +7,7 @@ export const DASHBOARD_BAR_CONTAINER = "[data-test=dashboardsbar-container]";
 export const openDashboard = (uid) => {
   cy.visit(DASHBOARD_APP_URL + "/#/" + uid);
   // eslint-disable-next-line cypress/no-unnecessary-waiting
-  cy.wait(5000); // don't remove !
+  cy.wait(10000); // don't remove !
   cy.get("[data-test=dhis2-uicore-circularloader]", { timeout: 15000 }).should(
     "not.exist"
   );
