@@ -8,8 +8,9 @@ import {
 
 describe("Dashboards -> DHIS2-8010", { tags: ["smoke"] }, () => {
   const dashboards = Cypress.env("dashboards");
-  const flakyDashboards = [
-    "Immunization",
+  const flakyDashboards = [];
+  /*  const flakyDashboards = [
+      "Immunization",
     "Immunization data",
     "Inpatient Morbidity Mortality",
     "Malnutrition",
@@ -19,7 +20,7 @@ describe("Dashboards -> DHIS2-8010", { tags: ["smoke"] }, () => {
     "Staffing",
     "Reporting Reproductive Health",
   ];
-
+ */
   beforeEach(() => {
     openApp();
     cy.clearConsoleLogs();
