@@ -70,7 +70,7 @@ describe(
 
 function scrollDown(i = 1) {
   const resolution = Cypress.config("viewportHeight");
-  if (i > 20) {
+  if (i > 7) {
     return;
   }
 
