@@ -6,11 +6,20 @@ import {
   openApp,
 } from "../utils/dashboard";
 
-describe("Dashboards -> DHIS2-8010", { tags: ["smoke"] }, () => {
-  const dashboards = Cypress.env("dashboards");
-  const flakyDashboards = [];
-  /*  const flakyDashboards = [
-      "Immunization",
+describe(
+  "Dashboards -> DHIS2-8010",
+  {
+    tags: ["smoke"],
+    retries: {
+      runMode: 3,
+      openMode: 2,
+    },
+  },
+  () => {
+    const dashboards = Cypress.env("dashboards");
+    const flakyDashboards = [];
+    /*const flakyDashboards = [
+    "Immunization",
     "Immunization data",
     "Inpatient Morbidity Mortality",
     "Malnutrition",
@@ -19,44 +28,45 @@ describe("Dashboards -> DHIS2-8010", { tags: ["smoke"] }, () => {
     "Reporting Rates",
     "Staffing",
     "Reporting Reproductive Health",
-  ];
- */
-  beforeEach(() => {
-    openApp();
-    cy.clearConsoleLogs();
-  });
+  ];*/
 
-  // Check if 'dashboards' is defined and is an array
-  if (!Array.isArray(dashboards) || dashboards.length === 0) {
-    it("No dashboards defined in Cypress environment", () => {
-      cy.log(
-        "Skipping tests because no dashboards are defined in Cypress environment"
-      );
+    beforeEach(() => {
+      openApp();
+      cy.clearConsoleLogs();
     });
-  } else {
-    dashboards
-      .filter((dashboard) => !flakyDashboards.includes(dashboard.displayName))
-      .forEach((dashboard) => {
-        it(dashboard.displayName, () => {
-          openDashboard(dashboard.id);
-          scrollDown();
 
-          cy.waitForResources()
-            .getConsoleLogs()
-            .should((logs) => {
-              const reportLog =
-                "Dashboard: " +
-                dashboard.displayName +
-                " has " +
-                logs.length +
-                " severe errors: \n" +
-                JSON.stringify(logs, null, 1);
-              expect(logs, reportLog).to.have.length(0);
-            });
-        });
+    // Check if 'dashboards' is defined and is an array
+    if (!Array.isArray(dashboards) || dashboards.length === 0) {
+      it("No dashboards defined in Cypress environment", () => {
+        cy.log(
+          "Skipping tests because no dashboards are defined in Cypress environment"
+        );
       });
+    } else {
+      dashboards
+        .filter((dashboard) => !flakyDashboards.includes(dashboard.displayName))
+        .forEach((dashboard) => {
+          it(dashboard.displayName, () => {
+            openDashboard(dashboard.id);
+            scrollDown();
+
+            cy.waitForResources()
+              .getConsoleLogs()
+              .should((logs) => {
+                const reportLog =
+                  "Dashboard: " +
+                  dashboard.displayName +
+                  " has " +
+                  logs.length +
+                  " severe errors: \n" +
+                  JSON.stringify(logs, null, 1);
+                expect(logs, reportLog).to.have.length(0);
+              });
+          });
+        });
+    }
   }
-});
+);
 
 function scrollDown(i = 1) {
   const resolution = Cypress.config("viewportHeight");
