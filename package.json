@@ -5,8 +5,8 @@
   "scripts": {
     "cy:open": "cypress open",
     "cy:test": "cypress run --browser chrome",
-    "cy:parallel": "cypress-parallel -t 3 -s cy:test -d cypress/e2e",
-    "cy:parallel-report": "cypress-parallel -r cypress-multi-reporters -o configFile=reporter-config.json -t 3 -s cy:test -d cypress/e2e",
+    "cy:parallel": "cypress-parallel -t 1 -s cy:test -d cypress/e2e",
+    "cy:parallel-report": "cypress-parallel -r cypress-multi-reporters -o configFile=reporter-config.json -t 1 -s cy:test -d cypress/e2e",
     "allure": "allure generate --clean ./reports/allure-results/ && allure open",
     "allure:serve": "allure serve --results ./reports/allure-results",
     "lint": "eslint . --fix"
