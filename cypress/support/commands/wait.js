@@ -1,52 +1,31 @@
 import "cypress-wait-until";
 
-Cypress.Commands.add(
-  "waitForResources",
-  (interval = 1000, timeout = 30000, retry = 5) => {
-    cy.log("waiting for resources");
+Cypress.Commands.add("waitForResources", (interval = 3000, timeout = 30000) => {
+  cy.log("Starting waitForResources");
 
-    var retries = retry;
-    let checkCount = 0; // Counter for the number of checks performed
-    let lastEntryCount = 0; // Last count of entries for comparison
+  const start = Date.now();
+  let previousLength = 0;
+  const checkResources = () => {
+    const now = Date.now();
+    const entries = cy.state("window").performance.getEntriesByType("resource");
+    const currentLength = entries.length;
 
-    const getCount = () => {
-      const entries = cy
-        .state("window")
-        .performance.getEntriesByType("resource");
+    cy.log(`Time elapsed: ${now - start}ms`);
+    cy.log(`Resource entries: ${currentLength}`);
 
-      return entries.length;
-    };
+    if (now - start > timeout) {
+      cy.log("Timeout reached, stopping waitForResources");
+      return true;
+    }
 
-    var count = getCount();
+    if (currentLength === previousLength) {
+      cy.log("No new resources loaded, stopping waitForResources");
+      return true;
+    }
 
-    const checkNoNewLong = () => {
-      checkCount++; // Increment the check counter
-      const newCount = getCount();
-      lastEntryCount = newCount;
+    previousLength = currentLength;
+    cy.wait(interval).then(checkResources);
+  };
 
-      cy.log(`Check #${checkCount}: ${newCount} resources loaded.`);
-
-      if (newCount == count) {
-        if (retries <= 0) {
-          cy.log("finished waiting");
-          cy.log(`Total checks performed: ${checkCount}`);
-          return true;
-        }
-        retries--;
-        return false;
-      } else {
-        retries = retry;
-        count = newCount;
-        return false;
-      }
-    };
-
-    cy.waitUntil(() => Promise.resolve(checkNoNewLong()), {
-      interval: interval,
-      timeout: timeout,
-    }).then(() => {
-      cy.log(`Final resource count: ${lastEntryCount}`);
-      cy.log(`Total checks performed: ${checkCount}`);
-    });
-  }
-);
+  checkResources();
+});
