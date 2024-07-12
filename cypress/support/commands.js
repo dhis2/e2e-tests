@@ -26,22 +26,59 @@ Cypress.on("uncaught:exception", (err) => {
 Cypress.Commands.add("login", () => {
   const username = Cypress.env("LOGIN_USERNAME");
   const password = Cypress.env("LOGIN_PASSWORD");
+
+  const loginWithNewEndpoints = () => {
+    cy.request({
+      method: "POST",
+      url: "/api/auth/login",
+      body: {
+        username,
+        password,
+      },
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((resp) => {
+      cy.log("Logged in using new endpoint:", resp);
+    });
+  };
+
+  const loginWithOldEndpoints = () => {
+    cy.request({
+      method: "POST",
+      url: "/dhis-web-commons-security/login.action",
+      form: true,
+      followRedirect: true,
+      retryOnStatusCodeFailure: true,
+      body: {
+        j_username: username,
+        j_password: password,
+      },
+    }).then((resp) => {
+      cy.log("Logged in using old endpoint:", resp);
+    });
+  };
+
+  const checkLoginEndpoint = () => {
+    return cy
+      .request({
+        method: "GET",
+        url: "/api/loginConfig",
+        failOnStatusCode: false,
+      })
+      .then((resp) => {
+        if (resp.status === 200 && resp.body.apiVersion) {
+          loginWithNewEndpoints();
+        } else {
+          loginWithOldEndpoints();
+        }
+      });
+  };
+
   cy.session(
     [username, password],
     () => {
-      cy.request({
-        method: "POST",
-        url: "/dhis-web-commons-security/login.action",
-        form: true,
-        followRedirect: true,
-        retryOnStatusCodeFailure: true,
-        body: {
-          j_username: username,
-          j_password: password,
-        },
-      }).then((resp) => {
-        cy.log(resp);
-      });
+      checkLoginEndpoint();
     },
     {
       validate() {
