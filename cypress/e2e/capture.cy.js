@@ -3,11 +3,11 @@
 import {
   openApp,
   fillEventForm,
-  addComment,
+  addNote,
   openEvent,
   Selectors,
   ContextActions,
-  getCommentByValue,
+  getNoteByValue,
 } from "../utils/capture";
 
 import { getCurrentUserDisplayName } from "../utils/api";
@@ -37,14 +37,14 @@ describe(
     });
 
     it("should create event", () => {
-      const comment = "Test comment";
+      const note = "Test note";
       cy.visit(
         "dhis-web-capture/index.html#/new?orgUnitId=DiszpKrYNg8&programId=q04UBOqq3rp"
       );
       cy.intercept("POST", "**/tracker*").as("post");
 
       fillEventForm();
-      addComment(comment);
+      addNote(note);
 
       cy.get(Selectors.SAVE_BUTTON).click();
 
@@ -63,8 +63,8 @@ describe(
       });
 
       getCurrentUserDisplayName().then((displayName) => {
-        getCommentByValue(comment)
-          .get("[data-test=comment-user]")
+        getNoteByValue(note)
+          .get("[data-test=note-user]")
           .should("have.text", displayName);
       });
     });
