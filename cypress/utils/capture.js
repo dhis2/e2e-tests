@@ -1,7 +1,7 @@
 import moment from "moment";
 require("cypress-plugin-tab");
 
-export const CAPTURE_APP_URL = "dhis-web-capture";
+export const CAPTURE_APP_URL = "dhis-web-capture/#/";
 
 export const Selectors = {
   NEW_EVENT_BUTTON: '[data-test="new-button-toggle"]',
@@ -60,13 +60,15 @@ export const fillEventForm = () => {
   );
 };
 
-export const addComment = (comment) => {
-  cy.get('[data-test="new-note-button"]').click();
+export const addNote = (note) => {
+  cy.get(
+    '[data-test="new-note-container"] [data-test="dhis2-uicore-button"]'
+  ).click();
 
-  cy.get('[data-test="note-textfield"]').type(comment);
+  cy.get('[data-test="note-textfield"]').type(note);
 
   cy.get('[data-test="note-buttons-container"] button').first().click();
-  cy.get('[data-test="note-text"]').contains(comment);
+  cy.get('[data-test="note-text"]').contains(note);
 };
 
 export const openEvent = (eventId) => {
@@ -86,6 +88,6 @@ export const openLastSavedEvent = () => {
   });
 };
 
-export const getCommentByValue = (value) => {
+export const getNoteByValue = (value) => {
   return cy.contains(value);
 };
