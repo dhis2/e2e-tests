@@ -63,10 +63,10 @@ export const fillEventForm = () => {
 export const addComment = (comment) => {
   cy.get('[data-test="new-note-button"]').click();
 
-  cy.get('[data-test="comment-textfield"]').type(comment);
+  cy.get('[data-test="note-textfield"]').type(comment);
 
-  cy.get('[data-test="comment-buttons-container"] button').first().click();
-  cy.get('[data-test="comment-text"]').contains(comment);
+  cy.get('[data-test="note-buttons-container"] button').first().click();
+  cy.get('[data-test="note-text"]').contains(comment);
 };
 
 export const openEvent = (eventId) => {
