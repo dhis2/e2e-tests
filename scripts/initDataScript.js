@@ -1,7 +1,6 @@
 const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
-const struts_apps = ["dhis-web-dataentry/index.action"];
 const queryParams = "?fields=displayName,id&paging=false";
 
 async function install() {
@@ -72,12 +71,8 @@ async function install() {
       "eventVisualizations"
     );
 
-    // Include struts_apps in apps data
     if (envData.apps) {
-      envData.apps = [
-        ...struts_apps,
-        ...envData.apps.flatMap((i) => i.webName),
-      ];
+      envData.apps = [...envData.apps.flatMap((i) => i.webName)];
     }
     // Write envData to Cypress environment file
     fs.writeFileSync(cypressEnvFilePath, JSON.stringify(envData, null, 2));
