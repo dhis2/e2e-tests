@@ -1,7 +1,7 @@
 import moment from "moment";
 require("cypress-plugin-tab");
 
-export const CAPTURE_APP_URL = "dhis-web-capture/#/";
+export const CAPTURE_APP_URL = "dhis-web-capture/#";
 
 export const Selectors = {
   NEW_EVENT_BUTTON: '[data-test="new-button-toggle"]',
@@ -72,7 +72,7 @@ export const addNote = (note) => {
 };
 
 export const openEvent = (eventId) => {
-  return cy.visit(`${CAPTURE_APP_URL}/#viewEvent?viewEventId=${eventId}`);
+  return cy.visit(`${CAPTURE_APP_URL}viewEvent?viewEventId=${eventId}`);
 };
 
 export const openLastSavedEvent = () => {
