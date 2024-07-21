@@ -20,4 +20,4 @@ services:
       - ./allure-report:/e2e/allure-report
       - ./screenshots:/e2e/cypress/screenshots
       - ./env_files:/e2e/env_files
-    entrypoint: "yarn run cy:parallel-report && python3 merge_rp_launches.py"
+    entrypoint: "yarn run cy:test && python3 merge_rp_launches.py"

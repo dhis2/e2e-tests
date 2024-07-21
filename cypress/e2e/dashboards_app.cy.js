@@ -6,7 +6,7 @@ import {
   openApp,
 } from "../utils/dashboard";
 
-describe.skip(
+describe(
   "Dashboards -> DHIS2-8010",
   {
     tags: ["smoke"],
