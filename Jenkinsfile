@@ -24,7 +24,7 @@ def findDatabaseId(String groupName, String version) {
 def getCronForBranch(String branchName) {
     // Define the base hour for the oldest supported version
     int baseHour = 2 // Starting at 2 AM for v37
-    int baseVersion = 37
+    int baseVersion = 39
 
     if (branchName == "master") {
         return '0 0 * * *' // Midnight for master
