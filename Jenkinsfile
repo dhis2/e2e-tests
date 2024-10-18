@@ -193,7 +193,7 @@ pipeline {
           writeFile(text: "$json", file: 'reporter-config.json')
 
           catchError(message: 'Tests failed', stageResult: 'FAILURE', catchInterruptions: false) {
-            sh 'docker-compose up --exit-code-from cypress-tests'
+            sh 'docker compose up --exit-code-from cypress-tests'
           }
 
           sh 'python3 merge_rp_launches.py'
