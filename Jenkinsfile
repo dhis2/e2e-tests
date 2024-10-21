@@ -185,6 +185,7 @@ pipeline {
       steps {
         script {
           sh 'mkdir -p $WORKSPACE/screenshots'
+          sh 'mkdir -p $WORKSPACE/allure-report'
 
           unarchive mapping: ['cypress.env.json': 'cypress.env.json']
           // assign version to the report portal version attribute and name the launch based on the branch
