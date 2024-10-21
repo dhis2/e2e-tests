@@ -184,6 +184,8 @@ pipeline {
 
       steps {
         script {
+          sh 'mkdir -p $WORKSPACE/screenshots'
+
           unarchive mapping: ['cypress.env.json': 'cypress.env.json']
           // assign version to the report portal version attribute and name the launch based on the branch
           def json = sh(
