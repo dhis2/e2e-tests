@@ -49,7 +49,7 @@ pipeline {
 
   parameters {
     booleanParam(name: 'keep_instance_alive', defaultValue: false, description: 'Keep the instance alive after the build is done.')
-    string(name: 'keep_instance_alive_for', defaultValue: '300', description: 'Duration (in minutes) to keep the intance alive for.')
+    string(name: 'keep_instance_alive_for', defaultValue: '300', description: 'Duration (in minutes) to keep the instance alive for.')
     string(name: 'instance_readiness_threshold', defaultValue: '45', description: 'Duration (in minutes) to wait for the instance to get ready.')
   }
 
@@ -80,7 +80,6 @@ pipeline {
     ALLURE_REPORT_DIR_PATH = 'allure'
     ALLURE_RESULTS_DIR = 'reports/allure-results'
     ALLURE_REPORT_DIR = "allure-report-$DHIS2_VERSION"
-    JIRA_RELEASE_VERSION_NAME = "${env.TAG_NAME ? env.DHIS2_VERSION : sh(script: './get_next_version.sh', returnStdout: true)}"
     HTTP = 'https --check-status'
   }
 
@@ -173,13 +172,9 @@ pipeline {
 
     stage('Test') {
       environment {
-        JIRA_ENABLED = false
-        JIRA_USERNAME = "$JIRA_USERNAME"
-        JIRA_PASSWORD = "$JIRA_PASSWORD"
         BASE_URL = "$INSTANCE_URL"
         LAUNCH_BRANCH_VERSION = "${env.TARGET_BRANCH}"
         CI_BUILD_ID = "$BUILD_NUMBER"
-        RP_TOKEN = credentials('report-portal-access-uuid')
       }
 
       steps {
@@ -188,18 +183,10 @@ pipeline {
           sh 'mkdir -p $WORKSPACE/allure-report'
 
           unarchive mapping: ['cypress.env.json': 'cypress.env.json']
-          // assign version to the report portal version attribute and name the launch based on the branch
-          def json = sh(
-            returnStdout: true,
-            script: "jq '.reportportalAgentJsCypressReporterOptions.attributes[0].value=\"${JIRA_RELEASE_VERSION_NAME}\" | .reportportalAgentJsCypressReporterOptions.launch=\"e2e_tests_${env.GIT_BRANCH}\"' reporter-config.json"
-          )
-          writeFile(text: "$json", file: 'reporter-config.json')
 
           catchError(message: 'Tests failed', stageResult: 'FAILURE', catchInterruptions: false) {
             sh 'docker compose up --exit-code-from cypress-tests'
           }
-
-          sh 'python3 merge_rp_launches.py'
         }
       }
     }

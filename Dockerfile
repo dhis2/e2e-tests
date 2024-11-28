@@ -8,7 +8,6 @@ WORKDIR /e2e
 
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
-COPY ./merge_rp_launches.py ./merge_rp_launches.py
 COPY ./reporter-config.json ./reporter-config.json
 COPY ./cypress.config.js ./cypress.config.js
 COPY ./cypress ./cypress

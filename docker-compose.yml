@@ -9,15 +9,10 @@ services:
       CYPRESS_LOGIN_USERNAME: ${LOGIN_USERNAME:-admin}
       CYPRESS_LOGIN_PASSWORD: ${LOGIN_PASSWORD:-district}
       CI_BUILD_ID: ${CI_BUILD_ID}
-      RP_TOKEN: ${RP_TOKEN}
-      JIRA_ENABLED: ${JIRA_ENABLED:-false}
-      JIRA_USERNAME: ${JIRA_USERNAME}
-      JIRA_PASSWORD: ${JIRA_PASSWORD}
-      JIRA_RELEASE_VERSION_NAME: "${JIRA_RELEASE_VERSION_NAME}"
       TAGS: ${TAGS}
     volumes: 
       - ./reports/allure-results:/e2e/reports/allure-results
       - ./allure-report:/e2e/allure-report
       - ./screenshots:/e2e/cypress/screenshots
       - ./env_files:/e2e/env_files
-    entrypoint: "yarn run cy:test && python3 merge_rp_launches.py"
+    entrypoint: "yarn run cy:test"
