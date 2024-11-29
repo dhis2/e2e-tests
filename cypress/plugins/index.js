@@ -1,5 +1,4 @@
 const allureWriter = require("@shelex/cypress-allure-plugin/writer");
-const reportPortal = require("./report-portal");
 const logConsole = require("./record-console-errors");
 
 /// <reference types="cypress" />
@@ -22,7 +21,6 @@ const logConsole = require("./record-console-errors");
 module.exports = (on, config) => {
   // Install additional plugins
   logConsole.install(on);
-  reportPortal.install(on, config);
   allureWriter(on, config);
 
   return config;
