@@ -11,6 +11,5 @@ RUN yarn install --frozen-lockfile
 COPY ./reporter-config.json ./reporter-config.json
 COPY ./cypress.config.js ./cypress.config.js
 COPY ./cypress ./cypress
-COPY ./reporters ./reporters
 
 CMD ["/bin/sh", "-c", "sleep 15"]
