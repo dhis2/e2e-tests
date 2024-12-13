@@ -1,13 +1,19 @@
 /// <reference types="cypress" />
 
-import { openApp, Selectors, dropdownValues, inputFieldAssertions } from "../utils/android";
+import {
+  openApp,
+  Selectors,
+  dropdownValues,
+  inputFieldAssertions,
+  syncGlobal,
+} from "../utils/android";
 
 describe("android", () => {
   beforeEach(() => {
     openApp();
   });
 
-/*    it("General Settings", () => {
+  /*    it("General Settings", () => {
     openApp("/general-settings");
   
     // Loop through each input field assertion and verify the text
@@ -57,7 +63,7 @@ describe("android", () => {
       .last()
       .should("have.value", "100");
   });
-  
+*/
 
   it("Synchronization-->Global", () => {
     openApp("/sync/global-settings");
@@ -67,6 +73,23 @@ describe("android", () => {
     cy.get(Selectors.SAVE_AND_RESET_ALL_VALUES_BUTTON_SELECTOR)
       .contains("Save") // Ensure the button has the correct text
       .should("be.disabled");
+
+    //ANDROAPP-3936 and 3937 - How often should metadata and data sync
+    cy.get(Selectors.UICORE_SELECT_INPUT_SELECTOR).each(($el, index) => {
+      // Click on each element one by one
+      cy.wrap($el).click();
+
+      cy.get(Selectors.SINGLESELECTOPTION_SELECTOR)
+        .should("have.length", syncGlobal[index].length) // Ensure correct number of options
+        .each(($dropdown, dropdownIndex) => {
+          cy.wrap($dropdown).should(
+            "have.text",
+            syncGlobal[index][dropdownIndex]
+          );
+        });
+
+      cy.get("body").click(); // Click to close dropdowns
+    });
 
     // ANDROAPP-4964 - Test Labels and check if checkboxes are checked
     cy.get(Selectors.NEW_VERSION_OF_TRACKER_CHECKBOX_SELECTOR).each(
@@ -96,11 +119,6 @@ describe("android", () => {
         cy.get('[data-test="dhis2-uicore-box"]').should("have.text", "");
       });
 
-    //ANDROAPP-3937 - How often should metadata sync
-
-    // Sync Metadata = 1 day
-    // Sync Configuration = 1 day
-
     //ANDROAPP-3933 continued - Save button disabled, make a change, save button enabled, click save and changes saved
     cy.get(Selectors.SAVE_AND_RESET_ALL_VALUES_BUTTON_SELECTOR)
       .contains("Reset all values to default") // Ensure the button has the correct text
@@ -110,37 +128,30 @@ describe("android", () => {
       .contains("Save") // Ensure the button has the correct text
       .should("be.disabled");
   });
-*/
+
   it("Synchronization-->Programs", () => {
     openApp("/sync/program-setting");
 
     //ANDROAPP-3056, 3057, 3052 and 3059: Dropdown has three options
-    
+
     // Find all elements with the same data-test attribute
-    cy.get(Selectors.UICORE_SELECT_INPUT_SELECTOR)
-      .each(($el, index) => {
-        // Click on each element one by one
-        cy.wrap($el).click();
+    cy.get(Selectors.UICORE_SELECT_INPUT_SELECTOR).each(($el, index) => {
+      // Click on each element one by one
+      cy.wrap($el).click();
 
-        cy.get(Selectors.SINGLESELECTOPTION_SELECTOR)
-          .should('have.length', dropdownValues[index].length) // Ensure correct number of options
-          .each(($dropdown, dropdownIndex) => {
-            cy.wrap($dropdown).should('have.text', dropdownValues[index][dropdownIndex]);
-          });
+      cy.get(Selectors.SINGLESELECTOPTION_SELECTOR)
+        .should("have.length", dropdownValues[index].length) // Ensure correct number of options
+        .each(($dropdown, dropdownIndex) => {
+          cy.wrap($dropdown).should(
+            "have.text",
+            dropdownValues[index][dropdownIndex]
+          );
+        });
 
-        cy.get('body').click(); // Click to close dropdowns
-      });
-
+      cy.get("body").click(); // Click to close dropdowns
+    });
 
     //ANDROAPP-3939 - Add a program specific setting --> Values per program --> Download TEI with statuses --> All statuses and Only Active
-
-    //ANDROAPP-3055 - Maximum events to download set to 1000
-    cy.get(Selectors.UICORE_INPUT_SELECTOR)
-    .find('#eventsDownload')  
-    .should('have.value', '1000');  
-
-    //ANDROAPP-3938 - Reset all values to default
-    //- Download TEI with status =  All statuses
 
     //ANDROAPP-3938 and 3932 - Reset all values to default
     // Maximum TeI downloads = 500
@@ -148,10 +159,32 @@ describe("android", () => {
     // Maximum event downloads = 1000
     // Download TEI that has been updated within = Any time Period
 
-    //ANDROAPP-3936 - How often should data sync
+    cy.get(Selectors.SAVE_AND_RESET_ALL_VALUES_BUTTON_SELECTOR)
+      .contains("Reset all values to default") // Ensure the button has the correct text
+      .click(); // Click the button
+
+    //ANDROAPP-3055 - Maximum events to download set to 1000
+
+    cy.get(Selectors.UICORE_INPUT_SELECTOR)
+      .find("#teiDownload")
+      .should("have.value", "500");
+
+    cy.get(Selectors.UICORE_INPUT_SELECTOR)
+      .find("#eventsDownload")
+      .should("have.value", "1000");
+
+    cy.get(Selectors.UICORE_SELECT_INPUT_SELECTOR).eq(0).contains("Global");
+
+    cy.get(Selectors.UICORE_SELECT_INPUT_SELECTOR)
+      .eq(1)
+      .contains("Any time period");
+
+    // Get the second element and check if it contains "Any time period"
+    cy.get(Selectors.UICORE_SELECT_INPUT_SELECTOR)
+      .eq(2)
+      .contains("Any time period");
   });
 
-  /*
   it("Synchronization-->Data sets", () => {
     openApp("/sync/dataset-setting");
 
@@ -174,7 +207,6 @@ describe("android", () => {
 
   it("Appearance-->Home Screen", () => {
     openApp("/appearance/home-screen");
-
 
     // ANDROAPP-3946: Appearance - Home Screen- Reset all values
     // Verify that the save button is disabled
@@ -292,5 +324,4 @@ describe("android", () => {
       .contains("Save") // Ensure the button has the correct text
       .should("be.disabled");
   });
-  */
 });
