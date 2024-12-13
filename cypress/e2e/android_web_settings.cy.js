@@ -13,7 +13,7 @@ describe("android", () => {
     openApp();
   });
 
-  /*    it("General Settings", () => {
+      it("General Settings", () => {
     openApp("/general-settings");
   
     // Loop through each input field assertion and verify the text
@@ -63,7 +63,7 @@ describe("android", () => {
       .last()
       .should("have.value", "100");
   });
-*/
+
 
   it("Synchronization-->Global", () => {
     openApp("/sync/global-settings");
