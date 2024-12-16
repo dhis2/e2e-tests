@@ -210,7 +210,9 @@ describe("android", () => {
 
     // ANDROAPP-3946: Appearance - Home Screen- Reset all values
     // Verify that the save button is disabled
-    cy.contains("Save").should("be.disabled");
+    cy.get(Selectors.SAVE_AND_RESET_ALL_VALUES_BUTTON_SELECTOR)
+      .contains("Save") // Ensure the button has the correct text
+      .should("be.disabled");
 
     cy.get(Selectors.SAVE_AND_RESET_ALL_VALUES_BUTTON_SELECTOR)
       .contains("Reset all values to default") // Ensure the button has the correct text
@@ -294,8 +296,6 @@ describe("android", () => {
     cy.get(Selectors.SAVE_AND_RESET_ALL_VALUES_BUTTON_SELECTOR)
       .contains("Save") // Ensure the button has the correct text
       .should("be.disabled");
-
-    // ANDROAPP-3958: Maximum periods to download - check test
 
     // ANDROAPP-2959: Add a specific setting
 
