@@ -8,11 +8,13 @@ export const openApp = (path = "") => {
 export const Selectors = {
   SAVE_AND_RESET_ALL_VALUES_BUTTON_SELECTOR:
     '[data-test="dhis2-uicore-buttonstrip"] [data-test="dhis2-uicore-button"]',
-  NEW_VERSION_OF_TRACKER_CHECKBOX_SELECTOR: '[data-test="dhis2-uiwidgets-checkboxfield"]',
+  NEW_VERSION_OF_TRACKER_CHECKBOX_SELECTOR:
+    '[data-test="dhis2-uiwidgets-checkboxfield"]',
   CHECKBOX_SELECTOR: '[data-test="dhis2-uicore-checkbox"]',
   SINGLESELECTOPTION_SELECTOR: '[data-test="dhis2-uicore-singleselectoption"]',
   UICORE_SELECT_INPUT_SELECTOR: '[data-test="dhis2-uicore-select-input"]',
   UICORE_INPUT_SELECTOR: '[data-test="dhis2-uicore-input"]',
+  CARD_SELECTOR: '[data-test="dhis2-uicore-card"]'
 };
 
 export const inputFieldAssertions = [
@@ -32,7 +34,17 @@ export const syncGlobal = [
 ];
 
 export const dropdownValues = [
-  ["Global", "Per Org Unit", "Per program", "Per OU and program"], 
-  ["Any time period", "Last month", "Last 3 months", "Last 12 months"], 
-  ["Any time period", "Last month", "Last 3 months", "Last 12 months"], 
+  ["Global", "Per Org Unit", "Per program", "Per OU and program"],
+  ["Any time period", "Last month", "Last 3 months", "Last 12 months"],
+  ["Any time period", "Last month", "Last 3 months", "Last 12 months"],
 ];
+
+export const getSaveResetButton = () =>
+  cy.get(Selectors.SAVE_AND_RESET_ALL_VALUES_BUTTON_SELECTOR);
+
+export const getReservedValuesInput = () =>
+  cy
+    .contains("Reserved values downloaded per TEI attribute")
+    .parent()
+    .find('input[type="number"]')
+    .last();

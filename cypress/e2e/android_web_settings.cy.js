@@ -6,16 +6,19 @@ import {
   dropdownValues,
   inputFieldAssertions,
   syncGlobal,
+  getSaveResetButton,
+  getReservedValuesInput,
 } from "../utils/android";
 
 describe("android", () => {
+
   beforeEach(() => {
     openApp();
   });
 
-      it("General Settings", () => {
+  it("General Settings", () => {
     openApp("/general-settings");
-  
+
     // Loop through each input field assertion and verify the text
     inputFieldAssertions.forEach(({ label, expectedText }) => {
       cy.contains(label)
@@ -26,53 +29,30 @@ describe("android", () => {
 
     //ANDROAPP-3931: Save button is visible and disabled until any changes are made
     // Verify that the save button is disabled
-    cy.get(Selectors.SAVE_AND_RESET_ALL_VALUES_BUTTON_SELECTOR)
-      .contains("Save") // Ensure the button has the correct text
-      .should("be.disabled");
+    getSaveResetButton().contains("Save").should("be.disabled"); // Ensure the button has the correct text
 
     //ANDROAPP-3048: General-Reserved Values - cannot enter negative number
-    cy.contains("Reserved values downloaded per TEI attribute")
-      .parent()
-      .find("input")
-      .get('input[type="number"]')
-      .last()
-      .clear()
-      .type("-20")
-      .should("have.value", "20");
+    getReservedValuesInput().clear().type("-20").should("have.value", "20");
 
     // Verify that the save button is enabled
-    cy.get(Selectors.SAVE_AND_RESET_ALL_VALUES_BUTTON_SELECTOR)
-      .contains("Save") // Ensure the button has the correct text
-      .should("be.enabled");
+    getSaveResetButton().contains("Save").should("be.enabled"); // Ensure the button has the correct text
 
     //ANDROAPP-3930: General - Reset all values to default
     // Reset default settings and save the changes
-    cy.get(Selectors.SAVE_AND_RESET_ALL_VALUES_BUTTON_SELECTOR)
-      .contains("Reset all values to default") // Ensure the button has the correct text
-      .click();
+    getSaveResetButton().contains("Reset all values to default").click();
 
     // Verify that the save button is disabled after pressing the reset all values to default button
-    cy.get(Selectors.SAVE_AND_RESET_ALL_VALUES_BUTTON_SELECTOR)
-      .contains("Save") // Ensure the button has the correct text
-      .should("be.disabled");
+    getSaveResetButton().contains("Save").should("be.disabled");
 
-    cy.contains("Reserved values downloaded per TEI attribute")
-      .parent()
-      .find("input")
-      .get('input[type="number"]')
-      .last()
-      .should("have.value", "100");
+    getReservedValuesInput().should("have.value", "100");
   });
-
 
   it("Synchronization-->Global", () => {
     openApp("/sync/global-settings");
 
     //ANDROAPP-3933 - Save button disabled, make a change, save button enabled, click save and changes saved
     // Verify that the save button is disabled
-    cy.get(Selectors.SAVE_AND_RESET_ALL_VALUES_BUTTON_SELECTOR)
-      .contains("Save") // Ensure the button has the correct text
-      .should("be.disabled");
+    getSaveResetButton().contains("Save").should("be.disabled");
 
     //ANDROAPP-3936 and 3937 - How often should metadata and data sync
     cy.get(Selectors.UICORE_SELECT_INPUT_SELECTOR).each(($el, index) => {
@@ -120,13 +100,9 @@ describe("android", () => {
       });
 
     //ANDROAPP-3933 continued - Save button disabled, make a change, save button enabled, click save and changes saved
-    cy.get(Selectors.SAVE_AND_RESET_ALL_VALUES_BUTTON_SELECTOR)
-      .contains("Reset all values to default") // Ensure the button has the correct text
-      .click(); // Click the button
+    getSaveResetButton().contains("Reset all values to default").click();
 
-    cy.get(Selectors.SAVE_AND_RESET_ALL_VALUES_BUTTON_SELECTOR)
-      .contains("Save") // Ensure the button has the correct text
-      .should("be.disabled");
+    getSaveResetButton().contains("Save").should("be.disabled");
   });
 
   it("Synchronization-->Programs", () => {
@@ -159,10 +135,7 @@ describe("android", () => {
     // Maximum event downloads = 1000
     // Download TEI that has been updated within = Any time Period
 
-    cy.get(Selectors.SAVE_AND_RESET_ALL_VALUES_BUTTON_SELECTOR)
-      .contains("Reset all values to default") // Ensure the button has the correct text
-      .click(); // Click the button
-
+    getSaveResetButton().contains("Reset all values to default").click();
     //ANDROAPP-3055 - Maximum events to download set to 1000
 
     cy.get(Selectors.UICORE_INPUT_SELECTOR)
@@ -190,19 +163,13 @@ describe("android", () => {
 
     //ANDROAPP-3944: Reset all values to default should reset Max number of past data to download to 11
     // Verify that the save button is disabled
-    cy.get(Selectors.SAVE_AND_RESET_ALL_VALUES_BUTTON_SELECTOR)
-      .contains("Save") // Ensure the button has the correct text
-      .should("be.disabled");
+    getSaveResetButton().contains("Save").should("be.disabled");
 
-    cy.get(Selectors.SAVE_AND_RESET_ALL_VALUES_BUTTON_SELECTOR)
-      .contains("Reset all values to default") // Ensure the button has the correct text
-      .click(); // Click the button
+    getSaveResetButton().contains("Reset all values to default").click();
 
     cy.get("#periodDSDownload").should("have.value", "11");
 
-    cy.get(Selectors.SAVE_AND_RESET_ALL_VALUES_BUTTON_SELECTOR)
-      .contains("Save") // Ensure the button has the correct text
-      .should("be.disabled");
+    getSaveResetButton().contains("Save").should("be.disabled");
   });
 
   it("Appearance-->Home Screen", () => {
@@ -210,13 +177,9 @@ describe("android", () => {
 
     // ANDROAPP-3946: Appearance - Home Screen- Reset all values
     // Verify that the save button is disabled
-    cy.get(Selectors.SAVE_AND_RESET_ALL_VALUES_BUTTON_SELECTOR)
-      .contains("Save") // Ensure the button has the correct text
-      .should("be.disabled");
+    getSaveResetButton().contains("Save").should("be.disabled");
 
-    cy.get(Selectors.SAVE_AND_RESET_ALL_VALUES_BUTTON_SELECTOR)
-      .contains("Reset all values to default") // Ensure the button has the correct text
-      .click(); // Click the button
+    getSaveResetButton().contains("Reset all values to default").click(); // Click the button
 
     //ANDROAPP-3945: check Date, Org Unit, Sync Status and Assigned to Me checkboxes are checked
     cy.get(Selectors.CHECKBOX_SELECTOR).each(($checkbox) => {
@@ -238,9 +201,7 @@ describe("android", () => {
         });
     });
 
-    cy.get(Selectors.SAVE_AND_RESET_ALL_VALUES_BUTTON_SELECTOR)
-      .contains("Save") // Ensure the button has the correct text
-      .should("be.disabled");
+    getSaveResetButton().contains("Save").should("be.disabled");
   });
 
   it("Appearance-->Program", () => {
@@ -249,13 +210,9 @@ describe("android", () => {
     //ANDROAPP-3950: Appearance - Program - Global - Save button
 
     // Verify that the save button is disabled
-    cy.get(Selectors.SAVE_AND_RESET_ALL_VALUES_BUTTON_SELECTOR)
-      .contains("Save") // Ensure the button has the correct text
-      .should("be.disabled");
+    getSaveResetButton().contains("Save").should("be.disabled");
 
-    cy.get(Selectors.SAVE_AND_RESET_ALL_VALUES_BUTTON_SELECTOR)
-      .contains("Reset all values to default") // Ensure the button has the correct text
-      .click(); // Click the button
+    getSaveResetButton().contains("Reset all values to default").click();
 
     cy.get(Selectors.CHECKBOX_SELECTOR).each(($checkbox) => {
       // Check if the element is of type checkbox
@@ -283,9 +240,7 @@ describe("android", () => {
         });
     });
 
-    cy.get(Selectors.SAVE_AND_RESET_ALL_VALUES_BUTTON_SELECTOR)
-      .contains("Save") // Ensure the button has the correct text
-      .should("be.enabled");
+    getSaveResetButton().contains("Save"); // Ensure the button has the correct text
   });
 
   it("Appearance-->Datasets", () => {
@@ -293,16 +248,12 @@ describe("android", () => {
 
     //ANDROAPP-3943: Save button is visible and disabled until any changes are made
     // Verify that the save button is disabled
-    cy.get(Selectors.SAVE_AND_RESET_ALL_VALUES_BUTTON_SELECTOR)
-      .contains("Save") // Ensure the button has the correct text
-      .should("be.disabled");
+    getSaveResetButton().contains("Save").should("be.disabled");
 
     // ANDROAPP-2959: Add a specific setting
 
     // ANDROAPP-3957: Appearance - Data Set - Reset all values
-    cy.get(Selectors.SAVE_AND_RESET_ALL_VALUES_BUTTON_SELECTOR)
-      .contains("Reset all values to default") // Ensure the button has the correct text
-      .click(); // Click the button
+    getSaveResetButton().contains("Reset all values to default").click();
 
     cy.get(Selectors.CHECKBOX_SELECTOR).each(($checkbox) => {
       // Check if the element is of type checkbox
@@ -320,8 +271,6 @@ describe("android", () => {
     });
 
     // Verify that the save button is disabled
-    cy.get(Selectors.SAVE_AND_RESET_ALL_VALUES_BUTTON_SELECTOR)
-      .contains("Save") // Ensure the button has the correct text
-      .should("be.disabled");
+    getSaveResetButton().contains("Save").should("be.disabled");
   });
 });
