@@ -1,3 +1,7 @@
+export const baseURL = "/dhis-web-dashboard/#/";
+export const username = "system"
+export const password = "System123"
+
 export const ANDROID_SETTINGS_APP_URL =
   "/api/apps/android-settings-app/index.html#";
 
