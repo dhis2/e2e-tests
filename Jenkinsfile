@@ -23,7 +23,7 @@ def findDatabaseId(String groupName, String version) {
 
 def getCronForBranch(String branchName) {
     // Define the base hour for the oldest supported version
-    int baseHour = 2 // Starting at 2 AM for v37
+    int baseHour = 2 // Starting at 2 AM for v39
     int baseVersion = 39
 
     if (branchName == "master") {
@@ -35,7 +35,7 @@ def getCronForBranch(String branchName) {
         int scheduledHour = baseHour + hourOffset
         return "0 ${scheduledHour} * * *"
     }
-    return '0 22 * * *' // Default to 10 PM for any other branch
+    return '' // Default to empty cron schedule for any other ref
 }
 
 pipeline {
