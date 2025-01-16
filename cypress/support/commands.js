@@ -22,9 +22,9 @@ Cypress.on("uncaught:exception", (err) => {
   }
 });
 
-Cypress.Commands.add("login", () => {
-  const username = Cypress.env("LOGIN_USERNAME");
-  const password = Cypress.env("LOGIN_PASSWORD");
+Cypress.Commands.add("login", (customUsername, customPassword) => {
+  const username = customUsername || Cypress.env("LOGIN_USERNAME");
+  const password = customPassword || Cypress.env("LOGIN_PASSWORD");
 
   const loginWithNewEndpoints = () => {
     cy.request({
