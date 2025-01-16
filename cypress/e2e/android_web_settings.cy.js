@@ -1,7 +1,6 @@
 /// <reference types="cypress" />
 
 import {
-  baseURL,
   username,
   password,
   openApp,
@@ -11,61 +10,26 @@ import {
   syncGlobal,
   getSaveResetButton,
   getReservedValuesInput,
+  reinstallAndroidApp,
 } from "../utils/android";
 
-
 before(() => {
-  cy.visit(baseURL);
-  cy.get("#signInLabel").click(); 
-  cy.get("input[type='text']").type(username);
-  cy.get("input[type='password']").type(password);
-  cy.get("#submit").click(); 
-  
-  cy.get('[data-test="headerbar-apps"] button')
-  .should("be.visible")
-  .click({ force: true });
-  cy.get("#filter").click();
-  cy.get('[data-test="dhis2-uicore-input"] [id="filter"]').type(
-  "App Management"
-);
-  cy.get('[data-test="headerbar-apps-menu-list"] a')
-  .contains("App Management")
-  .click();
+  reinstallAndroidApp();
 
-  cy.get('[data-test="dhis2-uicore-menulist"]')
-  .find('[data-test="dhis2-uicore-menuitem"]')
-  .contains("App Hub")
-  .click();
+  openApp();
 
-  cy.contains("Android Settings")
-  .click();
-/*
-  cy.get('[data-test="dhis2-uicore-button"]')
-  .contains("Install")
-  .click();
-*/
+  cy.get('[data-test="dhis2-uicore-buttonstrip"]')
+    .contains("button", "Set defaults and save")
+    .click();
 
-cy.get('[data-test="headerbar-apps"] button')
-.should("be.visible")
-.click({ force: true });
-cy.get("#filter").click();
-cy.get('[data-test="dhis2-uicore-input"] [id="filter"]').type(
-"Android Settings"
-);
-cy.get('[data-test="headerbar-apps-menu-list"] a')
-.contains("Android Settings")
-.click();
-
-cy.get('[data-test="dhis2-uicore-buttonstrip"]')
-  .contains('button', 'Set defaults and save') 
-  .click(); 
-  
+  cy.get("[data-test=dhis2-uicore-alertbar]").contains(
+    "The initial configuration of the app has been completed and it is now ready to use."
+  );
 });
 
-
 describe("android", () => {
-
   beforeEach(() => {
+    cy.login(username, password);
     openApp();
   });
 

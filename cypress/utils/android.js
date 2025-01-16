@@ -52,3 +52,46 @@ export const getReservedValuesInput = () =>
     .parent()
     .find('input[type="number"]')
     .last();
+
+export const reinstallAndroidApp = () => {
+  cy.login(username, password);
+  // 1. call the API to uninstall
+  // DELETE https://play.im.dhis2.org/stable-2-40-6/api/apps/android-settings-app
+  cy.request({
+    method: "DELETE",
+    url: "/api/apps/android-settings-app",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "",
+    },
+    failOnStatusCode: false,
+  }).then((resp) => {
+    cy.log("Successfully deleted app:", resp);
+  });
+
+  // 2. call the data store API to delete
+  // DELETE https://play.im.dhis2.org/stable-2-40-6/api/40/dataStore/ANDROID_SETTINGS_APP
+  cy.request({
+    method: "DELETE",
+    url: "/api/40/dataStore/ANDROID_SETTINGS_APP",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    failOnStatusCode: false,
+  }).then((resp) => {
+    cy.log("Successfully deleted data store entry:", JSON.stringify(resp));
+    cy.log(resp);
+  });
+
+  // 3. Call the API to install
+  // POST https://play.im.dhis2.org/stable-2-40-6/api/appHub/df0dded4-dc6d-4be7-a10b-e159d8570779
+  cy.request({
+    method: "POST",
+    url: "/api/appHub/df0dded4-dc6d-4be7-a10b-e159d8570779",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }).then((resp) => {
+    cy.log("Successfully installed app:", resp);
+  });
+};
