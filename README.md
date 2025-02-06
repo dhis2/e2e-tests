@@ -74,3 +74,54 @@
 ### Allure
 
 [Allure](https://docs.qameta.io/allure/) is the framework used to generate a test report. To generate and serve the report, run `yarn run allure:serve`. The report should open in a browser window.
+
+
+## Notes about specific tests
+
+### Smoke app tests
+
+It checks the apps load correctly. It gets the list of the apps on _jenkins_ using a script `initDataScript` which sets some environment variables for the tests.
+
+To get the list of the apps, a call is made to `/dhis-web-apps/apps-bundle.json` then the webname field is used for running the tests.
+
+To run the tests locally, you can temporarily add this list to `cypress.config.js`. This is how the list would like look like:
+
+
+```
+env: {
+    LOGIN_USERNAME: "admin",
+    LOGIN_PASSWORD: "district",
+    allure: "true",
+    grepTags: process.env.TAGS,
+    allureResultsPath: "reports/allure-results",
+    apps: [
+      "dhis-web-aggregate-data-entry",
+      "dhis-web-approval",
+      "dhis-web-app-management",
+      "dhis-web-cache-cleaner",
+      "dhis-web-capture",
+      "dhis-web-dashboard",
+      "dhis-web-data-administration",
+      "dhis-web-data-visualizer",
+      "dhis-web-data-quality",
+      "dhis-web-datastore",
+      "dhis-web-event-reports",
+      "dhis-web-event-visualizer",
+      "dhis-web-import-export",
+      "dhis-web-interpretation",
+      "dhis-web-maintenance",
+      "dhis-web-maps",
+      "dhis-web-menu-management",
+      "dhis-web-messaging",
+      "dhis-web-reports",
+      "dhis-web-scheduler",
+      "dhis-web-sms-configuration",
+      "dhis-web-settings",
+      "dhis-web-tracker-capture",
+      "dhis-web-translations",
+      "dhis-web-usage-analytics",
+      "dhis-web-user",
+      "dhis-web-user-profile",
+    ],
+  },
+```
