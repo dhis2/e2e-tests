@@ -12,7 +12,7 @@ export const Selectors = {
   PROGRAM_SELECTOR: '[data-test="program-selector-container"]',
   PROGRAM_MENULIST_SELECTOR: '[data-test="dhis2-uicore-menulist"]',
   ORG_UNIT_CONTAINER_SELECTOR: '[data-test="org-unit-selector-container"]',
-  ORG_UNIT_INPUT_SELECTOR: '[data-test="capture-ui-input"]',
+  ORG_UNIT_INPUT_SELECTOR: 'input[placeholder="Search"]',
 };
 
 export const ContextActions = {
@@ -36,28 +36,20 @@ export const openApp = () => {
 
 export const fillEventForm = () => {
   cy.get(Selectors.NEW_EVENT_FORM).should("be.visible");
-  cy.get('[data-test="capture-ui-input"][placeholder="yyyy-mm-dd"]').each(
-    ($el) => {
-      let date = moment().format("YYYY-MM-DD");
-      cy.wrap($el).type(date);
-
-      cy.get(`li[data-date=${date}]`).click();
-      cy.get('[data-test="date-calendar-wrapper"]').should(
-        "not.be",
-        "displayed"
-      );
-    }
-  );
+  cy.get('input[placeholder="yyyy-mm-dd"]').each(($el) => {
+    let date = moment().format("YYYY-MM-DD");
+    cy.wrap($el).type(date).as("date-field");
+    cy.get("@date-field").blur();
+    cy.get('[data-test="date-calendar-wrapper"]').should("not.be", "displayed");
+  });
 
   cy.get("[class*=Select-control]").each(($el) => {
     cy.wrap($el).click().get(".Select-menu-outer").last().click();
   });
 
-  cy.get('[class*="textFieldCustomForm"] [data-test="capture-ui-input"]').each(
-    ($el) => {
-      cy.wrap($el).type("33");
-    }
-  );
+  cy.get('[class*="textFieldCustomForm"] input').each(($el) => {
+    cy.wrap($el).type("33");
+  });
 };
 
 export const addNote = (note) => {
