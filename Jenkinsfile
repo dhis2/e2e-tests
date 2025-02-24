@@ -2,25 +2,6 @@
 
 boolean isOnMasterOrMaintenanceVersionBranch = env.BRANCH_NAME == "master" || env.BRANCH_NAME.startsWith("v")
 
-def uploadNewDatabase(String groupName, String version) {
-  def databaseName = "${version}.sql.gz"
-
-  echo "Downloading database for $version"
-  sh "curl -f https://databases.dhis2.org/sierra-leone/$version/dhis2-db-sierra-leone.sql.gz -o \"$databaseName\""
-
-  return sh(
-      returnStdout: true,
-      script: "./upload.sh $groupName \"sierra-leone/$databaseName\" $databaseName | jq -r '.id'"
-  ).trim()
-}
-
-def findDatabaseId(String groupName, String version) {
-  return sh(
-      returnStdout: true,
-      script: "./list.sh | jq -r '.[] | select(.name == \"$groupName\") .databases[] | select(.name == \"sierra-leone/${version}.sql.gz\") .id'"
-  ).trim()
-}
-
 def getCronForBranch(String branchName) {
     // Define the base hour for the oldest supported version
     int baseHour = 2 // Starting at 2 AM for v39
@@ -96,23 +77,23 @@ pipeline {
               gitHelper.sparseCheckout(IM_REPO_URL, "${gitHelper.getLatestTag(IM_REPO_URL)}", '/scripts')
 
               dir('scripts/databases') {
-                env.DATABASE_ID = findDatabaseId(DATABASE_GROUP_NAME, DHIS2_VERSION)
+                env.DATABASE_ID = im.findDatabaseId(DATABASE_GROUP_NAME, DHIS2_VERSION)
 
                 if (!env.DATABASE_ID) {
                   echo "Couldn't find database for $DHIS2_VERSION"
 
                   try {
-                    env.DATABASE_ID = uploadNewDatabase(DATABASE_GROUP_NAME, DHIS2_VERSION)
+                    env.DATABASE_ID = im.uploadNewDatabase(DATABASE_GROUP_NAME, DHIS2_VERSION)
                   } catch (err) {
                     echo "Couldn't download database for ${DHIS2_VERSION}: ${err}"
 
                     DHIS2_SHORT_VERSION = DHIS2_VERSION.split('\\.').take(2).join('.')
-                    env.DATABASE_ID = findDatabaseId(DATABASE_GROUP_NAME, DHIS2_SHORT_VERSION)
+                    env.DATABASE_ID = im.findDatabaseId(DATABASE_GROUP_NAME, DHIS2_SHORT_VERSION)
 
                     if (!env.DATABASE_ID) {
                       echo "Couldn't find database for $DHIS2_SHORT_VERSION"
 
-                      env.DATABASE_ID = uploadNewDatabase(DATABASE_GROUP_NAME, DHIS2_SHORT_VERSION)
+                      env.DATABASE_ID = im.uploadNewDatabase(DATABASE_GROUP_NAME, DHIS2_SHORT_VERSION)
                     }
                   }
                 }
