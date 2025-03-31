@@ -6,6 +6,7 @@ export const CAPTURE_APP_URL = "dhis-web-capture/#";
 export const Selectors = {
   NEW_EVENT_BUTTON: '[data-test="new-button-toggle"]',
   SAVE_BUTTON: '[data-test="main-button"]',
+  SAVE_TEI_BUTTON: '[data-test="dhis2-uicore-splitbutton-button"]',
   NEW_EVENT_IN_SELECTED_PROGRAM_BUTTON: '[data-test="new-menuitem-one"]',
   WORKING_LIST_TABLE: '[data-test="main-page-working-list"]',
   NEW_EVENT_FORM: '[data-test="registration-page-content"]',
@@ -57,8 +58,8 @@ export const addNote = (note) => {
     '[data-test="new-note-container"] [data-test="dhis2-uicore-button"]'
   ).click();
 
-  cy.get('[data-test="note-textfield"]').type(note);
-
+  cy.get('[data-test="note-textfield"]').type('note').blur();
+  
   cy.get('[data-test="note-buttons-container"] button').first().click();
   cy.get('[data-test="note-text"]').contains(note);
 };
