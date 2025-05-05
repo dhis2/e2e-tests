@@ -10,16 +10,26 @@ async function install() {
     const loginPassword = process.env.CYPRESS_LOGIN_PASSWORD;
     const cypressEnvFilePath = "./cypress.env.json";
 
-    const login = await axios.get("/api", {
+    // First try to get a session cookie by accessing a non-public URL
+    const initialLogin = await axios.get("/api/dashboards", {
       baseURL: baseUrl,
       auth: { username: loginUsername, password: loginPassword },
     });
+
+    // If we still don't have a cookie, make a regular API request
+    let login = initialLogin;
+    if (!initialLogin.headers["set-cookie"] || !initialLogin.headers["set-cookie"][0]) {
+      login = await axios.get("/api", {
+        baseURL: baseUrl,
+        auth: { username: loginUsername, password: loginPassword },
+      });
+    }
 
     const client = axios.create({
       withCredentials: false,
       timeout: 20000,
       baseURL: baseUrl,
-      headers: { Cookie: login.headers["set-cookie"][0] },
+      headers: { Cookie: login.headers["set-cookie"]?.[0] || "" },
     });
 
     let envData = {};
