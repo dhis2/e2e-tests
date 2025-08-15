@@ -41,7 +41,7 @@ pipeline {
     IMAGE_TAG = "${env.TARGET_BRANCH == 'master' ? 'latest' : env.REF_BASED_VERSION}"
     IMAGE_REPOSITORY = "${env.TAG_NAME ? 'core' : 'core-dev'}"
     IM_REPO_URL = 'https://github.com/dhis2-sre/im-manager'
-    IM_ENVIRONMENT = 'im.dhis2.org'
+    IM_ENVIRONMENT = 'hcloud.c.dhis2.org'
     IM_HOST = "https://api.$IM_ENVIRONMENT"
     INSTANCE_GROUP_NAME = 'qa'
     DATABASE_GROUP_NAME = 'test-dbs'
