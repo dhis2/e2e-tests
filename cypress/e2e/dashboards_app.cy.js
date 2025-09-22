@@ -3,6 +3,7 @@ import {
   DASHBOARD_SCROLL_BAR,
   ALL_DASHBOARD_ITEMS,
   LOADED_DASHBOARD_ITEMS,
+  TEXT_DASHBOARD_ITEMS,
   openApp,
 } from "../utils/dashboard";
 
@@ -61,8 +62,14 @@ function scrollDown(i = 1) {
   }
 
   cy.get(LOADED_DASHBOARD_ITEMS).then((visibleItems) => {
+    cy.get("body").then(($body) => {
+      const textItemsLength = $body.find(TEXT_DASHBOARD_ITEMS).length;
+
     cy.get(ALL_DASHBOARD_ITEMS).then((allItems) => {
-      if (Cypress.$(allItems).length != Cypress.$(visibleItems).length) {
+        if (
+          Cypress.$(allItems).length - textItemsLength !=
+          Cypress.$(visibleItems).length
+        ) {
         cy.get(DASHBOARD_SCROLL_BAR)
           .scrollTo(0, resolution * i)
           .waitForResources();
@@ -71,6 +78,7 @@ function scrollDown(i = 1) {
       }
 
       return cy.wrap(allItems);
+      });
     });
   });
 }
