@@ -54,7 +54,7 @@ export const fillEventForm = () => {
 
 export const addNote = (note) => {
   cy.get(
-    '[data-test="new-note-container"] [data-test="dhis2-uicore-button"]'
+    '[data-test="new-note-container"] [data-test="write-note-btn"]'
   ).click();
 
   cy.get('[data-test="note-textfield"]').type(note);
