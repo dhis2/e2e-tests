@@ -1,7 +1,7 @@
 import moment from "moment";
 require("cypress-plugin-tab");
 
-export const CAPTURE_APP_URL = "dhis-web-capture/#";
+export const CAPTURE_APP_URL = "dhis-web-capture/?redirect=false#";
 
 export const Selectors = {
   NEW_EVENT_BUTTON: '[data-test="new-button-toggle"]',
