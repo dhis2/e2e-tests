@@ -39,7 +39,7 @@ describe(
     it("should create event", () => {
       const note = "Test note";
       cy.visit(
-        "dhis-web-capture/index.html#/new?orgUnitId=DiszpKrYNg8&programId=q04UBOqq3rp"
+        "dhis-web-capture/?redirect=false#/new?orgUnitId=DiszpKrYNg8&programId=q04UBOqq3rp"
       );
       // cy.intercept("POST", "**/tracker*").as("post");
 

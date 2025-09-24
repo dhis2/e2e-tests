@@ -1,8 +1,8 @@
 export const EVENT_REPORTS_APP_URL = "dhis-web-event-reports";
-export const DATA_VISUALIZER_APP_URL = "dhis-web-data-visualizer";
+export const DATA_VISUALIZER_APP_URL = "dhis-web-data-visualizer/?redirect=false";
 export const EVENT_VISUALIZER_APP_URL = "dhis-web-event-visualizer";
 export const MAPS_APP_URL = "dhis-web-maps";
-export const LINE_LISTING_APP = "api/apps/line-listing/index.html";
+export const LINE_LISTING_APP = "dhis-web-line-listing/?redirect=false";
 export const Selectors = {
   LOADER: '[data-test="dhis2-uicore-circularloader"]',
   VISUALIZATION_TITLE: '[data-test="titlebar"]',
@@ -11,7 +11,7 @@ export const Selectors = {
 export const MAP_CONTAINER = "#dhis2-map-container .dhis2-map";
 
 export const loadVisualisation = (uid) => {
-  cy.visit(`${DATA_VISUALIZER_APP_URL}/#/${uid}`);
+  cy.visit(`${DATA_VISUALIZER_APP_URL}#/${uid}`);
   waitForVisualization(Selectors.VISUALIZATION_TITLE);
 };
 export const loadEventReport = (uid) => {

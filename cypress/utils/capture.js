@@ -1,7 +1,7 @@
 import moment from "moment";
 require("cypress-plugin-tab");
 
-export const CAPTURE_APP_URL = "dhis-web-capture/#";
+export const CAPTURE_APP_URL = "dhis-web-capture/?redirect=false#";
 
 export const Selectors = {
   NEW_EVENT_BUTTON: '[data-test="new-button-toggle"]',
@@ -54,7 +54,7 @@ export const fillEventForm = () => {
 
 export const addNote = (note) => {
   cy.get(
-    '[data-test="new-note-container"] [data-test="dhis2-uicore-button"]'
+    '[data-test="new-note-container"] [data-test="write-note-btn"]'
   ).click();
 
   cy.get('[data-test="note-textfield"]').type(note);

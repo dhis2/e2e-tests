@@ -1,9 +1,9 @@
-export const baseURL = "/dhis-web-dashboard/#/";
+export const baseURL = "/dhis-web-dashboard/?redirect=false#/";
 export const username = "system"
 export const password = "System123"
 
 export const ANDROID_SETTINGS_APP_URL =
-  "/api/apps/android-settings-app/index.html#";
+  "/api/apps/android-settings-app/?redirect=false#";
 
 export const openApp = (path = "") => {
   return cy.visit(`${ANDROID_SETTINGS_APP_URL}${path}`);
