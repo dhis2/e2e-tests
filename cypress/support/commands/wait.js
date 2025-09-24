@@ -2,7 +2,7 @@ import "cypress-wait-until";
 
 Cypress.Commands.add(
   "waitForResources",
-  (interval = 1000, timeout = 30000, retry = 5) => {
+  (interval = 1000, timeout = 20000, retry = 5) => {
     cy.log("waiting for resources");
 
     var retries = retry;
