@@ -1,5 +1,5 @@
 export const EVENT_REPORTS_APP_URL = "dhis-web-event-reports";
-export const DATA_VISUALIZER_APP_URL = "dhis-web-data-visualizer";
+export const DATA_VISUALIZER_APP_URL = "dhis-web-data-visualizer?redirect=false";
 export const EVENT_VISUALIZER_APP_URL = "dhis-web-event-visualizer";
 export const MAPS_APP_URL = "dhis-web-maps";
 export const LINE_LISTING_APP = "dhis-web-line-listing/?redirect=false";
