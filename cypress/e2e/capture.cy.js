@@ -1,5 +1,3 @@
-/// <reference types="cypress" />
-
 import {
   openApp,
   fillEventForm,
@@ -37,37 +35,35 @@ describe(
     });
 
     it("should create event", () => {
-      const note = "Test note";
+      const note = "note";
       cy.visit(
         "dhis-web-capture/?redirect=false#/new?orgUnitId=DiszpKrYNg8&programId=q04UBOqq3rp"
       );
-      // cy.intercept("POST", "**/tracker*").as("post");
+     cy.intercept("POST", "**/tracker*").as("post");
 
       fillEventForm();
       addNote(note);
+      cy.get(Selectors.SAVE_TEI_BUTTON).click()
 
-      cy.get(Selectors.SAVE_BUTTON).click();
+      cy.wait("@post").then((interception) => {
+        cy.log(interception.response.body.bundleReport.typeReportMap["EVENT"]);
+        cy.wrap(
+          interception.response.body.bundleReport.typeReportMap["EVENT"]
+            .objectReports[0].uid
+        ).as("eventId");
+      });
 
-      // Todo: check with Tracker team why this is not working then enable this part
-      // cy.wait("@post").then((interception) => {
-      //   cy.log(interception.response.body.bundleReport.typeReportMap["EVENT"]);
-      //   cy.wrap(
-      //     interception.response.body.bundleReport.typeReportMap["EVENT"]
-      //       .objectReports[0].uid
-      //   ).as("eventId");
-      // });
+      cy.location("href").should("not.contain", "new");
+      cy.get(Selectors.WORKING_LIST_TABLE).should("be.visible");
+      cy.get("@eventId").then((eventId) => {
+        openEvent(eventId);
+      });
 
-      // cy.location("href").should("not.contain", "new");
-      // cy.get(Selectors.WORKING_LIST_TABLE).should("be.visible");
-      // cy.get("@eventId").then((eventId) => {
-      //   openEvent(eventId);
-      // });
-
-      // getCurrentUserDisplayName().then((displayName) => {
-      //   getNoteByValue(note)
-      //     .get("[data-test=note-user]")
-      //     .should("have.text", displayName);
-      // });
+      getCurrentUserDisplayName().then((displayName) => {
+        getNoteByValue(note)
+          .get("[data-test=note-user]")
+          .should("have.text", displayName);
+      });
     });
   }
 );
