@@ -63,6 +63,7 @@ pipeline {
     ALLURE_RESULTS_DIR = 'reports/allure-results'
     ALLURE_REPORT_DIR = "allure-report-$DHIS2_VERSION"
     HTTP = 'https --check-status'
+    ALLOW_SUSPEND = 'false'
   }
 
   triggers {
