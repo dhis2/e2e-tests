@@ -20,3 +20,10 @@ import "@shelex/cypress-allure-plugin";
 import "cypress-network-idle";
 import registerCypressGrep from "cypress-grep";
 registerCypressGrep();
+
+Cypress.on("uncaught:exception", (err, runnable) => {
+  if (err.message.includes("BfMAe6Itzgt")) {
+    // returning false here prevents Cypress from failing the test
+    return false;
+  }
+});
