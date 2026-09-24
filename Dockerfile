@@ -10,7 +10,7 @@ ENV CYPRESS_VIDEO=false
 WORKDIR /e2e
 
 COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile --ignore-scripts && npx cypress install
+RUN yarn install --frozen-lockfile --ignore-scripts && ./node_modules/.bin/cypress install
 COPY ./reporter-config.json ./reporter-config.json
 COPY ./cypress.config.js ./cypress.config.js
 COPY ./cypress ./cypress
