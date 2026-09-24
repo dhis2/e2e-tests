@@ -1,7 +1,9 @@
 FROM 'cypress/included:13.13.0'
 RUN rm -f /etc/apt/sources.list.d/google-chrome.list && \
-  apt-get update && apt-get install -y python3-pip && \
-  pip3 install --break-system-packages requests
+  apt-get update && \
+  apt-get install -y --no-install-recommends python3-pip && \
+  rm -rf /var/lib/apt/lists/* && \
+  pip3 install --break-system-packages --only-binary :all: requests==2.34.2
 
 ENV CYPRESS_VIDEO=false
 
