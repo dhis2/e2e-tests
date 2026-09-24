@@ -26,9 +26,14 @@ describe(
       });
     } else {
       maps.forEach((map) => {
-        it(map.displayName, () => {
+        const title =
+          typeof map.displayName === "string" && map.displayName.trim()
+            ? map.displayName
+            : `Map ${map.id} (missing/invalid displayName)`;
+
+        it(title, () => {
           loadMap(map.id);
-          checkVisualizationHasNoErrors("Map", map.displayName);
+          checkVisualizationHasNoErrors("Map", title);
         });
       });
     }
