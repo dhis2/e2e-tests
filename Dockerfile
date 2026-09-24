@@ -1,6 +1,7 @@
-FROM 'cypress/included:10.6.0'
-RUN apt-get update && apt-get install -y python3-pip && \
-  pip3 install requests
+FROM 'cypress/included:13.13.0'
+RUN rm -f /etc/apt/sources.list.d/google-chrome.list && \
+  apt-get update && apt-get install -y python3-pip && \
+  pip3 install --break-system-packages requests
 
 ENV CYPRESS_VIDEO=false
 
