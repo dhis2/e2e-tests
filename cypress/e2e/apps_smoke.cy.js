@@ -1,3 +1,5 @@
+import { runSmokeSuite, smokeTitle } from "../utils/smoke";
+
 describe(
   "Apps -> DHIS2-8017",
   {
@@ -14,36 +16,11 @@ describe(
       cy.clearConsoleLogs();
     });
 
-    // Check if 'apps' is defined and is an array
-    if (!Array.isArray(apps) || apps.length === 0) {
-      it("No apps defined in Cypress environment", () => {
-        cy.log(
-          "Skipping tests because no apps are defined in Cypress environment"
-        );
-      });
-    } else {
-      apps.forEach((app) => {
-        const title =
-          typeof app === "string" && app.trim()
-            ? app
-            : `App (missing/invalid webName)`;
-
-        it(title, () => {
-          cy.visit(app)
-            .waitForResources()
-            .getConsoleLogs()
-            .should((logs) => {
-              const reportLog =
-                "App: " +
-                title +
-                " has " +
-                logs.length +
-                " severe errors: \n" +
-                JSON.stringify(logs, null, 1);
-              expect(logs, reportLog).to.have.length(0);
-            });
-        });
-      });
-    }
+    runSmokeSuite(apps, {
+      emptyMessage: "No apps defined in Cypress environment",
+      getTitle: (app) => smokeTitle(app, "App (missing/invalid path)"),
+      visit: (app) => cy.visit(app).waitForResources(),
+      type: "App",
+    });
   }
 );
