@@ -35,11 +35,11 @@ async function install() {
     let envData = {};
 
     const formatDataForTable = (data, envKey) => {
-      // Special handling for "apps" as it's a direct array
+      // Special handling for "apps": /api/apps.json responds with a bare array
       if (envKey === "apps") {
-        return data["apps"].map((item) => ({
+        return data.map((item) => ({
           Name: item.name,
-          WebName: item.webName,
+          BasePath: item.basePath,
           Version: item.version,
         }));
       }
@@ -61,7 +61,7 @@ async function install() {
           },
         });
 
-        envData[envKey] = data[envKey] || [];
+        envData[envKey] = (envKey === "apps" ? data : data[envKey]) || [];
         console.log(`${envKey.toUpperCase()}:`);
         console.table(formatDataForTable(data, envKey));
       } catch (error) {
@@ -70,7 +70,7 @@ async function install() {
     };
 
     // Fetch and log data
-    await fetchData("/dhis-web-apps/apps-bundle.json", "apps");
+    await fetchData("/api/apps.json?fields=name,basePath&paging=false", "apps");
     await fetchData("/api/dashboards" + queryParams, "dashboards");
     await fetchData("/api/visualizations" + queryParams, "visualizations");
     await fetchData("/api/eventReports.json" + queryParams, "eventReports");
@@ -82,7 +82,10 @@ async function install() {
     );
 
     if (envData.apps) {
-      envData.apps = [...envData.apps.flatMap((i) => i.webName)];
+      // Global Shell is the app shell itself, not a visitable app
+      envData.apps = envData.apps
+        .filter((i) => i.basePath !== "/dhis-web-global-shell")
+        .flatMap((i) => i.basePath);
     }
     // Write envData to Cypress environment file
     fs.writeFileSync(cypressEnvFilePath, JSON.stringify(envData, null, 2));
