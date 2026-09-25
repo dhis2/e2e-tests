@@ -34,12 +34,15 @@ async function install() {
 
     let envData = {};
 
+    // Older DHIS2 versions (e.g. 2.41) don't include basePath on /api/apps.json entries
+    const appPath = (item) => item.basePath || new URL(item.baseUrl).pathname;
+
     const formatDataForTable = (data, envKey) => {
       // Special handling for "apps": /api/apps.json responds with a bare array
       if (envKey === "apps") {
         return data.map((item) => ({
           Name: item.name,
-          BasePath: item.basePath,
+          Path: appPath(item),
           Version: item.version,
         }));
       }
@@ -70,7 +73,7 @@ async function install() {
     };
 
     // Fetch and log data
-    await fetchData("/api/apps.json?fields=name,basePath&paging=false", "apps");
+    await fetchData("/api/apps.json?fields=name,key,basePath,baseUrl&paging=false", "apps");
     await fetchData("/api/dashboards" + queryParams, "dashboards");
     await fetchData("/api/visualizations" + queryParams, "visualizations");
     await fetchData("/api/eventReports.json" + queryParams, "eventReports");
@@ -84,8 +87,8 @@ async function install() {
     if (envData.apps) {
       // Global Shell is the app shell itself, not a visitable app
       envData.apps = envData.apps
-        .filter((i) => i.basePath !== "/dhis-web-global-shell")
-        .flatMap((i) => i.basePath);
+        .filter((i) => i.key !== "global-shell")
+        .flatMap((i) => appPath(i));
     }
     // Write envData to Cypress environment file
     fs.writeFileSync(cypressEnvFilePath, JSON.stringify(envData, null, 2));
