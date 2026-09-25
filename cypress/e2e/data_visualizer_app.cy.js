@@ -1,4 +1,5 @@
 import { loadVisualisation } from "../utils/analytics";
+import { smokeItems, smokeTitle, checkHasNoErrors } from "../utils/smoke";
 
 describe(
   "Data visualizer -> DHIS2-11216",
@@ -10,36 +11,25 @@ describe(
     },
   },
   () => {
-    const visualizations = Cypress.env("visualizations");
+    const visualizations = smokeItems(
+      Cypress.env("visualizations"),
+      "No visualizations defined in Cypress environment"
+    );
 
     beforeEach(() => {
       cy.clearConsoleLogs();
     });
 
-    // Check if 'visualizations' is defined and is an array
-    if (!Array.isArray(visualizations) || visualizations.length === 0) {
-      it("No visualizations defined in Cypress environment", () => {
-        cy.log(
-          "Skipping tests because no visualizations are defined in Cypress environment"
-        );
-      });
-    } else {
-      visualizations.forEach((visualization) => {
-        it(visualization.displayName, () => {
-          loadVisualisation(visualization.id);
+    visualizations?.forEach((visualization) => {
+      const title = smokeTitle(
+        visualization.displayName,
+        `Visualization ${visualization.id} (missing/invalid displayName)`
+      );
 
-          cy.getConsoleLogs().should((logs) => {
-            const reportLog =
-              "Visualization: " +
-              visualization.displayName +
-              " has " +
-              logs.length +
-              " severe errors: \n" +
-              JSON.stringify(logs, null, 1);
-            expect(logs, reportLog).to.have.length(0);
-          });
-        });
+      it(title, () => {
+        loadVisualisation(visualization.id);
+        checkHasNoErrors("Visualization", title);
       });
-    }
+    });
   }
 );
