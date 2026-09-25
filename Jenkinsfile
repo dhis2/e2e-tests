@@ -135,7 +135,7 @@ pipeline {
     stage('Initialize Data') {
       environment {
         CYPRESS_BASE_URL = "$INSTANCE_URL"
-        CYPRESS_LOGIN_CREDENTIALS = credentials('admin_login_credentials')
+        CYPRESS_LOGIN_CREDENTIALS = credentials('dhis2-default')
       }
       steps {
         script {
