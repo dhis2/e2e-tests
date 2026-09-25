@@ -23,14 +23,19 @@ describe(
       });
     } else {
       apps.forEach((app) => {
-        it(app, () => {
+        const title =
+          typeof app === "string" && app.trim()
+            ? app
+            : `App (missing/invalid webName)`;
+
+        it(title, () => {
           cy.visit(app)
             .waitForResources()
             .getConsoleLogs()
             .should((logs) => {
               const reportLog =
                 "App: " +
-                app +
+                title +
                 " has " +
                 logs.length +
                 " severe errors: \n" +
