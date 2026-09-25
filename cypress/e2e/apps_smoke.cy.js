@@ -1,4 +1,4 @@
-import { runSmokeSuite, smokeTitle } from "../utils/smoke";
+import { smokeItems, smokeTitle, checkHasNoErrors } from "../utils/smoke";
 
 describe(
   "Apps -> DHIS2-8017",
@@ -10,17 +10,22 @@ describe(
     },
   },
   () => {
-    const apps = Cypress.env("apps");
+    const apps = smokeItems(
+      Cypress.env("apps"),
+      "No apps defined in Cypress environment"
+    );
 
     beforeEach(() => {
       cy.clearConsoleLogs();
     });
 
-    runSmokeSuite(apps, {
-      emptyMessage: "No apps defined in Cypress environment",
-      getTitle: (app) => smokeTitle(app, "App (missing/invalid path)"),
-      visit: (app) => cy.visit(app).waitForResources(),
-      type: "App",
+    apps?.forEach((app) => {
+      const title = smokeTitle(app, "App (missing/invalid path)");
+
+      it(title, () => {
+        cy.visit(app).waitForResources();
+        checkHasNoErrors("App", title);
+      });
     });
   }
 );

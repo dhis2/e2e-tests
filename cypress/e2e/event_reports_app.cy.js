@@ -1,5 +1,5 @@
 import { loadEventReport } from "../utils/analytics";
-import { runSmokeSuite, smokeTitle } from "../utils/smoke";
+import { smokeItems, smokeTitle, checkHasNoErrors } from "../utils/smoke";
 
 describe(
   "Event reports -> DHIS2-8019",
@@ -11,21 +11,25 @@ describe(
     },
   },
   () => {
-    const eventReports = Cypress.env("eventReports");
+    const eventReports = smokeItems(
+      Cypress.env("eventReports"),
+      "No event reports defined in Cypress environment"
+    );
 
     beforeEach(() => {
       cy.clearConsoleLogs();
     });
 
-    runSmokeSuite(eventReports, {
-      emptyMessage: "No event reports defined in Cypress environment",
-      getTitle: (eventReport) =>
-        smokeTitle(
-          eventReport.displayName,
-          `Event report ${eventReport.id} (missing/invalid displayName)`
-        ),
-      visit: (eventReport) => loadEventReport(eventReport.id),
-      type: "Event report",
+    eventReports?.forEach((eventReport) => {
+      const title = smokeTitle(
+        eventReport.displayName,
+        `Event report ${eventReport.id} (missing/invalid displayName)`
+      );
+
+      it(title, () => {
+        loadEventReport(eventReport.id);
+        checkHasNoErrors("Event report", title);
+      });
     });
   }
 );

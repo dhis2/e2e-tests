@@ -1,5 +1,5 @@
 import { loadVisualisation } from "../utils/analytics";
-import { runSmokeSuite, smokeTitle } from "../utils/smoke";
+import { smokeItems, smokeTitle, checkHasNoErrors } from "../utils/smoke";
 
 describe(
   "Data visualizer -> DHIS2-11216",
@@ -11,21 +11,25 @@ describe(
     },
   },
   () => {
-    const visualizations = Cypress.env("visualizations");
+    const visualizations = smokeItems(
+      Cypress.env("visualizations"),
+      "No visualizations defined in Cypress environment"
+    );
 
     beforeEach(() => {
       cy.clearConsoleLogs();
     });
 
-    runSmokeSuite(visualizations, {
-      emptyMessage: "No visualizations defined in Cypress environment",
-      getTitle: (visualization) =>
-        smokeTitle(
-          visualization.displayName,
-          `Visualization ${visualization.id} (missing/invalid displayName)`
-        ),
-      visit: (visualization) => loadVisualisation(visualization.id),
-      type: "Visualization",
+    visualizations?.forEach((visualization) => {
+      const title = smokeTitle(
+        visualization.displayName,
+        `Visualization ${visualization.id} (missing/invalid displayName)`
+      );
+
+      it(title, () => {
+        loadVisualisation(visualization.id);
+        checkHasNoErrors("Visualization", title);
+      });
     });
   }
 );

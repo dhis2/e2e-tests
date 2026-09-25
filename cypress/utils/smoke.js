@@ -25,26 +25,17 @@ export const checkHasNoErrors = (type, title, { checkNoData = false } = {}) => {
   });
 };
 
-// Shared shape for every "iterate a Cypress-env list, visit each item, assert
-// zero severe console errors" smoke suite (apps, visualizations, event
-// reports/charts, line lists, maps).
-export const runSmokeSuite = (
-  items,
-  { emptyMessage, getTitle, visit, type, checkNoData = false }
-) => {
+// Returns items to iterate over, or registers a single placeholder test and
+// returns null when the Cypress-env list is empty. The it() call for each
+// real item stays in the calling spec file (not in here) so static analysis
+// (e.g. SonarCloud's "add some tests to this file" check) can still see it.
+export const smokeItems = (items, emptyMessage) => {
   if (!Array.isArray(items) || items.length === 0) {
     it(emptyMessage, () => {
       cy.log(emptyMessage);
     });
-    return;
+    return null;
   }
 
-  items.forEach((item) => {
-    const title = getTitle(item);
-
-    it(title, () => {
-      visit(item);
-      checkHasNoErrors(type, title, { checkNoData });
-    });
-  });
+  return items;
 };

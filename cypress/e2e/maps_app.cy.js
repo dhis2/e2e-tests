@@ -1,5 +1,5 @@
 import { loadMap } from "../utils/analytics";
-import { runSmokeSuite, smokeTitle } from "../utils/smoke";
+import { smokeItems, smokeTitle, checkHasNoErrors } from "../utils/smoke";
 
 describe(
   "Maps -> DHIS2-8021",
@@ -11,22 +11,25 @@ describe(
     },
   },
   () => {
-    const maps = Cypress.env("maps");
+    const maps = smokeItems(
+      Cypress.env("maps"),
+      "No maps defined in Cypress environment"
+    );
 
     beforeEach(() => {
       cy.clearConsoleLogs();
     });
 
-    runSmokeSuite(maps, {
-      emptyMessage: "No maps defined in Cypress environment",
-      getTitle: (map) =>
-        smokeTitle(
-          map.displayName,
-          `Map ${map.id} (missing/invalid displayName)`
-        ),
-      visit: (map) => loadMap(map.id),
-      type: "Map",
-      checkNoData: true,
+    maps?.forEach((map) => {
+      const title = smokeTitle(
+        map.displayName,
+        `Map ${map.id} (missing/invalid displayName)`
+      );
+
+      it(title, () => {
+        loadMap(map.id);
+        checkHasNoErrors("Map", title, { checkNoData: true });
+      });
     });
   }
 );

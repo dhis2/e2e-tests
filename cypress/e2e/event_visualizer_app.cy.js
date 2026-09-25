@@ -1,5 +1,5 @@
 import { loadEventChart } from "../utils/analytics";
-import { runSmokeSuite, smokeTitle } from "../utils/smoke";
+import { smokeItems, smokeTitle, checkHasNoErrors } from "../utils/smoke";
 
 describe(
   "Event visualizer -> DHIS2-9193",
@@ -11,21 +11,25 @@ describe(
     },
   },
   () => {
-    const eventCharts = Cypress.env("eventCharts");
+    const eventCharts = smokeItems(
+      Cypress.env("eventCharts"),
+      "No event charts defined in Cypress environment"
+    );
 
     beforeEach(() => {
       cy.clearConsoleLogs();
     });
 
-    runSmokeSuite(eventCharts, {
-      emptyMessage: "No event charts defined in Cypress environment",
-      getTitle: (chart) =>
-        smokeTitle(
-          chart.displayName,
-          `Event visualization ${chart.id} (missing/invalid displayName)`
-        ),
-      visit: (chart) => loadEventChart(chart.id),
-      type: "Event visualization",
+    eventCharts?.forEach((chart) => {
+      const title = smokeTitle(
+        chart.displayName,
+        `Event visualization ${chart.id} (missing/invalid displayName)`
+      );
+
+      it(title, () => {
+        loadEventChart(chart.id);
+        checkHasNoErrors("Event visualization", title);
+      });
     });
   }
 );

@@ -1,5 +1,5 @@
 import { LINE_LISTING_APP, loadLineList } from "../utils/analytics";
-import { runSmokeSuite, smokeTitle } from "../utils/smoke";
+import { smokeItems, smokeTitle, checkHasNoErrors } from "../utils/smoke";
 
 describe(
   "Line listing -> DHIS2-13221",
@@ -11,22 +11,26 @@ describe(
     },
   },
   () => {
-    const lineLists = Cypress.env("eventVisualizations");
+    const lineLists = smokeItems(
+      Cypress.env("eventVisualizations"),
+      "No line lists defined in Cypress environment"
+    );
 
     beforeEach(() => {
       cy.clearConsoleLogs();
       cy.visit(LINE_LISTING_APP);
     });
 
-    runSmokeSuite(lineLists, {
-      emptyMessage: "No line lists defined in Cypress environment",
-      getTitle: (lineList) =>
-        smokeTitle(
-          lineList.displayName,
-          `Line list ${lineList.id} (missing/invalid displayName)`
-        ),
-      visit: (lineList) => loadLineList(lineList.id),
-      type: "Line list",
+    lineLists?.forEach((lineList) => {
+      const title = smokeTitle(
+        lineList.displayName,
+        `Line list ${lineList.id} (missing/invalid displayName)`
+      );
+
+      it(title, () => {
+        loadLineList(lineList.id);
+        checkHasNoErrors("Line list", title);
+      });
     });
   }
 );
