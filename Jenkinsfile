@@ -97,6 +97,7 @@ pipeline {
     ALLURE_REPORT_DIR = "allure-report-$DHIS2_VERSION"
     HTTP = 'https --check-status'
     ALLOW_SUSPEND = 'false'
+    RUN_E2E = 'true'
   }
 
   triggers {
@@ -108,7 +109,7 @@ pipeline {
       steps {
         script {
           if (hasNoNewBuildSinceLastRun()) {
-            env.SKIP_RUN = 'true'
+            env.RUN_E2E = 'false'
             currentBuild.result = 'NOT_BUILT'
             currentBuild.description = 'Skipped: no new DHIS2 build'
           }
@@ -117,7 +118,7 @@ pipeline {
     }
 
     stage('Create DHIS2 instance') {
-      when { not { environment name: 'SKIP_RUN', value: 'true' } }
+      when { environment name: 'RUN_E2E', value: 'true' }
       steps {
         script {
           withCredentials([usernamePassword(credentialsId: 'e2e-im-user', passwordVariable: 'PASSWORD', usernameVariable: 'USER_EMAIL')]) {
@@ -173,7 +174,7 @@ pipeline {
     }
 
     stage('Prepare reports dir') {
-      when { not { environment name: 'SKIP_RUN', value: 'true' } }
+      when { environment name: 'RUN_E2E', value: 'true' }
       steps {
         sh "mkdir -p $ALLURE_REPORT_DIR_PATH"
         sh "mkdir -p $ALLURE_RESULTS_DIR"
@@ -181,7 +182,7 @@ pipeline {
     }
 
     stage('Initialize Data') {
-      when { not { environment name: 'SKIP_RUN', value: 'true' } }
+      when { environment name: 'RUN_E2E', value: 'true' }
       environment {
         CYPRESS_BASE_URL = "$INSTANCE_URL"
         CYPRESS_LOGIN_CREDENTIALS = credentials('admin_login_credentials')
@@ -202,7 +203,7 @@ pipeline {
     }
 
     stage('Test') {
-      when { not { environment name: 'SKIP_RUN', value: 'true' } }
+      when { environment name: 'RUN_E2E', value: 'true' }
       environment {
         BASE_URL = "$INSTANCE_URL"
         LAUNCH_BRANCH_VERSION = "${env.TARGET_BRANCH}"
@@ -227,7 +228,7 @@ pipeline {
   post {
     always {
       script {
-        if (env.SKIP_RUN == 'true') {
+        if (env.RUN_E2E == 'false') {
           return
         }
 
