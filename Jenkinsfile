@@ -19,6 +19,15 @@ def getCronForBranch(String branchName) {
     return '' // Default to empty cron schedule for any other ref
 }
 
+// Last build of this job that actually ran (skipped runs are NOT_BUILT, aborted ones never finished).
+def getLastExecutedBuild() {
+    def build = currentBuild.previousBuild
+    while (build != null && (build.result == 'NOT_BUILT' || build.result == 'ABORTED')) {
+        build = build.previousBuild
+    }
+    return build
+}
+
 pipeline {
   agent {
     label 'ec2-jdk11'
@@ -70,7 +79,41 @@ pipeline {
   }
 
   stages {
+    stage('Check for new DHIS2 build') {
+      steps {
+        script {
+          // Only scheduled runs are guarded; manual runs always execute.
+          boolean isScheduled = currentBuild.getBuildCauses('hudson.triggers.TimerTrigger$TimerTriggerCause')
+          def lastBuild = getLastExecutedBuild()
+
+          if (isScheduled && lastBuild) {
+            // Push time (epoch seconds) of the image this run would deploy. Empty if the lookup fails.
+            String imagePushedAt = sh(returnStdout: true, script: """
+              curl -sf "https://hub.docker.com/v2/repositories/dhis2/${IMAGE_REPOSITORY}/tags/${IMAGE_TAG}" \\
+                | jq -r '.last_updated | sub("\\\\.[0-9]+Z\$"; "Z") | fromdate' || true
+            """).trim()
+
+            if (imagePushedAt.isLong()) {
+              long lastBuildStartedAt = (long) (lastBuild.startTimeInMillis / 1000)
+              echo "Image dhis2/${IMAGE_REPOSITORY}:${IMAGE_TAG} pushed at ${new Date(imagePushedAt.toLong() * 1000)}, " +
+                "last executed build #${lastBuild.number} started at ${new Date(lastBuild.startTimeInMillis)}"
+
+              if (imagePushedAt.toLong() < lastBuildStartedAt) {
+                echo "No new build of dhis2/${IMAGE_REPOSITORY}:${IMAGE_TAG} since build #${lastBuild.number}, skipping run."
+                env.SKIP_RUN = 'true'
+                currentBuild.result = 'NOT_BUILT'
+                currentBuild.description = 'Skipped: no new DHIS2 build'
+              }
+            } else {
+              echo "Couldn't determine when dhis2/${IMAGE_REPOSITORY}:${IMAGE_TAG} was pushed, running anyway."
+            }
+          }
+        }
+      }
+    }
+
     stage('Create DHIS2 instance') {
+      when { expression { env.SKIP_RUN != 'true' } }
       steps {
         script {
           withCredentials([usernamePassword(credentialsId: 'e2e-im-user', passwordVariable: 'PASSWORD', usernameVariable: 'USER_EMAIL')]) {
@@ -126,6 +169,7 @@ pipeline {
     }
 
     stage('Prepare reports dir') {
+      when { expression { env.SKIP_RUN != 'true' } }
       steps {
         sh "mkdir -p $ALLURE_REPORT_DIR_PATH"
         sh "mkdir -p $ALLURE_RESULTS_DIR"
@@ -133,6 +177,7 @@ pipeline {
     }
 
     stage('Initialize Data') {
+      when { expression { env.SKIP_RUN != 'true' } }
       environment {
         CYPRESS_BASE_URL = "$INSTANCE_URL"
         CYPRESS_LOGIN_CREDENTIALS = credentials('admin_login_credentials')
@@ -153,6 +198,7 @@ pipeline {
     }
 
     stage('Test') {
+      when { expression { env.SKIP_RUN != 'true' } }
       environment {
         BASE_URL = "$INSTANCE_URL"
         LAUNCH_BRANCH_VERSION = "${env.TARGET_BRANCH}"
@@ -177,6 +223,10 @@ pipeline {
   post {
     always {
       script {
+        if (env.SKIP_RUN == 'true') {
+          return
+        }
+
         allure([
           includeProperties: true,
           jdk: '',
