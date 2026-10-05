@@ -28,6 +28,31 @@ def getLastExecutedBuild() {
     return build
 }
 
+// True for a scheduled run when the image it would deploy is older than the last executed build.
+// Manual runs and failed lookups never skip.
+boolean hasNoNewBuildSinceLastRun() {
+    def lastBuild = getLastExecutedBuild()
+    if (!currentBuild.getBuildCauses('hudson.triggers.TimerTrigger$TimerTriggerCause') || !lastBuild) {
+        return false
+    }
+
+    String image = "dhis2/${IMAGE_REPOSITORY}:${IMAGE_TAG}"
+    // Push time of the image in epoch seconds, empty if the lookup fails.
+    String imagePushedAt = sh(returnStdout: true, script: """
+      curl -sf "https://hub.docker.com/v2/repositories/dhis2/${IMAGE_REPOSITORY}/tags/${IMAGE_TAG}" \\
+        | jq -r '.last_updated | sub("\\\\.[0-9]+Z\$"; "Z") | fromdate' || true
+    """).trim()
+
+    if (!imagePushedAt.isLong()) {
+        echo "Couldn't determine when ${image} was pushed, running anyway."
+        return false
+    }
+
+    echo "${image} pushed at ${new Date(imagePushedAt.toLong() * 1000)}, " +
+      "last executed build #${lastBuild.number} started at ${new Date(lastBuild.startTimeInMillis)}"
+    return imagePushedAt.toLong() * 1000 < lastBuild.startTimeInMillis
+}
+
 pipeline {
   agent {
     label 'ec2-jdk11'
@@ -82,38 +107,17 @@ pipeline {
     stage('Check for new DHIS2 build') {
       steps {
         script {
-          // Only scheduled runs are guarded; manual runs always execute.
-          boolean isScheduled = currentBuild.getBuildCauses('hudson.triggers.TimerTrigger$TimerTriggerCause')
-          def lastBuild = getLastExecutedBuild()
-
-          if (isScheduled && lastBuild) {
-            // Push time (epoch seconds) of the image this run would deploy. Empty if the lookup fails.
-            String imagePushedAt = sh(returnStdout: true, script: """
-              curl -sf "https://hub.docker.com/v2/repositories/dhis2/${IMAGE_REPOSITORY}/tags/${IMAGE_TAG}" \\
-                | jq -r '.last_updated | sub("\\\\.[0-9]+Z\$"; "Z") | fromdate' || true
-            """).trim()
-
-            if (imagePushedAt.isLong()) {
-              long lastBuildStartedAt = (long) (lastBuild.startTimeInMillis / 1000)
-              echo "Image dhis2/${IMAGE_REPOSITORY}:${IMAGE_TAG} pushed at ${new Date(imagePushedAt.toLong() * 1000)}, " +
-                "last executed build #${lastBuild.number} started at ${new Date(lastBuild.startTimeInMillis)}"
-
-              if (imagePushedAt.toLong() < lastBuildStartedAt) {
-                echo "No new build of dhis2/${IMAGE_REPOSITORY}:${IMAGE_TAG} since build #${lastBuild.number}, skipping run."
-                env.SKIP_RUN = 'true'
-                currentBuild.result = 'NOT_BUILT'
-                currentBuild.description = 'Skipped: no new DHIS2 build'
-              }
-            } else {
-              echo "Couldn't determine when dhis2/${IMAGE_REPOSITORY}:${IMAGE_TAG} was pushed, running anyway."
-            }
+          if (hasNoNewBuildSinceLastRun()) {
+            env.SKIP_RUN = 'true'
+            currentBuild.result = 'NOT_BUILT'
+            currentBuild.description = 'Skipped: no new DHIS2 build'
           }
         }
       }
     }
 
     stage('Create DHIS2 instance') {
-      when { expression { env.SKIP_RUN != 'true' } }
+      when { not { environment name: 'SKIP_RUN', value: 'true' } }
       steps {
         script {
           withCredentials([usernamePassword(credentialsId: 'e2e-im-user', passwordVariable: 'PASSWORD', usernameVariable: 'USER_EMAIL')]) {
@@ -169,7 +173,7 @@ pipeline {
     }
 
     stage('Prepare reports dir') {
-      when { expression { env.SKIP_RUN != 'true' } }
+      when { not { environment name: 'SKIP_RUN', value: 'true' } }
       steps {
         sh "mkdir -p $ALLURE_REPORT_DIR_PATH"
         sh "mkdir -p $ALLURE_RESULTS_DIR"
@@ -177,7 +181,7 @@ pipeline {
     }
 
     stage('Initialize Data') {
-      when { expression { env.SKIP_RUN != 'true' } }
+      when { not { environment name: 'SKIP_RUN', value: 'true' } }
       environment {
         CYPRESS_BASE_URL = "$INSTANCE_URL"
         CYPRESS_LOGIN_CREDENTIALS = credentials('admin_login_credentials')
@@ -198,7 +202,7 @@ pipeline {
     }
 
     stage('Test') {
-      when { expression { env.SKIP_RUN != 'true' } }
+      when { not { environment name: 'SKIP_RUN', value: 'true' } }
       environment {
         BASE_URL = "$INSTANCE_URL"
         LAUNCH_BRANCH_VERSION = "${env.TARGET_BRANCH}"
