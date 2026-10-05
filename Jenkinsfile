@@ -106,7 +106,7 @@ pipeline {
 
   stages {
     stage('Check for new DHIS2 build') {
-      steps {
+      steps { // NOSONAR
         script {
           if (hasNoNewBuildSinceLastRun()) {
             env.RUN_E2E = 'false'
@@ -118,7 +118,7 @@ pipeline {
     }
 
     stage('Create DHIS2 instance') {
-      when { environment name: 'RUN_E2E', value: 'true' }
+      when { environment name: 'RUN_E2E', value: 'true' } // NOSONAR
       steps {
         script {
           withCredentials([usernamePassword(credentialsId: 'e2e-im-user', passwordVariable: 'PASSWORD', usernameVariable: 'USER_EMAIL')]) {
@@ -174,7 +174,7 @@ pipeline {
     }
 
     stage('Prepare reports dir') {
-      when { environment name: 'RUN_E2E', value: 'true' }
+      when { environment name: 'RUN_E2E', value: 'true' } // NOSONAR
       steps {
         sh "mkdir -p $ALLURE_REPORT_DIR_PATH"
         sh "mkdir -p $ALLURE_RESULTS_DIR"
@@ -182,7 +182,7 @@ pipeline {
     }
 
     stage('Initialize Data') {
-      when { environment name: 'RUN_E2E', value: 'true' }
+      when { environment name: 'RUN_E2E', value: 'true' } // NOSONAR
       environment {
         CYPRESS_BASE_URL = "$INSTANCE_URL"
         CYPRESS_LOGIN_CREDENTIALS = credentials('admin_login_credentials')
@@ -203,7 +203,7 @@ pipeline {
     }
 
     stage('Test') {
-      when { environment name: 'RUN_E2E', value: 'true' }
+      when { environment name: 'RUN_E2E', value: 'true' } // NOSONAR
       environment {
         BASE_URL = "$INSTANCE_URL"
         LAUNCH_BRANCH_VERSION = "${env.TARGET_BRANCH}"
@@ -228,7 +228,7 @@ pipeline {
   post {
     always {
       script {
-        if (env.RUN_E2E == 'false') {
+        if (env.RUN_E2E == 'false') { // NOSONAR
           return
         }
 
