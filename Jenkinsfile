@@ -217,7 +217,7 @@ pipeline {
 
           unarchive mapping: ['cypress.env.json': 'cypress.env.json']
 
-          catchError(message: 'Tests failed', stageResult: 'FAILURE', catchInterruptions: false) {
+          catchError(message: 'Tests failed', buildResult: 'UNSTABLE', stageResult: 'FAILURE', catchInterruptions: false) {
             sh 'docker compose up --exit-code-from cypress-tests'
           }
         }
@@ -257,20 +257,24 @@ pipeline {
         }
       }
     }
-
-    /*failure {
+    unstable {
       script {
-        def prefix = ""
-        if (fileExists('./reports/new_failures.json')) {
-          prefix = 'NEW ERRORS FOUND! '
-        }
-
-         slackSend(
-           color: '#ff0000',
-           message: "${prefix}E2E tests initialized from branch $GIT_BRANCH for version - $DHIS2_VERSION failed. Please visit " + env.BUILD_URL + " for more information",
-           channel: '@Haroon;@Hella'
+        slack.sendMessage(
+          '#ff0000',
+          slack.buildUrl() + "\nE2E tests failed on ${env.TARGET_BRANCH} and need investigation. :detective-duck:",
+          'alerts-e2e-tests'
         )
       }
-    }*/
+    }
+
+    failure {
+      script {
+        slack.sendMessage(
+          '#ff0000',
+          slack.buildUrl() + "\nE2E pipeline on ${env.TARGET_BRANCH} failed before tests completed. :x:",
+          'alerts-e2e-tests'
+        )
+      }
+    }
   }
 }
