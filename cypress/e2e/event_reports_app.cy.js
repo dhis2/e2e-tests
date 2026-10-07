@@ -1,4 +1,5 @@
 import { loadEventReport } from "../utils/analytics";
+import { smokeItems, smokeTitle, checkHasNoErrors } from "../utils/smoke";
 
 describe(
   "Event reports -> DHIS2-8019",
@@ -10,37 +11,25 @@ describe(
     },
   },
   () => {
-    const eventReports = Cypress.env("eventReports");
+    const eventReports = smokeItems(
+      Cypress.env("eventReports"),
+      "No event reports defined in Cypress environment"
+    );
 
     beforeEach(() => {
       cy.clearConsoleLogs();
     });
 
-    // Check if 'eventReports' is defined and is an array
-    if (!Array.isArray(eventReports) || eventReports.length === 0) {
-      it("No event reports defined in Cypress environment", () => {
-        cy.log(
-          "Skipping tests because no event reports are defined in Cypress environment"
-        );
-      });
-    } else {
-      eventReports.forEach((eventReport) => {
-        it(eventReport.displayName, () => {
-          loadEventReport(eventReport.id);
+    eventReports?.forEach((eventReport) => {
+      const title = smokeTitle(
+        eventReport.displayName,
+        `Event report ${eventReport.id} (missing/invalid displayName)`
+      );
 
-          cy.getConsoleLogs().should((logs) => {
-            const reportLog =
-              "Event report: " +
-              eventReport.displayName +
-              " has " +
-              logs.length +
-              " severe errors: \n" +
-              JSON.stringify(logs, null, 1);
-
-            expect(logs, reportLog).to.have.length(0);
-          });
-        });
+      it(title, () => {
+        loadEventReport(eventReport.id);
+        checkHasNoErrors("Event report", title);
       });
-    }
+    });
   }
 );

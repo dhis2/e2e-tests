@@ -1,4 +1,5 @@
-import { loadMap, checkVisualizationHasNoErrors } from "../utils/analytics";
+import { loadMap } from "../utils/analytics";
+import { smokeItems, smokeTitle, checkHasNoErrors } from "../utils/smoke";
 
 describe(
   "Maps -> DHIS2-8021",
@@ -10,32 +11,25 @@ describe(
     },
   },
   () => {
-    const maps = Cypress.env("maps");
-    console.table(maps);
+    const maps = smokeItems(
+      Cypress.env("maps"),
+      "No maps defined in Cypress environment"
+    );
 
     beforeEach(() => {
       cy.clearConsoleLogs();
     });
 
-    // Check if 'maps' is defined and is an array
-    if (!Array.isArray(maps) || maps.length === 0) {
-      it("No maps defined in Cypress environment", () => {
-        cy.log(
-          "Skipping tests because no maps are defined in Cypress environment"
-        );
-      });
-    } else {
-      maps.forEach((map) => {
-        const title =
-          typeof map.displayName === "string" && map.displayName.trim()
-            ? map.displayName
-            : `Map ${map.id} (missing/invalid displayName)`;
+    maps?.forEach((map) => {
+      const title = smokeTitle(
+        map.displayName,
+        `Map ${map.id} (missing/invalid displayName)`
+      );
 
-        it(title, () => {
-          loadMap(map.id);
-          checkVisualizationHasNoErrors("Map", title);
-        });
+      it(title, () => {
+        loadMap(map.id);
+        checkHasNoErrors("Map", title, { checkNoData: true });
       });
-    }
+    });
   }
 );
