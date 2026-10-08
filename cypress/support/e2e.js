@@ -19,4 +19,7 @@ import "./hooks";
 import "@shelex/cypress-allure-plugin";
 import "cypress-network-idle";
 import registerCypressGrep from "cypress-grep";
+import { disableServiceWorker } from "../utils/serviceWorker";
 registerCypressGrep();
+
+Cypress.on("window:before:load", disableServiceWorker);
