@@ -53,6 +53,19 @@ boolean hasNoNewBuildSinceLastRun() {
     return imagePushedAt.toLong() * 1000 < lastBuild.startTimeInMillis
 }
 
+// No new DHIS2 build is expected over the weekend, so Saturday, Sunday and Monday runs don't count as missed builds.
+boolean isExpectedBuildDay(Date date) {
+    return date.format('u').toInteger() in 2..5 // ISO day of week: 1 = Monday, 7 = Sunday
+}
+
+// Alert when two consecutive runs on expected build days were both skipped, e.g. Tuesday and Wednesday.
+boolean shouldAlertOnSkip() {
+    def previous = currentBuild.previousBuild
+    return isExpectedBuildDay(new Date()) &&
+      previous?.result == 'NOT_BUILT' &&
+      isExpectedBuildDay(new Date(previous.startTimeInMillis))
+}
+
 pipeline {
   agent {
     label 'ec2-jdk11'
@@ -112,6 +125,14 @@ pipeline {
             env.RUN_E2E = 'false'
             currentBuild.result = 'NOT_BUILT'
             currentBuild.description = 'Skipped: no new DHIS2 build'
+
+            if (shouldAlertOnSkip()) {
+              slack.sendMessage(
+                '#ffcc00',
+                slack.buildUrl() + "\nE2E run on ${env.TARGET_BRANCH} skipped: no new DHIS2 build for 2 days in a row. Check that the ${IMAGE_REPOSITORY}:${IMAGE_TAG} image is still being published. :zzz:",
+                'alerts-e2e-tests'
+              )
+            }
           }
         }
       }
