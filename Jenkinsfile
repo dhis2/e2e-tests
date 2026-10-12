@@ -1,5 +1,10 @@
 @Library('pipeline-library') _
 
+import groovy.transform.Field
+
+@Field final String ALERTS_CHANNEL = 'alerts-e2e-tests'
+@Field final String SKIPPED_RESULT = 'NOT_BUILT'
+
 boolean isOnMasterOrMaintenanceVersionBranch = env.BRANCH_NAME == "master" || env.BRANCH_NAME.startsWith("v")
 
 def getCronForBranch(String branchName) {
@@ -22,7 +27,7 @@ def getCronForBranch(String branchName) {
 // Last build of this job that actually ran (skipped runs are NOT_BUILT, aborted ones never finished).
 def getLastExecutedBuild() {
     def build = currentBuild.previousBuild
-    while (build != null && (build.result == 'NOT_BUILT' || build.result == 'ABORTED')) {
+    while (build != null && (build.result == SKIPPED_RESULT || build.result == 'ABORTED')) {
         build = build.previousBuild
     }
     return build
@@ -51,6 +56,19 @@ boolean hasNoNewBuildSinceLastRun() {
     echo "${image} pushed at ${new Date(imagePushedAt.toLong() * 1000)}, " +
       "last executed build #${lastBuild.number} started at ${new Date(lastBuild.startTimeInMillis)}"
     return imagePushedAt.toLong() * 1000 < lastBuild.startTimeInMillis
+}
+
+// No new DHIS2 build is expected over the weekend, so Saturday, Sunday and Monday runs don't count as missed builds.
+boolean isExpectedBuildDay(Date date) {
+    return date.format('u').toInteger() in 2..5 // ISO day of week: 1 = Monday, 7 = Sunday
+}
+
+// Alert when two consecutive runs on expected build days were both skipped, e.g. Tuesday and Wednesday.
+boolean shouldAlertOnSkip() {
+    def previous = currentBuild.previousBuild
+    return isExpectedBuildDay(new Date()) &&
+      previous?.result == SKIPPED_RESULT &&
+      isExpectedBuildDay(new Date(previous.startTimeInMillis))
 }
 
 pipeline {
@@ -110,8 +128,16 @@ pipeline {
         script {
           if (hasNoNewBuildSinceLastRun()) {
             env.RUN_E2E = 'false'
-            currentBuild.result = 'NOT_BUILT'
+            currentBuild.result = SKIPPED_RESULT
             currentBuild.description = 'Skipped: no new DHIS2 build'
+
+            if (shouldAlertOnSkip()) {
+              slack.sendMessage(
+                '#ffcc00',
+                slack.buildUrl() + "\nE2E run on ${env.TARGET_BRANCH} skipped: no new DHIS2 build for 2 days in a row. Check that the ${IMAGE_REPOSITORY}:${IMAGE_TAG} image is still being published. :zzz:",
+                ALERTS_CHANNEL
+              )
+            }
           }
         }
       }
@@ -263,7 +289,7 @@ pipeline {
         slack.sendMessage(
           '#ff0000',
           slack.buildUrl() + "\nE2E tests failed on ${env.TARGET_BRANCH} and need investigation. :detective-duck:",
-          'alerts-e2e-tests'
+          ALERTS_CHANNEL
         )
       }
     }
@@ -273,7 +299,7 @@ pipeline {
         slack.sendMessage(
           '#ff0000',
           slack.buildUrl() + "\nE2E pipeline on ${env.TARGET_BRANCH} failed before tests completed. :x:",
-          'alerts-e2e-tests'
+          ALERTS_CHANNEL
         )
       }
     }
