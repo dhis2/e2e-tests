@@ -1,3 +1,5 @@
+import { smokeItems, smokeTitle, checkHasNoErrors } from "../utils/smoke";
+
 describe(
   "Apps -> DHIS2-8017",
   {
@@ -8,42 +10,22 @@ describe(
     },
   },
   () => {
-    const apps = Cypress.env("apps");
+    const apps = smokeItems(
+      Cypress.env("apps"),
+      "No apps defined in Cypress environment"
+    );
 
     beforeEach(() => {
       cy.clearConsoleLogs();
     });
 
-    // Check if 'apps' is defined and is an array
-    if (!Array.isArray(apps) || apps.length === 0) {
-      it("No apps defined in Cypress environment", () => {
-        cy.log(
-          "Skipping tests because no apps are defined in Cypress environment"
-        );
-      });
-    } else {
-      apps.forEach((app) => {
-        const title =
-          typeof app === "string" && app.trim()
-            ? app
-            : `App (missing/invalid webName)`;
+    apps?.forEach((app) => {
+      const title = smokeTitle(app, "App (missing/invalid path)");
 
-        it(title, () => {
-          cy.visit(app)
-            .waitForResources()
-            .getConsoleLogs()
-            .should((logs) => {
-              const reportLog =
-                "App: " +
-                title +
-                " has " +
-                logs.length +
-                " severe errors: \n" +
-                JSON.stringify(logs, null, 1);
-              expect(logs, reportLog).to.have.length(0);
-            });
-        });
+      it(title, () => {
+        cy.visit(app).waitForResources();
+        checkHasNoErrors("App", title);
       });
-    }
+    });
   }
 );

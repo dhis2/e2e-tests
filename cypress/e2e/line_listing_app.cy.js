@@ -1,4 +1,5 @@
 import { LINE_LISTING_APP, loadLineList } from "../utils/analytics";
+import { smokeItems, smokeTitle, checkHasNoErrors } from "../utils/smoke";
 
 describe(
   "Line listing -> DHIS2-13221",
@@ -10,38 +11,26 @@ describe(
     },
   },
   () => {
-    const lineLists = Cypress.env("eventVisualizations");
+    const lineLists = smokeItems(
+      Cypress.env("eventVisualizations"),
+      "No line lists defined in Cypress environment"
+    );
 
     beforeEach(() => {
       cy.clearConsoleLogs();
       cy.visit(LINE_LISTING_APP);
     });
 
-    // Check if 'lineLists' is defined and is an array
-    if (!Array.isArray(lineLists) || lineLists.length === 0) {
-      it("No line lists defined in Cypress environment", () => {
-        cy.log(
-          "Skipping tests because no line lists are defined in Cypress environment"
-        );
-      });
-    } else {
-      lineLists.forEach((lineList) => {
-        it(lineList.displayName, () => {
-          loadLineList(lineList.id);
+    lineLists?.forEach((lineList) => {
+      const title = smokeTitle(
+        lineList.displayName,
+        `Line list ${lineList.id} (missing/invalid displayName)`
+      );
 
-          cy.getConsoleLogs().should((logs) => {
-            const reportLog =
-              "Line list: " +
-              lineList.displayName +
-              " has " +
-              logs.length +
-              " severe errors: \n" +
-              JSON.stringify(logs, null, 1);
-
-            expect(logs, reportLog).to.have.length(0);
-          });
-        });
+      it(title, () => {
+        loadLineList(lineList.id);
+        checkHasNoErrors("Line list", title);
       });
-    }
+    });
   }
 );
