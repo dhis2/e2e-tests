@@ -15,7 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "@shelex/cypress-allure-plugin": "^2.26.5",
-    "axios": "^0.28.0",
+    "axios": "^1.8.2",
     "chalk": "^4.0.0",
     "chrome-remote-interface": "^0.31.2",
     "colors": "^1.4.0",
