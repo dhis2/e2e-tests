@@ -81,7 +81,7 @@ RUN_ALL=true node ./scripts/initDataScript.js   # full
 node ./scripts/initDataScript.js                # minimal (default)
 ```
 
-In Jenkins, scheduled runs use the minimal set, except that a scheduled run opens everything when no run of the past week was a full one (so about once a week). Run a full one at any time by building with the `run_all` parameter. The build description says which one it was.
+In Jenkins, scheduled runs use the minimal set, except on Wednesdays, when they open everything. (If the Wednesday run is skipped because there is no new DHIS2 build, there is no full run that week.) Run a full one at any time by building with the `run_all` parameter. The build description says which one it was.
 
 ### What the minimal set is
 
