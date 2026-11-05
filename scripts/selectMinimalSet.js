@@ -16,7 +16,8 @@ const onePerSignature = (items, signature) => {
   });
 };
 
-const sorted = (list = []) => [...new Set(list)].sort();
+const sorted = (list = []) =>
+  [...new Set(list)].sort((a, b) => String(a).localeCompare(String(b)));
 
 const SIGNATURES = {
   // Chart type, legend set, kinds of data items (indicator, data element, PI, ...), program-based
@@ -99,11 +100,11 @@ const pickDashboards = (dashboards) => {
   }
 };
 
-const select = (key, items) =>
-  key === "dashboards"
-    ? pickDashboards(items)
-    : SIGNATURES[key]
-    ? onePerSignature(items, SIGNATURES[key])
-    : items;
+const select = (key, items) => {
+  if (key === "dashboards") {
+    return pickDashboards(items);
+  }
+  return SIGNATURES[key] ? onePerSignature(items, SIGNATURES[key]) : items;
+};
 
 module.exports = { select };
