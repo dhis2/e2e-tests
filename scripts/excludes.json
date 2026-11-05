@@ -1,0 +1,11 @@
+{
+  "apps": {
+    "dashboard": "opened by dashboards_app.cy.js",
+    "data-visualizer": "opened by data_visualizer_app.cy.js",
+    "event-reports": "opened by event_reports_app.cy.js",
+    "event-visualizer": "opened by event_visualizer_app.cy.js",
+    "line-listing": "opened by line_listing_app.cy.js",
+    "maps": "opened by maps_app.cy.js",
+    "capture": "opened by capture.cy.js"
+  }
+}

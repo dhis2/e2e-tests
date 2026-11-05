@@ -4,6 +4,8 @@ import groovy.transform.Field
 
 @Field final String ALERTS_CHANNEL = 'alerts-e2e-tests'
 @Field final String SKIPPED_RESULT = 'NOT_BUILT'
+@Field final String FULL_RUN_DESCRIPTION = 'Full run: all objects'
+@Field final long ONE_WEEK_MILLIS = 7L * 24 * 60 * 60 * 1000
 
 boolean isOnMasterOrMaintenanceVersionBranch = env.BRANCH_NAME == "master" || env.BRANCH_NAME.startsWith("v")
 
@@ -58,6 +60,28 @@ boolean hasNoNewBuildSinceLastRun() {
     return imagePushedAt.toLong() * 1000 < lastBuild.startTimeInMillis
 }
 
+// Scheduled runs open a minimal set of objects (see "Minimal vs full run" in the README).
+// A run opens everything when asked to via the run_all parameter, or when it is a scheduled run
+// and no run of the past week was a full one.
+boolean isFullRunDue() {
+    if (params.run_all) {
+        return true
+    }
+    if (!currentBuild.getBuildCauses('hudson.triggers.TimerTrigger$TimerTriggerCause')) {
+        return false
+    }
+
+    long weekAgo = System.currentTimeMillis() - ONE_WEEK_MILLIS
+    def build = currentBuild.previousBuild
+    while (build != null && build.startTimeInMillis > weekAgo) {
+        if (build.description == FULL_RUN_DESCRIPTION) {
+            return false
+        }
+        build = build.previousBuild
+    }
+    return true
+}
+
 // No new DHIS2 build is expected over the weekend, so Saturday, Sunday and Monday runs don't count as missed builds.
 boolean isExpectedBuildDay(Date date) {
     return date.format('u').toInteger() in 2..5 // ISO day of week: 1 = Monday, 7 = Sunday
@@ -83,6 +107,7 @@ pipeline {
   parameters {
     booleanParam(name: 'keep_instance_alive', defaultValue: false, description: 'Keep the instance alive after the build is done.')
     string(name: 'keep_instance_alive_for', defaultValue: '300', description: 'Duration (in minutes) to keep the instance alive for.')
+    booleanParam(name: 'run_all', defaultValue: false, description: 'Open every dashboard, visualization, map, etc. instead of the minimal set. Scheduled runs do this once a week.')
     string(name: 'instance_readiness_threshold', defaultValue: '45', description: 'Duration (in minutes) to wait for the instance to get ready.')
   }
 
@@ -215,6 +240,9 @@ pipeline {
       }
       steps {
         script {
+          env.RUN_ALL = isFullRunDue() ? 'true' : 'false'
+          currentBuild.description = env.RUN_ALL == 'true' ? FULL_RUN_DESCRIPTION : 'Minimal run'
+
           sh 'npm install axios'
           sh '''
             export CYPRESS_LOGIN_USERNAME=$(echo $CYPRESS_LOGIN_CREDENTIALS | cut -d: -f1)
