@@ -1,7 +1,28 @@
 const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
-const queryParams = "?fields=displayName,id&paging=false";
+const { select } = require("./selectMinimalSet");
+const excludes = require("./excludes.json");
+
+// RUN_ALL=true opens every object on the instance, otherwise only a minimal set
+// that still covers every code path (see "Minimal vs full run" in the README)
+const runAll = process.env.RUN_ALL === "true";
+const baseFields = "displayName,id";
+// Extra fields only used to pick the minimal set
+const selectionFields = {
+  dashboards:
+    "dashboardItems[type,visualization[type],map[mapViews[layer]],eventChart[type],eventReport[dataType],eventVisualization[type]]",
+  visualizations:
+    "type,legend[set[id]],program[id],programStage[id],dataDimensionItems[dataDimensionItemType]",
+  maps: "basemap,mapViews[layer]",
+  eventReports: "dataType,program[programType]",
+  eventCharts: "type,program[programType]",
+  eventVisualizations: "outputType,program[programType]",
+};
+const queryParams = (envKey) =>
+  `?fields=${[baseFields, runAll ? "" : selectionFields[envKey]]
+    .filter(Boolean)
+    .join(",")}&paging=false`;
 
 async function install() {
   try {
@@ -55,6 +76,8 @@ async function install() {
       }));
     };
 
+    const selection = {};
+
     const fetchData = async (url, envKey) => {
       try {
         const { data } = await client.get(url, {
@@ -65,6 +88,14 @@ async function install() {
         });
 
         envData[envKey] = (envKey === "apps" ? data : data[envKey]) || [];
+        if (!runAll && envKey !== "apps") {
+          const all = envData[envKey];
+          envData[envKey] = select(envKey, all).map(({ displayName, id }) => ({
+            displayName,
+            id,
+          }));
+          selection[envKey] = `${envData[envKey].length} of ${all.length}`;
+        }
         console.log(`${envKey.toUpperCase()}:`);
         console.table(formatDataForTable(data, envKey));
       } catch (error) {
@@ -74,22 +105,31 @@ async function install() {
 
     // Fetch and log data
     await fetchData("/api/apps.json?fields=name,key,basePath,baseUrl&paging=false", "apps");
-    await fetchData("/api/dashboards" + queryParams, "dashboards");
-    await fetchData("/api/visualizations" + queryParams, "visualizations");
-    await fetchData("/api/eventReports.json" + queryParams, "eventReports");
-    await fetchData("/api/eventCharts.json" + queryParams, "eventCharts");
-    await fetchData("/api/maps.json" + queryParams, "maps");
+    await fetchData("/api/dashboards" + queryParams("dashboards"), "dashboards");
+    await fetchData("/api/visualizations" + queryParams("visualizations"), "visualizations");
+    await fetchData("/api/eventReports.json" + queryParams("eventReports"), "eventReports");
+    await fetchData("/api/eventCharts.json" + queryParams("eventCharts"), "eventCharts");
+    await fetchData("/api/maps.json" + queryParams("maps"), "maps");
     await fetchData(
-      `/api/eventVisualizations.json${queryParams}&filter=type:eq:LINE_LIST`,
+      `/api/eventVisualizations.json${queryParams("eventVisualizations")}&filter=type:eq:LINE_LIST`,
       "eventVisualizations"
     );
 
     if (envData.apps) {
       // Global Shell is the app shell itself, not a visitable app
+      // In the minimal run, apps that have their own spec are skipped here too
       envData.apps = envData.apps
-        .filter((i) => i.key !== "global-shell")
+        .filter(
+          (i) =>
+            i.key !== "global-shell" && (runAll || !(i.key in excludes.apps))
+        )
         .flatMap((i) => appPath(i));
+      selection.apps = `${envData.apps.length}`;
     }
+    console.log(
+      runAll ? "Full run: all objects" : "Minimal run (RUN_ALL=true for all):",
+      runAll ? "" : selection
+    );
     // Write envData to Cypress environment file
     fs.writeFileSync(cypressEnvFilePath, JSON.stringify(envData, null, 2));
     console.log(`Environment variables written to ${cypressEnvFilePath}`);
