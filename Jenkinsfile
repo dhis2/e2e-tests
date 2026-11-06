@@ -4,6 +4,7 @@ import groovy.transform.Field
 
 @Field final String ALERTS_CHANNEL = 'alerts-e2e-tests'
 @Field final String SKIPPED_RESULT = 'NOT_BUILT'
+@Field final String FULL_RUN_DESCRIPTION = 'Full run: all objects'
 
 boolean isOnMasterOrMaintenanceVersionBranch = env.BRANCH_NAME == "master" || env.BRANCH_NAME.startsWith("v")
 
@@ -58,6 +59,15 @@ boolean hasNoNewBuildSinceLastRun() {
     return imagePushedAt.toLong() * 1000 < lastBuild.startTimeInMillis
 }
 
+// Scheduled runs open a minimal set of objects (see "Minimal vs full run" in the README),
+// except on Wednesdays. A run also opens everything when the run_all parameter is set.
+boolean isFullRunDue() {
+    return params.run_all || (
+      currentBuild.getBuildCauses('hudson.triggers.TimerTrigger$TimerTriggerCause') &&
+      new Date().format('u').toInteger() == 3 // ISO day of week: 3 = Wednesday
+    )
+}
+
 // No new DHIS2 build is expected over the weekend, so Saturday, Sunday and Monday runs don't count as missed builds.
 boolean isExpectedBuildDay(Date date) {
     return date.format('u').toInteger() in 2..5 // ISO day of week: 1 = Monday, 7 = Sunday
@@ -83,6 +93,7 @@ pipeline {
   parameters {
     booleanParam(name: 'keep_instance_alive', defaultValue: false, description: 'Keep the instance alive after the build is done.')
     string(name: 'keep_instance_alive_for', defaultValue: '300', description: 'Duration (in minutes) to keep the instance alive for.')
+    booleanParam(name: 'run_all', defaultValue: false, description: 'Open every dashboard, visualization, map, etc. instead of the minimal set. Scheduled runs do this once a week.')
     string(name: 'instance_readiness_threshold', defaultValue: '45', description: 'Duration (in minutes) to wait for the instance to get ready.')
   }
 
@@ -215,6 +226,9 @@ pipeline {
       }
       steps {
         script {
+          env.RUN_ALL = isFullRunDue() ? 'true' : 'false'
+          currentBuild.description = env.RUN_ALL == 'true' ? FULL_RUN_DESCRIPTION : 'Minimal run'
+
           sh 'npm install axios'
           sh '''
             export CYPRESS_LOGIN_USERNAME=$(echo $CYPRESS_LOGIN_CREDENTIALS | cut -d: -f1)
