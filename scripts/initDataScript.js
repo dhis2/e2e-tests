@@ -3,6 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const { select } = require("./selectMinimalSet");
 const excludes = require("./excludes.json");
+const struts_apps = ["dhis-web-dataentry/index.action"];
 
 // RUN_ALL=true opens every object on the instance, otherwise only a minimal set
 // that still covers every code path (see "Minimal vs full run" in the README)
@@ -102,7 +103,7 @@ async function install() {
     };
 
     // Fetch and log data
-    await fetchData("/api/apps.json?fields=name,key,basePath,baseUrl&paging=false", "apps");
+    await fetchData("/dhis-web-apps/apps-bundle.json", "apps");
     await fetchData("/api/dashboards" + queryParams("dashboards"), "dashboards");
     await fetchData("/api/visualizations" + queryParams("visualizations"), "visualizations");
     await fetchData("/api/eventReports.json" + queryParams("eventReports"), "eventReports");
@@ -115,14 +116,13 @@ async function install() {
 
     // Include struts_apps in apps data
     if (envData.apps) {
-      // Global Shell is the app shell itself, not a visitable app
       // In the minimal run, apps that have their own spec are skipped here too
-      envData.apps = envData.apps
-        .filter(
-          (i) =>
-            i.key !== "global-shell" && (runAll || !(i.key in excludes.apps))
-        )
-        .flatMap((i) => appPath(i));
+      envData.apps = [
+        ...struts_apps,
+        ...envData.apps
+          .filter((i) => runAll || !(i.webName in excludes.apps))
+          .flatMap((i) => i.webName),
+      ];
       selection.apps = `${envData.apps.length}`;
     }
     console.log(

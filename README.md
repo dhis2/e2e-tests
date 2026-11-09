@@ -105,7 +105,7 @@ Reasons why this is enough:
 
 What is lost: a bug caused by one object's specific configuration (for example one unusual dimension or a particular legend) is not found by the minimal set. The weekly full run is there to catch these.
 
-To skip an app, add its key from `/api/apps` and the reason to `scripts/excludes.json`.
+To skip an app, add its `webName` from `/dhis-web-apps/apps-bundle.json` and the reason to `scripts/excludes.json`.
 
 ## Reporting
 
