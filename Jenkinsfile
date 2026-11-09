@@ -126,7 +126,6 @@ pipeline {
     ALLURE_REPORT_DIR = "allure-report-$DHIS2_VERSION"
     HTTP = 'https --check-status'
     ALLOW_SUSPEND = 'false'
-    RUN_E2E = 'true'
   }
 
   triggers {
@@ -137,6 +136,9 @@ pipeline {
     stage('Check for new DHIS2 build') {
       steps { // NOSONAR
         script {
+          // Not in the environment {} block: that would shadow this assignment and the when conditions would never see 'false'.
+          env.RUN_E2E = 'true'
+
           if (hasNoNewBuildSinceLastRun()) {
             env.RUN_E2E = 'false'
             currentBuild.result = SKIPPED_RESULT
