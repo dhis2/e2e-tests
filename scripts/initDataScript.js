@@ -101,7 +101,7 @@ async function install() {
     };
 
     // Fetch and log data
-    await fetchData("/api/apps.json?fields=name,key,basePath,baseUrl&paging=false", "apps");
+    await fetchData("/api/apps.json?fields=name,key,basePath&paging=false", "apps");
     await fetchData("/api/dashboards" + queryParams("dashboards"), "dashboards");
     await fetchData("/api/visualizations" + queryParams("visualizations"), "visualizations");
     await fetchData("/api/eventReports.json" + queryParams("eventReports"), "eventReports");
@@ -120,7 +120,7 @@ async function install() {
           (i) =>
             i.key !== "global-shell" && (runAll || !(i.key in excludes.apps))
         )
-        .flatMap((i) => appPath(i));
+        .flatMap((i) => i.basePath);
       selection.apps = `${envData.apps.length}`;
     }
     console.log(
