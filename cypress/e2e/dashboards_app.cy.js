@@ -54,6 +54,9 @@ describe(
   }
 );
 
+// Scrolls until every dashboard item is rendered. Some items (e.g. REPORTS or an
+// item without a type) never match LOADED_DASHBOARD_ITEMS, so also stop once the
+// bottom of the dashboard has been reached instead of always scrolling to the cap.
 function scrollDown(i = 1) {
   const resolution = Cypress.config("viewportHeight");
   if (i > 20) {
@@ -62,15 +65,23 @@ function scrollDown(i = 1) {
 
   cy.get(LOADED_DASHBOARD_ITEMS).then((visibleItems) => {
     cy.get(ALL_DASHBOARD_ITEMS).then((allItems) => {
-      if (Cypress.$(allItems).length != Cypress.$(visibleItems).length) {
-        cy.get(DASHBOARD_SCROLL_BAR)
+      if (allItems.length === visibleItems.length) {
+        return;
+      }
+
+      cy.get(DASHBOARD_SCROLL_BAR).then(($bar) => {
+        const bar = $bar[0];
+        const atBottom = bar.scrollTop + bar.clientHeight >= bar.scrollHeight - 1;
+        if (i > 1 && atBottom) {
+          return;
+        }
+
+        cy.wrap($bar)
           .scrollTo(0, resolution * i)
           .waitForResources();
 
         scrollDown(i + 1);
-      }
-
-      return cy.wrap(allItems);
+      });
     });
   });
 }
