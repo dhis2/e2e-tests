@@ -228,21 +228,18 @@ pipeline {
       }
       steps {
         script {
-          // An explicit 'true'/'false' string: the previous boolean interpolated into an empty RUN_ALL
           def runAll = isFullRunDue() ? 'true' : 'false'
           echo "run_all param=${params.run_all}, RUN_ALL=${runAll}"
           currentBuild.description = runAll == 'true' ? FULL_RUN_DESCRIPTION : 'Minimal run'
 
           sh 'npm install axios'
-          // Passed with withEnv: assigning env.RUN_ALL did not reach the sh step, so the data was always the minimal set
-          withEnv(['RUN_ALL=' + runAll]) {
-            sh '''
-              export CYPRESS_LOGIN_USERNAME=$(echo $CYPRESS_LOGIN_CREDENTIALS | cut -d: -f1)
-              export CYPRESS_LOGIN_PASSWORD=$(echo $CYPRESS_LOGIN_CREDENTIALS | cut -d: -f2)
-              echo "RUN_ALL=$RUN_ALL"
-              node ./scripts/initDataScript.js
-            '''
-          }
+          // Exported inside the script: neither env.RUN_ALL nor withEnv reached this sh step, so the data was always the minimal set
+          sh "export RUN_ALL=${runAll}\n" + '''
+            export CYPRESS_LOGIN_USERNAME=$(echo $CYPRESS_LOGIN_CREDENTIALS | cut -d: -f1)
+            export CYPRESS_LOGIN_PASSWORD=$(echo $CYPRESS_LOGIN_CREDENTIALS | cut -d: -f2)
+            echo "RUN_ALL=$RUN_ALL"
+            node ./scripts/initDataScript.js
+          '''
           archiveArtifacts artifacts: 'cypress.env.json', onlyIfSuccessful: true
           sh 'mkdir -p env_files'
           sh 'mv cypress.env.json env_files/'
