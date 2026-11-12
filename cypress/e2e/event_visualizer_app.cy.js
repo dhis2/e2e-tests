@@ -1,4 +1,5 @@
 import { loadEventChart } from "../utils/analytics";
+import { smokeItems, smokeTitle, checkHasNoErrors } from "../utils/smoke";
 
 describe(
   "Event visualizer -> DHIS2-9193",
@@ -10,37 +11,25 @@ describe(
     },
   },
   () => {
-    const eventCharts = Cypress.env("eventCharts");
+    const eventCharts = smokeItems(
+      Cypress.env("eventCharts"),
+      "No event charts defined in Cypress environment"
+    );
 
     beforeEach(() => {
       cy.clearConsoleLogs();
     });
 
-    // Check if 'eventCharts' is defined and is an array
-    if (!Array.isArray(eventCharts) || eventCharts.length === 0) {
-      it("No event charts defined in Cypress environment", () => {
-        cy.log(
-          "Skipping tests because no event charts are defined in Cypress environment"
-        );
-      });
-    } else {
-      eventCharts.forEach((chart) => {
-        it(chart.displayName, () => {
-          loadEventChart(chart.id);
+    eventCharts?.forEach((chart) => {
+      const title = smokeTitle(
+        chart.displayName,
+        `Event visualization ${chart.id} (missing/invalid displayName)`
+      );
 
-          cy.getConsoleLogs().should((logs) => {
-            const reportLog =
-              "Event visualization: " +
-              chart.displayName +
-              " has " +
-              logs.length +
-              " severe errors: \n" +
-              JSON.stringify(logs, null, 1);
-
-            expect(logs, reportLog).to.have.length(0);
-          });
-        });
+      it(title, () => {
+        loadEventChart(chart.id);
+        checkHasNoErrors("Event visualization", title);
       });
-    }
+    });
   }
 );

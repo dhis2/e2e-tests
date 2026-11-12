@@ -37,17 +37,3 @@ export const waitForVisualization = (title) => {
 
   cy.get(Selectors.LOADER).should("not.exist");
 };
-
-export const checkVisualizationHasNoErrors = (type, visualization) => {
-  cy.getConsoleLogs().should((logs) => {
-    const reportLog = `${type}: ${visualization} has ${
-      logs.length
-    } severe errors: \n ${JSON.stringify(logs, null, 1)}}`;
-
-    cy.contains("No data", {
-      matchCase: false,
-      timeout: 5000,
-    }).should("not.exist");
-    expect(logs, reportLog).to.have.length(0);
-  });
-};
