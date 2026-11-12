@@ -228,13 +228,16 @@ pipeline {
       }
       steps {
         script {
-          env.RUN_ALL = isFullRunDue() ? 'true' : 'false'
-          currentBuild.description = env.RUN_ALL == 'true' ? FULL_RUN_DESCRIPTION : 'Minimal run'
+          def runAll = isFullRunDue() ? 'true' : 'false'
+          echo "run_all param=${params.run_all}, RUN_ALL=${runAll}"
+          currentBuild.description = runAll == 'true' ? FULL_RUN_DESCRIPTION : 'Minimal run'
 
           sh 'npm install axios'
-          sh '''
+          // Exported inside the script: neither env.RUN_ALL nor withEnv reached this sh step, so the data was always the minimal set
+          sh "export RUN_ALL=${runAll}\n" + '''
             export CYPRESS_LOGIN_USERNAME=$(echo $CYPRESS_LOGIN_CREDENTIALS | cut -d: -f1)
             export CYPRESS_LOGIN_PASSWORD=$(echo $CYPRESS_LOGIN_CREDENTIALS | cut -d: -f2)
+            echo "RUN_ALL=$RUN_ALL"
             node ./scripts/initDataScript.js
           '''
           archiveArtifacts artifacts: 'cypress.env.json', onlyIfSuccessful: true
@@ -299,7 +302,6 @@ pipeline {
         }
       }
     }
-
     unstable {
       script {
         slack.sendMessage(
